@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../presentation/add_label/add_label_screen.dart';
-import '../presentation/add_note/add_note_screen.dart';
-import '../presentation/delete/delete_screen.dart';
-import '../presentation/help/help_screen.dart';
-import '../presentation/home/home_screen.dart';
-import '../presentation/notification/notification_screen.dart';
-import '../presentation/save/save_screen.dart';
-import '../presentation/setting/setting_screen.dart';
-import '../routes/routes.dart';
+import '../../config/routes/routes.dart';
+import '../../presentation/pages/add_label_page/add_label_page.dart';
+import '../../presentation/pages/add_note_page/add_note_screen.dart';
+import '../../presentation/pages/delete_page/delete_screen.dart';
+import '../../presentation/pages/help_page/help_screen.dart';
+import '../../presentation/pages/home_page/home_screen.dart';
+import '../../presentation/pages/notification_page/notification_screen.dart';
+import '../../presentation/pages/save_page/save_screen.dart';
+import '../../presentation/pages/setting_page/setting_screen.dart';
+
 
 class AppRoutes {
   Route? onGenerateRoute(RouteSettings routeSettings) {

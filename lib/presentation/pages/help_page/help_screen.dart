@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:notesapp/presentation/widgets/text_field_widget.dart';
 
-import '../../resources/gaps_manager.dart';
-import '../../resources/sizes_manager.dart';
-import '../../resources/strings_manager.dart';
+import '../../../utils/resources/gaps_manager.dart';
+import '../../../utils/resources/sizes_manager.dart';
+import '../../../utils/resources/strings_manager.dart';
 
 class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});
@@ -131,18 +132,14 @@ class HelpScreen extends StatelessWidget {
                   ],
                 ),
                 GapsManager.h20,
-                const TextField(
-                    decoration: InputDecoration(
-                        hintText: StringsManger.searchHelp,
-                        filled: true,
-                        fillColor: Color(0xff99CCFF),
-                        contentPadding: EdgeInsets.all(SizesManager.p12),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(SizesManager.r20))
-                        ),
-                        prefixIcon: Icon(Icons.search),
-                        prefixIconColor: Colors.black)
-                ),
+                const TextFieldWidget(
+                    hintText: StringsManger.searchHelp,
+                    filled: true,
+                    fillColor: Color(0xff99CCFF),
+                    contentPadding: SizesManager.p12,
+                    prefixIcon: Icon(Icons.search),
+                    prefixIconColor: Colors.black,
+                    borderRadius: SizesManager.r20),
                 GapsManager.h10,
                 const Divider(height: SizesManager.h1),
                 GapsManager.h10,

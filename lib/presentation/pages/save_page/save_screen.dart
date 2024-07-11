@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/gaps_manager.dart';
-import '../../resources/sizes_manager.dart';
-import '../../resources/strings_manager.dart';
+import '../../../utils/resources/gaps_manager.dart';
+import '../../../utils/resources/sizes_manager.dart';
+import '../../../utils/resources/strings_manager.dart';
+
 
 class SaveScreen extends StatelessWidget {
   const SaveScreen({super.key});

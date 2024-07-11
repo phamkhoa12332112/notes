@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notesapp/presentation/widgets/text_field_widget.dart';
 
-import '../../resources/sizes_manager.dart';
-import '../../resources/strings_manager.dart';
+import '../../../utils/resources/sizes_manager.dart';
+import '../../../utils/resources/strings_manager.dart';
 
 class AddLabelScreen extends StatelessWidget {
   const AddLabelScreen({super.key});
@@ -21,14 +22,12 @@ class AddLabelScreen extends StatelessWidget {
         body: const SafeArea(
           child: Column(
             children: [
-              TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                    hintText: StringsManger.add_lable,
-                    contentPadding: EdgeInsets.all(SizesManager.p12),
-                    suffixIcon: Icon(Icons.done),
-                    prefixIcon: Icon(Icons.close)),
-              ),
+              TextFieldWidget(
+                  borderRadius: 0,
+                  hintText: StringsManger.add_lable,
+                  contentPadding: SizesManager.p12,
+                  suffixIcon: Icon(Icons.done),
+                  prefixIcon: Icon(Icons.close)),
               Padding(
                 padding: EdgeInsets.all(SizesManager.p12),
                 child: Row(
