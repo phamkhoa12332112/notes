@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/sizes_manager.dart';
-import '../../resources/strings_manager.dart';
+import '../../../utils/resources/sizes_manager.dart';
+import '../../../utils/resources/strings_manager.dart';
+
 
 class DeleteScreen extends StatelessWidget {
   const DeleteScreen({super.key});

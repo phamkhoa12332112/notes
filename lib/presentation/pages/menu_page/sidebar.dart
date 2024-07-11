@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../resources/sizes_manager.dart';
-import '../../resources/strings_manager.dart';
-import '../../routes/routes.dart';
+import '../../../config/routes/routes.dart';
+import '../../../utils/resources/sizes_manager.dart';
+import '../../../utils/resources/strings_manager.dart';
 import 'list_title.dart';
 
 class Sidebar extends StatelessWidget {

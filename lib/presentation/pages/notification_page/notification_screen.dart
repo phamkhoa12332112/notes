@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/gaps_manager.dart';
-import '../../resources/sizes_manager.dart';
-import '../../resources/strings_manager.dart';
-import '../../routes/routes.dart';
-import '../menu/sidebar.dart';
+import '../../../config/routes/routes.dart';
+import '../../../utils/resources/gaps_manager.dart';
+import '../../../utils/resources/sizes_manager.dart';
+import '../../../utils/resources/strings_manager.dart';
+import '../menu_page/sidebar.dart';
+
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});

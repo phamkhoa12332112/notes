@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notesapp/resources/routes_manager.dart';
+import 'package:notesapp/utils/resources/routes_manager.dart';
 
 import 'logic/cubit/counter_cubit.dart';
 
@@ -10,6 +10,8 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final AppRoutes _appRouter = AppRoutes();
+
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
