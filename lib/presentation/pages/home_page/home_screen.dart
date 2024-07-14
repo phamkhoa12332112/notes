@@ -22,6 +22,7 @@ class HomeScreen extends StatelessWidget {
         suffixIcon: SizedBox(
           width: SizesManager.w100,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
                   icon: const Icon(Icons.view_stream_outlined),
@@ -47,16 +48,16 @@ class HomeScreen extends StatelessWidget {
         notchMargin: SizesManager.m10,
         height: SizesManager.h60,
         child: Container(
-          margin: const EdgeInsets.only(right: SizesManager.m100),
-          child: const Row(
+          margin: EdgeInsets.only(right: SizesManager.m100),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                  style: TextStyle(fontSize: SizesManager.s20),
+                  style: TextStyle(fontSize: SizesManager.s10),
                   StringsManger.app_name),
               Text(
-                  style: TextStyle(fontSize: SizesManager.s15),
-                  StringsManger.update_home)
+                  style: TextStyle(fontSize: SizesManager.s8),
+                  StringsManger.total_notes)
             ],
           ),
         ),

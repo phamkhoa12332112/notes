@@ -28,7 +28,7 @@ class SaveScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: const SafeArea(
+        body: SafeArea(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

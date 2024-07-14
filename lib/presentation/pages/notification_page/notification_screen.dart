@@ -31,14 +31,14 @@ class NotificationScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.notifications_none_outlined,
                   color: Colors.orange, size: SizesManager.s100),
-              Text(StringsManger.hintText_home),
+              const Text(StringsManger.hintText_home),
             ],
           ),
         ),
@@ -48,12 +48,12 @@ class NotificationScreen extends StatelessWidget {
         notchMargin: SizesManager.m10,
         height: SizesManager.h60,
         child: Container(
-          margin: const EdgeInsets.only(right: SizesManager.m100),
-          child: const Row(
+          margin: EdgeInsets.only(right: SizesManager.m100),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                  style: TextStyle(fontSize: SizesManager.s20),
+                  style: TextStyle(fontSize: SizesManager.s10),
                   StringsManger.app_name),
             ],
           ),

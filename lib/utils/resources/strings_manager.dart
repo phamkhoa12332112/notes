@@ -3,6 +3,7 @@ class StringsManger {
   static const String searchText_home = "Tìm kiếm ghi chú";
   static const String app_name = "Notes";
   static const String update_home = "Đã chỉnh sửa 12:09";
+  static const String total_notes = "Tổng 20 ghi chú";
 
   static const String noted = "Ghi chú";
   static const String remind = "Lời nhắc";

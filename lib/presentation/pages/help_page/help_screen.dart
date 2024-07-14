@@ -24,12 +24,11 @@ class HelpScreen extends StatelessWidget {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: SizesManager.s18, right: SizesManager.s18),
+            padding: EdgeInsets.all(SizesManager.p18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
+                Text(
                   StringsManger.help_title,
                   style: TextStyle(
                       fontSize: SizesManager.s15, fontWeight: FontWeight.w500),
@@ -103,9 +102,9 @@ class HelpScreen extends StatelessWidget {
                           color: Colors.blue,
                         )),
                     GapsManager.w20,
-                    const SizedBox(
+                    SizedBox(
                       width: SizesManager.w300,
-                      child: Text(
+                      child: const Text(
                         StringsManger.help_4,
                         maxLines: SizesManager.l2,
                         overflow: TextOverflow.ellipsis,
@@ -132,16 +131,16 @@ class HelpScreen extends StatelessWidget {
                   ],
                 ),
                 GapsManager.h20,
-                const TextFieldWidget(
+                TextFieldWidget(
                     hintText: StringsManger.searchHelp,
                     filled: true,
-                    fillColor: Color(0xff99CCFF),
+                    fillColor: const Color(0xff99CCFF),
                     contentPadding: SizesManager.p12,
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     prefixIconColor: Colors.black,
                     borderRadius: SizesManager.r20),
                 GapsManager.h10,
-                const Divider(height: SizesManager.h1),
+                Divider(height: SizesManager.h1),
                 GapsManager.h10,
                 Row(
                   children: [
@@ -161,7 +160,7 @@ class HelpScreen extends StatelessWidget {
                   ],
                 ),
                 GapsManager.h10,
-                const Divider(height: SizesManager.h1),
+                Divider(height: SizesManager.h1),
               ],
             ),
           ),
