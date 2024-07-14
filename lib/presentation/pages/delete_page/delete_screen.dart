@@ -21,14 +21,14 @@ class DeleteScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: const SafeArea(
+        body: SafeArea(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.delete_outline,
                     color: Colors.orangeAccent, size: SizesManager.s100),
-                Text(StringsManger.delete_text),
+                const Text(StringsManger.delete_text),
               ],
             ),
           ),

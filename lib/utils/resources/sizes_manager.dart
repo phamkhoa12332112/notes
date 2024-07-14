@@ -1,29 +1,34 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class SizesManager {
-  static const double s15 = 15.0;
-  static const double s18 = 18.0;
-  static const double s20 = 20.0;
-  static const double s30 = 30.0;
-  static const double s100 = 100.0;
+  static double s8 = 8.sp;
+  static double s10 = 10.sp;
+  static double s15 = 15.sp;
+  static double s18 = 18.sp;
+  static double s20 = 20.sp;
+  static double s30 = 30.sp;
+  static double s100 = 100.sp;
 
-  static const double p10 = 10.0;
-  static const double p12 = 12.0;
-  static const double p100 = 100.0;
+  static double p10 = 10.r;
+  static double p12 = 12.r;
+  static double p18 = 18.r;
+  static double p100 = 100.r;
 
-  static const double w30 = 30.0;
-  static const double w100 = 100.0;
-  static const double w300 = 300.0;
+  static double w30 = 30.w;
+  static double w100 = 100.w;
+  static double w300 = 300.w;
 
-  static const double m10 = 10.0;
-  static const double m100 = 100.0;
+  static double m10 = 10.r;
+  static double m100 = 100.r;
 
-  static const double h1 = 1.0;
-  static const double h30 = 30.0;
-  static const double h60 = 60.0;
+  static double h1 = 1.h;
+  static double h30 = 30.h;
+  static double h60 = 60.h;
 
 
-  static const double e10 = 10.0;
+  static double e10 = 10.r;
 
   static const int l2 = 2;
 
-  static const double r20 = 20.0;
+  static double r20 = 20.r;
 }

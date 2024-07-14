@@ -12,43 +12,43 @@ class Sidebar extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          const Text(
+          Text(
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: SizesManager.s20),
+              style: TextStyle(fontSize: SizesManager.s10),
               StringsManger.app_name),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.noted,
-            icon: const Icon(Icons.light),
+            icon: Icon(Icons.light),
             routes: RoutesName.homeScreen,
           ),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.remind,
-            icon: const Icon(Icons.conveyor_belt),
+            icon: Icon(Icons.conveyor_belt),
             routes: RoutesName.notificationScreen,
           ),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.add_lable,
-            icon: const Icon(Icons.add),
+            icon: Icon(Icons.add),
             routes: RoutesName.labelScreen,
           ),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.save,
-            icon: const Icon(Icons.save),
+            icon: Icon(Icons.save),
             routes: RoutesName.saveScreen,
           ),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.delete,
-            icon: const Icon(Icons.delete),
+            icon: Icon(Icons.delete),
             routes: RoutesName.deleteScreen,
           ),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.setting,
-            icon: const Icon(Icons.settings),
+            icon: Icon(Icons.settings),
             routes: RoutesName.settingScreen,
           ),
-          ContentSidebar(
+          const ContentSidebar(
             text: StringsManger.help,
-            icon: const Icon(Icons.help),
+            icon: Icon(Icons.help),
             routes: RoutesName.helpScreen,
           )
         ],

@@ -53,8 +53,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               ),
                               barrierDismissible: false);
                         },
-                        padding: const EdgeInsets.all(SizesManager.p10),
-                        icon: const Icon(
+                        padding: EdgeInsets.all(SizesManager.p10),
+                        icon:  Icon(
                           size: SizesManager.s30,
                           Icons.arrow_back,
                           color: Colors.black,
@@ -79,11 +79,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             GapsManager.h10,
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.only(left: SizesManager.p10),
+                padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
                     controller: _titleController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManger.title,
                         hintStyle: TextStyle(
