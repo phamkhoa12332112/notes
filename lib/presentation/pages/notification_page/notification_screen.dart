@@ -13,18 +13,18 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Sidebar(),
+      drawer: const Sidebar(),
       appBar: AppBar(
         title: Row(
           children: [
             Title(color: Colors.black, child: const Text(StringsManger.remind)),
-            const Expanded(
+            Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(Icons.search),
+                  const Icon(Icons.search),
                   GapsManager.w20,
-                  Icon(Icons.view_stream_outlined)
+                  const Icon(Icons.view_stream_outlined)
                 ],
               ),
             )
