@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GapsManager {
-  static const Widget h10 = SizedBox(height: 10);
-  static const Widget h20 = SizedBox(height: 20);
+  static Widget h10 = 10.verticalSpace;
+  static Widget h20 = 20.verticalSpace;
 
-  static const Widget w20 = SizedBox(width: 20);
+  static Widget w20 = 20.horizontalSpace;
 }
