@@ -6,7 +6,6 @@ import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 
-
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
 
@@ -37,25 +36,24 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           showDialog(
                               context: context,
                               builder: (_) => CupertinoAlertDialog(
-                                title: const Text(StringsManger.back),
-                                content: const Text(
-                                    StringsManger.content_dialog),
-                                actions: [
-                                  CupertinoDialogAction(
-                                      child: const Text(StringsManger.no),
-                                      onPressed: () =>
-                                          Navigator.pop(context)),
-                                  CupertinoDialogAction(
-                                      child: const Text(StringsManger.yes),
-                                      onPressed: () => Navigator.pushNamed(
-                                          context, RoutesName.homeScreen))
-                                ],
-                              ),
+                                    title: const Text(StringsManger.back),
+                                    content: const Text(
+                                        StringsManger.content_dialog),
+                                    actions: [
+                                      CupertinoDialogAction(
+                                          child: const Text(StringsManger.no),
+                                          onPressed: () =>
+                                              Navigator.pop(context)),
+                                      CupertinoDialogAction(
+                                          child: const Text(StringsManger.yes),
+                                          onPressed: () => Navigator.pushNamed(
+                                              context, RoutesName.homeScreen))
+                                    ],
+                                  ),
                               barrierDismissible: false);
                         },
                         padding: EdgeInsets.all(SizesManager.p10),
-                        icon:  Icon(
-                          size: SizesManager.s30,
+                        icon: const Icon(
                           Icons.arrow_back,
                           color: Colors.black,
                         ),
@@ -63,14 +61,19 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     ],
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   flex: 2,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.push_pin_outlined),
-                      Icon(Icons.notification_add_outlined),
-                      Icon(Icons.save_alt),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.push_pin_outlined)),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.notification_add_outlined)),
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.save_alt)),
                     ],
                   ),
                 )
@@ -82,12 +85,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
+                    style: TextStyle(fontSize: SizesManager.s15),
                     controller: _titleController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManger.title,
                         hintStyle: TextStyle(
-                            color: Colors.grey, fontSize: SizesManager.s30)),
+                            color: Colors.grey, fontSize: SizesManager.s15)),
                   ),
                   TextField(
                     controller: _contentController,
@@ -119,9 +123,18 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    onPressed: () {},
+                  PopupMenuButton(
                     icon: const Icon(Icons.add_box_outlined),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        child: Text('title1'),
+                        value: 'title1',
+                      ),
+                      const PopupMenuItem(
+                        child: Text('title2'),
+                        value: 'title2',
+                      )
+                    ],
                   ),
                   IconButton(
                     onPressed: () {},
@@ -135,10 +148,18 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_vert),
-            )
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  child: Text('title1'),
+                  value: 'title1',
+                ),
+                const PopupMenuItem(
+                  child: Text('title2'),
+                  value: 'title2',
+                )
+              ],
+            ),
           ],
         ),
       ),
