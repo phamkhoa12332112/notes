@@ -7,6 +7,9 @@ class SizesManager {
   static double s18 = 18.sp;
   static double s20 = 20.sp;
   static double s30 = 30.sp;
+  static double s50 = 50.sp;
+  static double s70 = 70.sp;
+  static double s90 = 90.sp;
   static double s100 = 100.sp;
 
   static double p10 = 10.r;
