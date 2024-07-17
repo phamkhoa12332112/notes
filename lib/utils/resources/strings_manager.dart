@@ -43,4 +43,23 @@ class StringsManger {
   static const String help_5 = 'Lưu trữ ghi chú và danh sách';
   static const String help_6 = 'Gửi ý kiến phản hồi';
   static const String searchHelp = 'Tìm trong phần trợ giúp';
+
+  static const String copy = 'Tạo bản sao';
+  static const String send = 'Gửi';
+  static const String collaborator = 'Cộng tác viên';
+  static const String label = 'Nhãn';
+
+  static const String take_a_photo = 'Chụp ảnh';
+  static const String add_pic = 'Thêm hình ảnh';
+  static const String blueprint = 'Bản vẽ';
+  static const String record = 'Ghi';
+  static const String check_box = 'Hộp kiểm';
+
+  static const String today = 'Lúc khác trong ngày hôm nay';
+  static const String tomorrow = 'Sáng mai';
+  static const String friday_morning = 'Sáng Thứ Năm';
+  static const String private_home = 'Nhà riêng';
+  static const String workplace = 'Nơi làm việc';
+  static const String date_and_time = 'Chọn ngày và giờ';
+  static const String location = 'Chọn địa điểm';
 }

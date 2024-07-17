@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:notesapp/presentation/pages/add_note_page/bottom_sheet_page/info_more_vert_page.dart';
 
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
+import 'bottom_sheet_page/info_add_box_page.dart';
+import 'bottom_sheet_page/info_notification_add_page.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
@@ -61,14 +64,22 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     ],
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   flex: 2,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.push_pin_outlined),
-                      Icon(Icons.notification_add_outlined),
-                      Icon(Icons.save_alt),
+                      const Icon(Icons.push_pin_outlined),
+                      IconButton(
+                          icon: const Icon(Icons.notification_add_outlined),
+                          onPressed: () {
+                            showModalBottomSheet(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero),
+                                context: context,
+                                builder: (ctx) => const InfoNotificationAddPage());
+                          }),
+                      const Icon(Icons.save_alt),
                     ],
                   ),
                 )
@@ -119,7 +130,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
+                          context: context,
+                          builder: (ctx) => const InfoAddBoxPage());
+                    },
                     icon: const Icon(Icons.add_box_outlined),
                   ),
                   IconButton(
@@ -135,7 +152,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero),
+                    context: context,
+                    builder: (ctx) => const InfoMoreVertPage());
+              },
               icon: const Icon(Icons.more_vert),
             )
           ],
