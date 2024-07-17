@@ -27,7 +27,7 @@ class DeleteScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.delete_outline,
-                    color: Colors.orangeAccent, size: SizesManager.s100),
+                    color: Colors.orangeAccent, size: SizesManager.s70),
                 const Text(StringsManger.delete_text),
               ],
             ),

@@ -37,7 +37,7 @@ class NotificationScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.notifications_none_outlined,
-                  color: Colors.orange, size: SizesManager.s100),
+                  color: Colors.orange, size: SizesManager.s70),
               const Text(StringsManger.hintText_home),
             ],
           ),

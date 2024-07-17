@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:notesapp/presentation/widgets/text_field_widget.dart';
 
 import '../../../config/routes/routes.dart';
-import '../../../utils/resources/assets_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 import '../menu_page/sidebar.dart';
@@ -32,13 +31,14 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       )),
-      body: const SafeArea(
+      body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image(image: AssetImage(ImageAssets.light)),
-              Text(StringsManger.hintText_home),
+              Icon(Icons.emoji_objects_outlined,
+                  color: Colors.orangeAccent, size: SizesManager.s70),
+              const Text(StringsManger.hintText_home),
             ],
           ),
         ),

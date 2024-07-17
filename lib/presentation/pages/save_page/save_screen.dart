@@ -34,7 +34,7 @@ class SaveScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.save_alt_outlined,
-                    color: Colors.orangeAccent, size: SizesManager.s100),
+                    color: Colors.orangeAccent, size: SizesManager.s70),
                 const Text(StringsManger.save_text),
               ],
             ),
