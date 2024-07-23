@@ -22,6 +22,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -77,7 +78,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                 shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero),
                                 context: context,
-                                builder: (ctx) => const InfoNotificationAddPage());
+                                builder: (context) =>
+                                    InfoNotificationAddPage());
                           }),
                       const Icon(Icons.save_alt),
                     ],
@@ -105,7 +107,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         border: InputBorder.none,
                         hintText: StringsManger.noted,
                         hintStyle: TextStyle(color: Colors.grey)),
-                  )
+                  ),
                 ],
               ),
             )

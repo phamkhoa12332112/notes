@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notesapp/presentation/widgets/text_field_widget.dart';
 
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
+import '../../widgets/text_field_widget.dart';
 import '../menu_page/sidebar.dart';
 
 class HomeScreen extends StatelessWidget {
