@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notesapp/presentation/pages/add_note_page/bottom_sheet_page/list_items.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
+
+import 'list_items.dart';
 
 class InfoAddBoxPage extends StatelessWidget {
   const InfoAddBoxPage({super.key});

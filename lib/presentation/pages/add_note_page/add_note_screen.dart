@@ -1,27 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:notesapp/presentation/pages/add_note_page/bottom_sheet_page/info_more_vert_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notesapp/blocs/bloc/tasks_bloc.dart';
+import 'package:notesapp/models/task.dart';
 
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
-import 'bottom_sheet_page/info_add_box_page.dart';
-import 'bottom_sheet_page/info_notification_add_page.dart';
+import '../../widgets/bottom_sheet_page/info_add_box_page.dart';
+import '../../widgets/bottom_sheet_page/info_more_vert_page.dart';
+import '../../widgets/bottom_sheet_page/info_notification_add_page.dart';
 
-class AddNoteScreen extends StatefulWidget {
+class AddNoteScreen extends StatelessWidget {
   const AddNoteScreen({super.key});
 
   @override
-  State<AddNoteScreen> createState() => _AddNoteScreenState();
-}
-
-class _AddNoteScreenState extends State<AddNoteScreen> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController contentController = TextEditingController();
 
     return Scaffold(
       body: SafeArea(
@@ -31,59 +28,62 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             Row(
               children: [
                 Expanded(
-                  flex: 4,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      IconButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) => CupertinoAlertDialog(
-                                    title: const Text(StringsManger.back),
-                                    content: const Text(
-                                        StringsManger.content_dialog),
-                                    actions: [
-                                      CupertinoDialogAction(
-                                          child: const Text(StringsManger.no),
-                                          onPressed: () =>
-                                              Navigator.pop(context)),
-                                      CupertinoDialogAction(
-                                          child: const Text(StringsManger.yes),
-                                          onPressed: () => Navigator.pushNamed(
-                                              context, RoutesName.homeScreen))
-                                    ],
-                                  ),
-                              barrierDismissible: false);
-                        },
-                        padding: EdgeInsets.all(SizesManager.p10),
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => CupertinoAlertDialog(
+                                        title: const Text(StringsManger.back),
+                                        content: const Text(
+                                            StringsManger.content_dialog),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                              child:
+                                                  const Text(StringsManger.no),
+                                              onPressed: () =>
+                                                  Navigator.pop(context)),
+                                          CupertinoDialogAction(
+                                              child:
+                                                  const Text(StringsManger.yes),
+                                              onPressed: () =>
+                                                  Navigator.pushNamed(context,
+                                                      RoutesName.homeScreen))
+                                        ],
+                                      ),
+                                  barrierDismissible: false);
+                            },
+                            padding: EdgeInsets.all(SizesManager.p10),
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Icon(Icons.push_pin_outlined),
-                      IconButton(
-                          icon: const Icon(Icons.notification_add_outlined),
-                          onPressed: () {
-                            showModalBottomSheet(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero),
-                                context: context,
-                                builder: (context) =>
-                                    InfoNotificationAddPage());
-                          }),
-                      const Icon(Icons.save_alt),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(Icons.push_pin_outlined),
+                    IconButton(
+                        icon: const Icon(Icons.notification_add_outlined),
+                        onPressed: () {
+                          showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero),
+                              context: context,
+                              builder: (context) =>
+                                  const InfoNotificationAddPage());
+                        }),
+                    const Icon(Icons.save_alt),
+                  ],
                 )
               ],
             ),
@@ -94,7 +94,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 children: [
                   TextField(
                     style: TextStyle(fontSize: SizesManager.s15),
-                    controller: _titleController,
+                    controller: titleController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManger.title,
@@ -102,7 +102,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s15)),
                   ),
                   TextField(
-                    controller: _contentController,
+                    controller: contentController,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManger.noted,
@@ -116,8 +116,10 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.popAndPushNamed(context, RoutesName.homeScreen,
-              result: [_titleController.text, _contentController.text]);
+          var task = Task(
+              title: titleController.text, content: contentController.text);
+          context.read<TasksBloc>().add(AddTask(task: task));
+          Navigator.popAndPushNamed(context, RoutesName.homeScreen);
         },
         elevation: SizesManager.e10,
         child: const Icon(Icons.save),
