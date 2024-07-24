@@ -22,6 +22,8 @@ class SizesManager {
   static double w300 = 300.w;
 
   static double m10 = 10.r;
+  static double m20 = 20.r;
+  static double m30 = 30.r;
   static double m100 = 100.r;
 
   static double h1 = 1.h;
