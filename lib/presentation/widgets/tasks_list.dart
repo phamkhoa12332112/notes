@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notesapp/blocs/bloc.export.dart';
-import 'package:notesapp/main.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
 
 import '../../models/task.dart';
