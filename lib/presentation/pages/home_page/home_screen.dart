@@ -6,11 +6,19 @@ import 'package:notesapp/presentation/widgets/tasks_list.dart';
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
+import '../../widgets/grid_builder.dart';
 import '../../widgets/text_field_widget.dart';
 import '../menu_page/sidebar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late bool isGridView = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +36,22 @@ class HomeScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                    icon: const Icon(Icons.view_stream_outlined),
-                    onPressed: () {}),
+                if (isGridView)
+                  IconButton(
+                      icon: const Icon(Icons.view_agenda_outlined),
+                      onPressed: () {
+                        setState(() {
+                          isGridView = false;
+                        });
+                      })
+                else
+                  IconButton(
+                      icon: const Icon(Icons.grid_view_outlined),
+                      onPressed: () {
+                        setState(() {
+                          isGridView = true;
+                        });
+                      }),
                 IconButton(icon: const Icon(Icons.people), onPressed: () {}),
               ],
             ),
@@ -48,7 +69,9 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   )
-                : TasksList(taskList: tasksList)),
+                : isGridView
+                    ? GridBuilder(selectedList: tasksList)
+                    : TasksList(taskList: tasksList)),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),
           notchMargin: SizesManager.m10,
