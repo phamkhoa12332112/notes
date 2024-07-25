@@ -45,13 +45,13 @@ class TasksList extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(
                     text: task.title,
-                    style: TextStyle(fontSize: SizesManager.s15)),
+                    style: TextStyle(color: Colors.black ,fontSize: SizesManager.s25)),
               ),
               subtitle: RichText(
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(
                     text: task.title,
-                    style: TextStyle(fontSize: SizesManager.s10)),
+                    style: TextStyle(color: Colors.black ,fontSize: SizesManager.s20)),
               ),
             ),
           ),

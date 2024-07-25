@@ -22,7 +22,7 @@ class StringsManger {
   static const String title_label = 'Chỉnh sửa nhãn';
   static const String delete_text = 'Không có ghi chú nào trong Thùng rác';
   static const String save_text =
-      'Ghi chút đã được lưu trữ của bạn sẽ xuất hiện ở đây';
+      'Ghi chú đã được lưu trữ của bạn sẽ xuất hiện ở đây';
 
 
   static const String show_mode = 'Chế độ hiển thị';

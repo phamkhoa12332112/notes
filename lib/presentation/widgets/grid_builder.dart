@@ -46,13 +46,13 @@ class GridBuilderState extends State<GridBuilder> {
                           overflow: TextOverflow.ellipsis,
                           text: TextSpan(
                               text: task.title,
-                              style: TextStyle(fontSize: SizesManager.s30)),
+                              style: TextStyle(color: Colors.black ,fontSize: SizesManager.s30)),
                         ),
                         RichText(
                           overflow: TextOverflow.ellipsis,
                           text: TextSpan(
                               text: task.content,
-                              style: TextStyle(fontSize: SizesManager.s20)),
+                              style: TextStyle(color: Colors.black ,fontSize: SizesManager.s20)),
                         ),
                       ],
                     ))),

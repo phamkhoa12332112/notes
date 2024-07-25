@@ -5,7 +5,6 @@ import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 
-
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
@@ -25,7 +24,7 @@ class SettingScreen extends StatelessWidget {
                 Text(
                   StringsManger.show_mode,
                   style: TextStyle(
-                      fontSize: SizesManager.s15,
+                      fontSize: SizesManager.s25,
                       color: Colors.black,
                       fontWeight: FontWeight.w400),
                 ),
@@ -33,7 +32,7 @@ class SettingScreen extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   children: [
                     Text(StringsManger.show_mode_1,
-                        style: TextStyle(fontSize: SizesManager.s10)),
+                        style: TextStyle(fontSize: SizesManager.s15)),
                     Align(
                         alignment: Alignment.centerRight,
                         child: Switch(value: true, onChanged: (value) {}))
@@ -42,7 +41,7 @@ class SettingScreen extends StatelessWidget {
                 Text(
                   StringsManger.default_remind,
                   style: TextStyle(
-                      fontSize: SizesManager.s15,
+                      fontSize: SizesManager.s25,
                       color: Colors.black,
                       fontWeight: FontWeight.w400),
                 ),
@@ -51,39 +50,33 @@ class SettingScreen extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   children: [
                     Text(StringsManger.morning,
-                        style: TextStyle(fontSize: SizesManager.s10)),
+                        style: TextStyle(fontSize: SizesManager.s15)),
                     const Align(
-                        alignment: Alignment.centerRight,
-                        child: Text('08:00'))
+                        alignment: Alignment.centerRight, child: Text('08:00'))
                   ],
                 ),
                 GapsManager.h10,
-                Stack(
-                    alignment: Alignment.centerLeft,
-                    children: [
-                      Text(StringsManger.afternoon,
-                          style: TextStyle(fontSize: SizesManager.s10)),
-                      const Align(
-                          alignment: Alignment.centerRight,
-                          child: Text('13:00'))
-                    ]
-                ),
+                Stack(alignment: Alignment.centerLeft, children: [
+                  Text(StringsManger.afternoon,
+                      style: TextStyle(fontSize: SizesManager.s15)),
+                  const Align(
+                      alignment: Alignment.centerRight, child: Text('13:00'))
+                ]),
                 GapsManager.h10,
                 Stack(
                   alignment: Alignment.centerLeft,
                   children: [
                     Text(StringsManger.night,
-                        style: TextStyle(fontSize: SizesManager.s10)),
+                        style: TextStyle(fontSize: SizesManager.s15)),
                     const Align(
-                        alignment: Alignment.centerRight,
-                        child: Text('18:00'))
+                        alignment: Alignment.centerRight, child: Text('18:00'))
                   ],
                 ),
                 GapsManager.h10,
                 Text(
                   StringsManger.share,
                   style: TextStyle(
-                      fontSize: SizesManager.s15,
+                      fontSize: SizesManager.s25,
                       color: Colors.black,
                       fontWeight: FontWeight.w400),
                 ),
@@ -91,7 +84,7 @@ class SettingScreen extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   children: [
                     Text(StringsManger.on_share,
-                        style: TextStyle(fontSize: SizesManager.s10)),
+                        style: TextStyle(fontSize: SizesManager.s15)),
                     Align(
                         alignment: Alignment.centerRight,
                         child: Switch(value: true, onChanged: (value) {}))

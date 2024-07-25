@@ -93,20 +93,22 @@ class AddNoteScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
-                    style: TextStyle(fontSize: SizesManager.s15),
+                    style: TextStyle(fontSize: SizesManager.s30),
                     controller: titleController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManger.title,
                         hintStyle: TextStyle(
-                            color: Colors.grey, fontSize: SizesManager.s15)),
+                            color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
                   TextField(
+                    style: TextStyle(fontSize: SizesManager.s20),
                     controller: contentController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: StringsManger.noted,
-                        hintStyle: TextStyle(color: Colors.grey)),
+                        hintStyle: TextStyle(
+                            color: Colors.grey, fontSize: SizesManager.s20)),
                   ),
                 ],
               ),
@@ -151,7 +153,10 @@ class AddNoteScreen extends StatelessWidget {
                     onPressed: () {},
                     icon: const Icon(Icons.text_format_outlined),
                   ),
-                  const Text(StringsManger.update_home),
+                  Text(
+                    StringsManger.update_home,
+                    style: TextStyle(fontSize: SizesManager.s15),
+                  ),
                 ],
               ),
             ),

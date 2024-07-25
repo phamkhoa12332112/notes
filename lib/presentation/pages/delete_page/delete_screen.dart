@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 
-
 class DeleteScreen extends StatelessWidget {
   const DeleteScreen({super.key});
 
@@ -27,12 +26,14 @@ class DeleteScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.delete_outline,
-                    color: Colors.orangeAccent, size: SizesManager.s70),
-                const Text(StringsManger.delete_text),
+                    color: Colors.orangeAccent, size: SizesManager.w150),
+                Text(
+                  StringsManger.delete_text,
+                  style: TextStyle(fontSize: SizesManager.s15),
+                ),
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 }

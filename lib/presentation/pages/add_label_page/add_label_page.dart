@@ -36,7 +36,7 @@ class AddLabelScreen extends StatelessWidget {
                     const Icon(Icons.label_outlined),
                     Text(
                       StringsManger.title,
-                      style: TextStyle(fontSize: SizesManager.s8),
+                      style: TextStyle(fontSize: SizesManager.s15),
                     ),
                     const Icon(Icons.edit)
                   ],
