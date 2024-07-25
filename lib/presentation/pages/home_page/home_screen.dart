@@ -64,8 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(Icons.emoji_objects_outlined,
-                            color: Colors.orangeAccent, size: SizesManager.s70),
-                        const Text(StringsManger.hintText_home),
+                            color: Colors.orangeAccent,
+                            size: SizesManager.w150),
+                        Text(
+                          StringsManger.hintText_home,
+                          style: TextStyle(fontSize: SizesManager.s15),
+                        ),
                       ],
                     ),
                   )
@@ -82,10 +86,10 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    style: TextStyle(fontSize: SizesManager.s10),
+                    style: TextStyle(fontSize: SizesManager.s20),
                     StringsManger.app_name),
                 Text(
-                    style: TextStyle(fontSize: SizesManager.s8),
+                    style: TextStyle(fontSize: SizesManager.s15),
                     StringsManger.total_notes)
               ],
             ),

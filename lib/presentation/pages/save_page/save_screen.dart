@@ -4,7 +4,6 @@ import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 
-
 class SaveScreen extends StatelessWidget {
   const SaveScreen({super.key});
 
@@ -34,12 +33,14 @@ class SaveScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.save_alt_outlined,
-                    color: Colors.orangeAccent, size: SizesManager.s70),
-                const Text(StringsManger.save_text),
+                    color: Colors.orangeAccent, size: SizesManager.w150),
+                Text(
+                  StringsManger.save_text,
+                  style: TextStyle(fontSize: SizesManager.s15),
+                ),
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 }

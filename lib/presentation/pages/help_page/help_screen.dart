@@ -31,7 +31,7 @@ class HelpScreen extends StatelessWidget {
                 Text(
                   StringsManger.help_title,
                   style: TextStyle(
-                      fontSize: SizesManager.s15, fontWeight: FontWeight.w500),
+                      fontSize: SizesManager.s25, fontWeight: FontWeight.w500),
                 ),
                 GapsManager.h20,
                 Row(
@@ -48,7 +48,10 @@ class HelpScreen extends StatelessWidget {
                           color: Colors.blue,
                         )),
                     GapsManager.w20,
-                    const Text(StringsManger.help_1)
+                    Text(
+                      StringsManger.help_1,
+                      style: TextStyle(fontSize: SizesManager.s15),
+                    )
                   ],
                 ),
                 GapsManager.h20,
@@ -66,7 +69,10 @@ class HelpScreen extends StatelessWidget {
                           color: Colors.blue,
                         )),
                     GapsManager.w20,
-                    const Text(StringsManger.help_2)
+                    Text(
+                      StringsManger.help_2,
+                      style: TextStyle(fontSize: SizesManager.s15),
+                    )
                   ],
                 ),
                 GapsManager.h20,
@@ -84,7 +90,10 @@ class HelpScreen extends StatelessWidget {
                           color: Colors.blue,
                         )),
                     GapsManager.w20,
-                    const Text(StringsManger.help_3)
+                    Text(
+                      StringsManger.help_3,
+                      style: TextStyle(fontSize: SizesManager.s15),
+                    )
                   ],
                 ),
                 GapsManager.h20,
@@ -103,8 +112,9 @@ class HelpScreen extends StatelessWidget {
                         )),
                     GapsManager.w20,
                     SizedBox(
-                      width: SizesManager.w300,
-                      child: const Text(
+                      width: SizesManager.w200,
+                      child: Text(
+                        style: TextStyle(fontSize: SizesManager.s15),
                         StringsManger.help_4,
                         maxLines: SizesManager.l2,
                         overflow: TextOverflow.ellipsis,
@@ -127,7 +137,10 @@ class HelpScreen extends StatelessWidget {
                           color: Colors.blue,
                         )),
                     GapsManager.w20,
-                    const Text(StringsManger.help_5)
+                    Text(
+                      StringsManger.help_5,
+                      style: TextStyle(fontSize: SizesManager.s15),
+                    )
                   ],
                 ),
                 GapsManager.h20,
@@ -156,7 +169,10 @@ class HelpScreen extends StatelessWidget {
                           color: Colors.blue,
                         )),
                     GapsManager.w20,
-                    const Text(StringsManger.help_6)
+                    Text(
+                      StringsManger.help_6,
+                      style: TextStyle(fontSize: SizesManager.s15),
+                    )
                   ],
                 ),
                 GapsManager.h10,

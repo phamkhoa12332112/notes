@@ -6,7 +6,6 @@ import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 import '../menu_page/sidebar.dart';
 
-
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
@@ -37,8 +36,11 @@ class NotificationScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(Icons.notifications_none_outlined,
-                  color: Colors.orange, size: SizesManager.s70),
-              const Text(StringsManger.hintText_home),
+                  color: Colors.orange, size: SizesManager.w150),
+              Text(
+                StringsManger.hintText_home,
+                style: TextStyle(fontSize: SizesManager.s15),
+              ),
             ],
           ),
         ),
@@ -53,7 +55,7 @@ class NotificationScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                  style: TextStyle(fontSize: SizesManager.s10),
+                  style: TextStyle(fontSize: SizesManager.s20),
                   StringsManger.app_name),
             ],
           ),
