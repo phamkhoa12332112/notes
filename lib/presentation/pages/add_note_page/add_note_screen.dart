@@ -119,7 +119,9 @@ class AddNoteScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           var task = Task(
-              title: titleController.text, content: contentController.text);
+              title: titleController.text,
+              content: contentController.text,
+              isDone: false);
           context.read<TasksBloc>().add(AddTask(task: task));
           Navigator.popAndPushNamed(context, RoutesName.homeScreen);
         },

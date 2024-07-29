@@ -18,6 +18,9 @@ class SizesManager {
   static double p18 = 18.r;
   static double p100 = 100.r;
 
+  static double w1 = 1.w;
+  static double w5 = 5.w;
+  static double w10 = 10.w;
   static double w30 = 30.w;
   static double w100 = 100.w;
   static double w150 = 150.w;
@@ -38,5 +41,6 @@ class SizesManager {
 
   static const int l2 = 2;
 
+  static double r0 = 0.r;
   static double r20 = 20.r;
 }

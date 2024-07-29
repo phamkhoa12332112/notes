@@ -3,15 +3,14 @@ import 'package:equatable/equatable.dart';
 class Task extends Equatable {
   final String title;
   final String content;
-  bool? isDone;
+  bool isDone = false;
   bool? isDelete;
 
   Task(
       {required this.title,
       required this.content,
-      this.isDone,
+      required this.isDone,
       this.isDelete}) {
-    isDone = isDone ?? false;
     isDelete = isDelete ?? false;
   }
 
