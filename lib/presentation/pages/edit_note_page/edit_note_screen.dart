@@ -125,7 +125,7 @@ class EditNoteScreen extends StatelessWidget {
               title: titleController.text,
               content: contentController.text,
               isDone: false);
-          context.read<TasksBloc>().add(EditTask(task: task));
+          context.read<TasksBloc>().add(EditTask(oldTask: task, newTask: editedTask));
           Navigator.pop(context);
         },
         elevation: SizesManager.e10,

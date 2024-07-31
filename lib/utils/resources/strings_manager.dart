@@ -67,4 +67,7 @@ class StringsManger {
   static const String time_friday_morning = 'Th 6 08:00';
   static const String address_private_home = '112 Ngự Bình, An...';
   static const String selected_item = 'đã được chọn';
+
+  static const String delete_bin = 'Xoá';
+  static const String select_all = 'Chọn tất cả';
 }

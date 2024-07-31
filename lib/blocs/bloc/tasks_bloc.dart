@@ -17,21 +17,25 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
 
   void _onAddTask(AddTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    emit(TasksState(allTasks: List.from(state.allTasks)..add(even.task)));
+    emit(TasksState(
+        allTasks: List.from(state.allTasks)..add(even.task),
+        deleteTasks: state.deleteTasks));
   }
 
   void _onEditTask(EditTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    final task = even.task;
-    final int index = state.allTasks.indexOf(task);
-    List<Task> allTasks = List.from(state.allTasks)..remove(task);
-    allTasks.insert(index, task.copyWith());
-    emit(TasksState(allTasks: allTasks));
+    emit(TasksState(
+        allTasks: List.from(state.allTasks)
+          ..remove(even.oldTask)
+          ..insert(0, even.newTask),
+        deleteTasks: state.deleteTasks));
   }
 
   void _onDeleteTask(DeleteTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    emit(TasksState(allTasks: List.from(state.allTasks)..remove(even.task)));
+    emit(TasksState(
+        allTasks: List.from(state.allTasks)..remove(even.task),
+        deleteTasks: List.from(state.deleteTasks)..remove(even.task)));
   }
 
   void _onRemoveTask(RemoveTask even, Emitter<TasksState> emit) {
@@ -39,7 +43,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     emit(TasksState(
         allTasks: List.from(state.allTasks)..remove(even.task),
         deleteTasks: List.from(state.deleteTasks)
-          ..add(even.task.copyWith(isDelete: true))));
+          ..insert(0, even.task.copyWith(isDelete: true, isDone: false))));
   }
 
   @override

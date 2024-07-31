@@ -17,12 +17,13 @@ class AddTask extends TasksEven {
 }
 
 class EditTask extends TasksEven {
-  final Task task;
+  final Task oldTask;
+  final Task newTask;
 
-  const EditTask({required this.task});
+  const EditTask({required this.oldTask, required this.newTask});
 
   @override
-  List<Object?> get props => [task];
+  List<Object?> get props => [oldTask, newTask];
 }
 
 class DeleteTask extends TasksEven {
