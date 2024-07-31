@@ -25,6 +25,12 @@ class TasksList extends StatefulWidget {
 }
 
 class _TasksListState extends State<TasksList> {
+  void _removeOrDeleteTask(BuildContext ctx, Task task) {
+    task.isDelete!
+        ? ctx.read<TasksBloc>().add(DeleteTask(task: task))
+        : ctx.read<TasksBloc>().add(RemoveTask(task: task));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -53,11 +59,7 @@ class _TasksListState extends State<TasksList> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                            onPressed: (_) {
-                              context
-                                  .read<TasksBloc>()
-                                  .add(DeleteTask(task: task));
-                            },
+                            onPressed: (_) => _removeOrDeleteTask(context, task),
                             borderRadius:
                                 BorderRadius.circular(SizesManager.r20),
                             padding: EdgeInsets.all(SizesManager.p10),

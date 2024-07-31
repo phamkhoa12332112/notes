@@ -12,13 +12,17 @@ import '../../widgets/bottom_sheet_page/info_add_box_page.dart';
 import '../../widgets/bottom_sheet_page/info_more_vert_page.dart';
 import '../../widgets/bottom_sheet_page/info_notification_add_page.dart';
 
-class AddNoteScreen extends StatelessWidget {
-  const AddNoteScreen({super.key});
+class EditNoteScreen extends StatelessWidget {
+  final Task task;
+
+  const EditNoteScreen({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController contentController = TextEditingController();
+    final TextEditingController titleController =
+        TextEditingController(text: task.title);
+    final TextEditingController contentController =
+        TextEditingController(text: task.content);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -117,12 +121,12 @@ class AddNoteScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          var task = Task(
+          var editedTask = Task(
               title: titleController.text,
               content: contentController.text,
               isDone: false);
-          context.read<TasksBloc>().add(AddTask(task: task));
-          Navigator.popAndPushNamed(context, RoutesName.homeScreen);
+          context.read<TasksBloc>().add(EditTask(task: task));
+          Navigator.pop(context);
         },
         elevation: SizesManager.e10,
         child: const Icon(Icons.save),

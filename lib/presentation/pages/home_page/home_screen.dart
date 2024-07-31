@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     StringsManger.app_name),
                 Text(
                     style: TextStyle(fontSize: SizesManager.s15),
-                    StringsManger.total_notes)
+                    "${StringsManger.total_notes_1}${tasksList.length}${StringsManger.total_notes_2}")
               ],
             ),
           ),

@@ -10,8 +10,9 @@ part 'tasks_state.dart';
 class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
   TasksBloc() : super(const TasksState()) {
     on<AddTask>(_onAddTask);
-    on<UpdateTask>(_onUpdateTask);
+    on<EditTask>(_onEditTask);
     on<DeleteTask>(_onDeleteTask);
+    on<RemoveTask>(_onRemoveTask);
   }
 
   void _onAddTask(AddTask even, Emitter<TasksState> emit) {
@@ -19,7 +20,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     emit(TasksState(allTasks: List.from(state.allTasks)..add(even.task)));
   }
 
-  void _onUpdateTask(UpdateTask even, Emitter<TasksState> emit) {
+  void _onEditTask(EditTask even, Emitter<TasksState> emit) {
     final state = this.state;
     final task = even.task;
     final int index = state.allTasks.indexOf(task);
@@ -31,6 +32,14 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
   void _onDeleteTask(DeleteTask even, Emitter<TasksState> emit) {
     final state = this.state;
     emit(TasksState(allTasks: List.from(state.allTasks)..remove(even.task)));
+  }
+
+  void _onRemoveTask(RemoveTask even, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(TasksState(
+        allTasks: List.from(state.allTasks)..remove(even.task),
+        deleteTasks: List.from(state.deleteTasks)
+          ..add(even.task.copyWith(isDelete: true))));
   }
 
   @override

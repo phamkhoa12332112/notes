@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notesapp/blocs/bloc.export.dart';
 import 'package:notesapp/models/task.dart';
+import 'package:notesapp/presentation/pages/edit_note_page/edit_note_screen.dart';
 import 'package:notesapp/utils/resources/sizes_manager.dart';
 
-import '../../blocs/bloc/tasks_bloc.dart';
 
 class GridBuilder extends StatefulWidget {
   const GridBuilder({
@@ -24,6 +24,12 @@ class GridBuilder extends StatefulWidget {
 }
 
 class GridBuilderState extends State<GridBuilder> {
+  void _removeOrDeleteTask(BuildContext ctx, Task task) {
+    task.isDelete!
+        ? ctx.read<TasksBloc>().add(DeleteTask(task: task))
+        : ctx.read<TasksBloc>().add(RemoveTask(task: task));
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -33,14 +39,15 @@ class GridBuilderState extends State<GridBuilder> {
         itemBuilder: (_, index) {
           var task = widget.tasksList[index];
           return GestureDetector(
-            onTap: () => Future.delayed(Duration.zero, () async {
-              widget.onTap!(task);
-            }),
-            onDoubleTap: () {
-              if (!widget.isSelectionMode) {
-                context.read<TasksBloc>().add(DeleteTask(task: task));
-              }
-            },
+            onTap: () => widget.isSelectionMode
+                ? Future.delayed(Duration.zero, () async {
+                    widget.onTap!(task);
+                  })
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditNoteScreen(task: task))),
+            onDoubleTap: () => _removeOrDeleteTask(context, task),
             onLongPress: () => Future.delayed(Duration.zero, () async {
               widget.onLongPress!();
             }),
