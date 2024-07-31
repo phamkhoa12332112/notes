@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       for (var task in selectedList) {
                         if (task.isDone) {
-                          context.read<TasksBloc>().add(DeleteTask(task: task));
+                          context.read<TasksBloc>().add(RemoveTask(task: task));
                         }
                       }
                       setState(() {

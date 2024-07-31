@@ -14,7 +14,15 @@ class DeleteScreen extends StatefulWidget {
 }
 
 class _DeleteScreenState extends State<DeleteScreen> {
+  late List<Task> selectedList = [];
+  final bool _isSelectionMode = true;
 
+  void onTap(Task task) {
+    setState(() {
+      task.isDone = !task.isDone;
+      task.isDone ? selectedList.add(task) : selectedList.remove(task);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +30,42 @@ class _DeleteScreenState extends State<DeleteScreen> {
       List<Task> deleteList = state.deleteTasks;
       return Scaffold(
           appBar: AppBar(
-            title: Stack(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Title(
                     color: Colors.black,
                     child: const Text(StringsManger.delete)),
-                const Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.more_vert))
+                PopupMenuButton(
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                        child: const Text(StringsManger.delete_bin),
+                        onTap: () {
+                          for (var task in selectedList) {
+                            if (task.isDone) {
+                              context
+                                  .read<TasksBloc>()
+                                  .add(DeleteTask(task: task));
+                            }
+                          }
+                        }),
+                    PopupMenuItem(
+                        child: const Text(StringsManger.select_all),
+                        onTap: () {
+                          setState(() {
+                            for (int index = 0;
+                                index < deleteList.length;
+                                index++) {
+                              deleteList[index].isDone =
+                                  deleteList[index].isDone ? false : true;
+                              deleteList[index].isDone
+                                  ? selectedList.add(deleteList[index])
+                                  : selectedList.remove(deleteList[index]);
+                            }
+                          });
+                        })
+                  ],
+                )
               ],
             ),
           ),
@@ -51,9 +87,9 @@ class _DeleteScreenState extends State<DeleteScreen> {
                     )
                   : GridBuilder(
                       tasksList: deleteList,
-                      isSelectionMode: false,
+                      isSelectionMode: _isSelectionMode,
                       onLongPress: null,
-                      onTap: null,
+                      onTap: onTap,
                     )));
     });
   }
