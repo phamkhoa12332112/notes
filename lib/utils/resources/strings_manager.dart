@@ -69,5 +69,6 @@ class StringsManger {
   static const String selected_item = 'đã được chọn';
 
   static const String delete_bin = 'Xoá';
+  static const String restore = 'Khôi phục';
   static const String select_all = 'Chọn tất cả';
 }

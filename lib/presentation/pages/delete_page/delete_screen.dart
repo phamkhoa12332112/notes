@@ -50,6 +50,17 @@ class _DeleteScreenState extends State<DeleteScreen> {
                           }
                         }),
                     PopupMenuItem(
+                        child: const Text(StringsManger.restore),
+                        onTap: () {
+                          for (var task in selectedList) {
+                            if (task.isDone) {
+                              context
+                                  .read<TasksBloc>()
+                                  .add(RestoreTask(task: task));
+                            }
+                          }
+                        }),
+                    PopupMenuItem(
                         child: const Text(StringsManger.select_all),
                         onTap: () {
                           setState(() {
@@ -63,7 +74,8 @@ class _DeleteScreenState extends State<DeleteScreen> {
                                   : selectedList.remove(deleteList[index]);
                             }
                           });
-                        })
+                        }),
+
                   ],
                 )
               ],
