@@ -52,3 +52,21 @@ class RestoreTask extends TasksEven {
   @override
   List<Object?> get props => [task];
 }
+
+class StoreTask extends TasksEven {
+  final Task task;
+
+  const StoreTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
+class UnStoreTask extends TasksEven {
+  final Task task;
+
+  const UnStoreTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}

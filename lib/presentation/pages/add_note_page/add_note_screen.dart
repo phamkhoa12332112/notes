@@ -70,10 +70,14 @@ class AddNoteScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.push_pin_outlined),
-                    IconButton(
-                        icon: const Icon(Icons.notification_add_outlined),
-                        onPressed: () {
+                    InkWell(
+                      child: const Icon(Icons.push_pin_outlined),
+                      onTap: () {},
+                    ),
+                    GapsManager.w20,
+                    InkWell(
+                        child: const Icon(Icons.notification_add_outlined),
+                        onTap: () {
                           showModalBottomSheet(
                               shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.zero),
@@ -81,7 +85,17 @@ class AddNoteScreen extends StatelessWidget {
                               builder: (context) =>
                                   const InfoNotificationAddPage());
                         }),
-                    const Icon(Icons.save_alt),
+                    GapsManager.w20,
+                    InkWell(
+                        onTap: () {
+                          var task = Task(
+                              title: titleController.text,
+                              content: contentController.text,
+                              isChoose: false);
+                          context.read<TasksBloc>().add(StoreTask(task: task));
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.save_alt)),
                   ],
                 )
               ],
@@ -120,7 +134,7 @@ class AddNoteScreen extends StatelessWidget {
           var task = Task(
               title: titleController.text,
               content: contentController.text,
-              isDone: false);
+              isChoose: false);
           context.read<TasksBloc>().add(AddTask(task: task));
           Navigator.popAndPushNamed(context, RoutesName.homeScreen);
         },

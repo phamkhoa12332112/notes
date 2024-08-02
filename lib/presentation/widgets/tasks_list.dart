@@ -6,6 +6,7 @@ import 'package:notesapp/utils/resources/strings_manager.dart';
 
 import '../../models/task.dart';
 import '../../utils/resources/sizes_manager.dart';
+import '../pages/edit_note_page/edit_note_screen.dart';
 
 class TasksList extends StatefulWidget {
   const TasksList(
@@ -38,9 +39,14 @@ class _TasksListState extends State<TasksList> {
       itemBuilder: (context, index) {
         var task = widget.taskList[index];
         return GestureDetector(
-          onTap: () => Future.delayed(Duration.zero, () async {
+          onTap: () => widget.isSelectionMode
+              ? Future.delayed(Duration.zero, () async {
             widget.onTap!(task);
-          }),
+          })
+              : Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditNoteScreen(task: task))),
           onLongPress: () => Future.delayed(Duration.zero, () async {
             widget.onLongPress!();
           }),
@@ -48,8 +54,8 @@ class _TasksListState extends State<TasksList> {
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: task.isDone ? Colors.green : Colors.grey,
-                    width: task.isDone ? SizesManager.w5 : SizesManager.w1),
+                    color: task.isChoose ? Colors.green : Colors.grey,
+                    width: task.isChoose ? SizesManager.w5 : SizesManager.w1),
                 borderRadius: BorderRadius.circular(SizesManager.r20)),
             margin: EdgeInsets.all(SizesManager.m20),
             child: !widget.isSelectionMode

@@ -32,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void onTap(Task task) {
     if (_isSelectionMode) {
       setState(() {
-        task.isDone = !task.isDone;
-        task.isDone ? selectedList.add(task) : selectedList.remove(task);
+        task.isChoose = !task.isChoose;
+        task.isChoose ? selectedList.add(task) : selectedList.remove(task);
       });
     }
   }
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   InkWell(
                     onTap: () {
                       for (var task in selectedList) {
-                        if (task.isDone) {
+                        if (task.isChoose) {
                           context.read<TasksBloc>().add(RemoveTask(task: task));
                         }
                       }
@@ -100,9 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       setState(() {
                         for (int index = 0; index < tasksList.length; index++) {
-                          tasksList[index].isDone =
-                              tasksList[index].isDone ? false : true;
-                          tasksList[index].isDone
+                          tasksList[index].isChoose =
+                              tasksList[index].isChoose ? false : true;
+                          tasksList[index].isChoose
                               ? selectedList.add(tasksList[index])
                               : selectedList.remove(tasksList[index]);
                         }
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.grey.shade300,
           child: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, RoutesName.addNoteScreen);

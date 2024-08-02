@@ -19,8 +19,8 @@ class _DeleteScreenState extends State<DeleteScreen> {
 
   void onTap(Task task) {
     setState(() {
-      task.isDone = !task.isDone;
-      task.isDone ? selectedList.add(task) : selectedList.remove(task);
+      task.isChoose = !task.isChoose;
+      task.isChoose ? selectedList.add(task) : selectedList.remove(task);
     });
   }
 
@@ -42,7 +42,7 @@ class _DeleteScreenState extends State<DeleteScreen> {
                         child: const Text(StringsManger.delete_bin),
                         onTap: () {
                           for (var task in selectedList) {
-                            if (task.isDone) {
+                            if (task.isChoose) {
                               context
                                   .read<TasksBloc>()
                                   .add(DeleteTask(task: task));
@@ -53,7 +53,7 @@ class _DeleteScreenState extends State<DeleteScreen> {
                         child: const Text(StringsManger.restore),
                         onTap: () {
                           for (var task in selectedList) {
-                            if (task.isDone) {
+                            if (task.isChoose) {
                               context
                                   .read<TasksBloc>()
                                   .add(RestoreTask(task: task));
@@ -67,9 +67,9 @@ class _DeleteScreenState extends State<DeleteScreen> {
                             for (int index = 0;
                                 index < deleteList.length;
                                 index++) {
-                              deleteList[index].isDone =
-                                  deleteList[index].isDone ? false : true;
-                              deleteList[index].isDone
+                              deleteList[index].isChoose =
+                                  deleteList[index].isChoose ? false : true;
+                              deleteList[index].isChoose
                                   ? selectedList.add(deleteList[index])
                                   : selectedList.remove(deleteList[index]);
                             }
