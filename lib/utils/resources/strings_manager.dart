@@ -71,4 +71,5 @@ class StringsManger {
   static const String delete_bin = 'Xoá';
   static const String restore = 'Khôi phục';
   static const String select_all = 'Chọn tất cả';
+  static const String deny_store = 'Huỷ bỏ lưu trữ';
 }

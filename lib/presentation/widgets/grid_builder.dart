@@ -56,8 +56,8 @@ class GridBuilderState extends State<GridBuilder> {
                     child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: task.isDone ? Colors.green : Colors.grey,
-                                width: task.isDone
+                                color: task.isChoose ? Colors.green : Colors.grey,
+                                width: task.isChoose
                                     ? SizesManager.w5
                                     : SizesManager.w1),
                             borderRadius: BorderRadiusDirectional.all(

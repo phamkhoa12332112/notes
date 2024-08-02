@@ -53,8 +53,14 @@ class EditNoteScreen extends StatelessWidget {
                                           CupertinoDialogAction(
                                               child:
                                                   const Text(StringsManger.yes),
-                                              onPressed: () =>
-                                                  Navigator.pushNamed(context,
+                                              onPressed: () => task.isStore!
+                                                  ? Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                      context,
+                                                      RoutesName.saveScreen,
+                                                      (route) => route.isFirst,
+                                                    )
+                                                  : Navigator.pushNamed(context,
                                                       RoutesName.homeScreen))
                                         ],
                                       ),
@@ -124,9 +130,15 @@ class EditNoteScreen extends StatelessWidget {
           var editedTask = Task(
               title: titleController.text,
               content: contentController.text,
-              isDone: false);
-          context.read<TasksBloc>().add(EditTask(oldTask: task, newTask: editedTask));
-          Navigator.pop(context);
+              isChoose: false,
+              isStore: task.isStore);
+          context
+              .read<TasksBloc>()
+              .add(EditTask(oldTask: task, newTask: editedTask));
+          task.isStore!
+              ? Navigator.pushNamedAndRemoveUntil(
+                  context, RoutesName.saveScreen, (route) => route.isFirst)
+              : Navigator.pushNamed(context, RoutesName.homeScreen);
         },
         elevation: SizesManager.e10,
         child: const Icon(Icons.save),
