@@ -12,17 +12,24 @@ import '../../widgets/bottom_sheet_page/info_add_box_page.dart';
 import '../../widgets/bottom_sheet_page/info_more_vert_page.dart';
 import '../../widgets/bottom_sheet_page/info_notification_add_page.dart';
 
-class EditNoteScreen extends StatelessWidget {
+class EditNoteScreen extends StatefulWidget {
   final Task task;
 
   const EditNoteScreen({super.key, required this.task});
 
   @override
+  State<EditNoteScreen> createState() => _EditNoteScreenState();
+}
+
+class _EditNoteScreenState extends State<EditNoteScreen> {
+  late bool pinNote = false;
+
+  @override
   Widget build(BuildContext context) {
     final TextEditingController titleController =
-        TextEditingController(text: task.title);
+        TextEditingController(text: widget.task.title);
     final TextEditingController contentController =
-        TextEditingController(text: task.content);
+        TextEditingController(text: widget.task.content);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -53,7 +60,8 @@ class EditNoteScreen extends StatelessWidget {
                                           CupertinoDialogAction(
                                               child:
                                                   const Text(StringsManger.yes),
-                                              onPressed: () => task.isStore!
+                                              onPressed: () => widget
+                                                      .task.isStore!
                                                   ? Navigator
                                                       .pushNamedAndRemoveUntil(
                                                       context,
@@ -80,10 +88,28 @@ class EditNoteScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.push_pin_outlined),
-                    IconButton(
-                        icon: const Icon(Icons.notification_add_outlined),
-                        onPressed: () {
+                    InkWell(
+                      onTap: () {
+                        var task = Task(
+                            title: titleController.text,
+                            content: contentController.text,
+                            isChoose: false,
+                            isPin: !pinNote,
+                            isStore: widget.task.isStore);
+                        context.read<TasksBloc>().add(PinTask(task: task));
+                        widget.task.isStore!
+                            ? Navigator.pushNamedAndRemoveUntil(context,
+                                RoutesName.saveScreen, (route) => route.isFirst)
+                            : Navigator.pop(context);
+                      },
+                      child: pinNote
+                          ? const Icon(Icons.push_pin)
+                          : const Icon(Icons.push_pin_outlined),
+                    ),
+                    GapsManager.w20,
+                    InkWell(
+                        child: const Icon(Icons.notification_add_outlined),
+                        onTap: () {
                           showModalBottomSheet(
                               shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.zero),
@@ -91,7 +117,22 @@ class EditNoteScreen extends StatelessWidget {
                               builder: (context) =>
                                   const InfoNotificationAddPage());
                         }),
-                    const Icon(Icons.save_alt),
+                    GapsManager.w20,
+                    InkWell(
+                        onTap: () {
+                          var task = Task(
+                              title: titleController.text,
+                              content: contentController.text,
+                              isChoose: false,
+                              isStore: widget.task.isStore);
+                          if (!widget.task.isStore!) {
+                            context
+                                .read<TasksBloc>()
+                                .add(StoreTask(task: task));
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.save_alt)),
                   ],
                 )
               ],
@@ -131,11 +172,11 @@ class EditNoteScreen extends StatelessWidget {
               title: titleController.text,
               content: contentController.text,
               isChoose: false,
-              isStore: task.isStore);
+              isStore: widget.task.isStore);
           context
               .read<TasksBloc>()
-              .add(EditTask(oldTask: task, newTask: editedTask));
-          task.isStore!
+              .add(EditTask(oldTask: widget.task, newTask: editedTask));
+          widget.task.isStore!
               ? Navigator.pushNamedAndRemoveUntil(
                   context, RoutesName.saveScreen, (route) => route.isFirst)
               : Navigator.pushNamed(context, RoutesName.homeScreen);

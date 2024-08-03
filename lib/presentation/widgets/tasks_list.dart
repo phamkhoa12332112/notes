@@ -35,18 +35,19 @@ class _TasksListState extends State<TasksList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: widget.taskList.length,
       itemBuilder: (context, index) {
         var task = widget.taskList[index];
         return GestureDetector(
           onTap: () => widget.isSelectionMode
               ? Future.delayed(Duration.zero, () async {
-            widget.onTap!(task);
-          })
+                  widget.onTap!(task);
+                })
               : Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => EditNoteScreen(task: task))),
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditNoteScreen(task: task))),
           onLongPress: () => Future.delayed(Duration.zero, () async {
             widget.onLongPress!();
           }),
@@ -65,7 +66,8 @@ class _TasksListState extends State<TasksList> {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                            onPressed: (_) => _removeOrDeleteTask(context, task),
+                            onPressed: (_) =>
+                                _removeOrDeleteTask(context, task),
                             borderRadius:
                                 BorderRadius.circular(SizesManager.r20),
                             padding: EdgeInsets.all(SizesManager.p10),

@@ -12,13 +12,30 @@ import '../../widgets/bottom_sheet_page/info_add_box_page.dart';
 import '../../widgets/bottom_sheet_page/info_more_vert_page.dart';
 import '../../widgets/bottom_sheet_page/info_notification_add_page.dart';
 
-class AddNoteScreen extends StatelessWidget {
+class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
 
   @override
+  State<AddNoteScreen> createState() => _AddNoteScreenState();
+}
+
+class _AddNoteScreenState extends State<AddNoteScreen> {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+  late bool pinNote = false;
+  late String title;
+  late String content;
+
+  void onTap() {
+    setState(() {
+      pinNote = !pinNote;
+      title = titleController.text;
+      content = contentController.text;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController contentController = TextEditingController();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -71,8 +88,10 @@ class AddNoteScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      child: const Icon(Icons.push_pin_outlined),
-                      onTap: () {},
+                      onTap: onTap,
+                      child: pinNote
+                          ? const Icon(Icons.push_pin)
+                          : const Icon(Icons.push_pin_outlined),
                     ),
                     GapsManager.w20,
                     InkWell(
@@ -134,8 +153,11 @@ class AddNoteScreen extends StatelessWidget {
           var task = Task(
               title: titleController.text,
               content: contentController.text,
-              isChoose: false);
-          context.read<TasksBloc>().add(AddTask(task: task));
+              isChoose: false,
+              isPin: pinNote);
+          pinNote
+              ? context.read<TasksBloc>().add(PinTask(task: task))
+              : context.read<TasksBloc>().add(AddTask(task: task));
           Navigator.popAndPushNamed(context, RoutesName.homeScreen);
         },
         elevation: SizesManager.e10,

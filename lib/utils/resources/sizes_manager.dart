@@ -16,6 +16,7 @@ class SizesManager {
   static double p10 = 10.r;
   static double p12 = 12.r;
   static double p18 = 18.r;
+  static double p20 = 18.r;
   static double p100 = 100.r;
 
   static double w1 = 1.w;
