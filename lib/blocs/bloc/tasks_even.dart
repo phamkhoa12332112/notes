@@ -70,3 +70,12 @@ class UnStoreTask extends TasksEven {
   @override
   List<Object?> get props => [task];
 }
+
+class PinTask extends TasksEven {
+  final Task task;
+
+  const PinTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}

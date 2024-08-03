@@ -6,15 +6,18 @@ class Task extends Equatable {
   bool isChoose = false;
   bool? isDelete;
   bool? isStore;
+  bool? isPin;
 
   Task(
       {required this.title,
       required this.content,
       required this.isChoose,
       this.isDelete,
-      this.isStore}) {
+      this.isStore,
+      this.isPin}) {
     isDelete = isDelete ?? false;
     isStore = isStore ?? false;
+    isPin = isPin ?? false;
   }
 
   Task copyWith(
@@ -22,13 +25,15 @@ class Task extends Equatable {
       String? content,
       bool? isChoose,
       bool? isDelete,
-      bool? isStore}) {
+      bool? isStore,
+      bool? isPin}) {
     return Task(
         title: title ?? this.title,
         content: content ?? this.content,
         isChoose: isChoose ?? this.isChoose,
         isDelete: isDelete ?? this.isDelete,
-        isStore: isStore ?? this.isStore);
+        isStore: isStore ?? this.isStore,
+        isPin: isPin ?? this.isPin);
   }
 
   Map<String, dynamic> toMap() {
@@ -37,7 +42,8 @@ class Task extends Equatable {
       'content': content,
       'isChoose': isChoose,
       'isDelete': isDelete,
-      'isStore': isStore
+      'isStore': isStore,
+      'isPin': isPin
     };
   }
 
@@ -47,9 +53,10 @@ class Task extends Equatable {
         content: map['content'] ?? "",
         isChoose: map['isChoose'],
         isDelete: map['isDelete'],
-        isStore: map['isStore']);
+        isStore: map['isStore'],
+        isPin: map['isPin']);
   }
 
   @override
-  List<Object?> get props => [title, content, isChoose, isDelete, isStore];
+  List<Object?> get props => [title, content, isChoose, isDelete, isStore, isPin];
 }

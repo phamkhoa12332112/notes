@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(builder: (context, state) {
       List<Task> tasksList = state.allTasks;
+      List<Task> pinList = state.pinTasks;
       return Scaffold(
         drawer: const Sidebar(),
         appBar: !_isSelectionMode
@@ -106,19 +107,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? selectedList.add(tasksList[index])
                               : selectedList.remove(tasksList[index]);
                         }
+                        for (int index = 0; index < pinList.length; index++) {
+                          pinList[index].isChoose =
+                              pinList[index].isChoose ? false : true;
+                          pinList[index].isChoose
+                              ? selectedList.add(pinList[index])
+                              : selectedList.remove(pinList[index]);
+                        }
                       });
                     },
                     child: const Icon(Icons.select_all_outlined),
                   ),
                   GapsManager.w20,
                   InkWell(
-                    onTap: () {},
+                    onTap: onLongPress,
                     child: const Icon(Icons.cancel),
                   )
                 ],
               ),
         body: SafeArea(
-            child: tasksList.isEmpty
+            child: (tasksList.isEmpty && pinList.isEmpty)
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -133,19 +141,63 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   )
-                : isGridView
-                    ? GridBuilder(
-                        tasksList: tasksList,
-                        isSelectionMode: _isSelectionMode,
-                        onTap: onTap,
-                        onLongPress: onLongPress,
+                : pinList.isNotEmpty
+                    ? SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: SizesManager.p20,
+                                    left: SizesManager.p20),
+                                child: Text('Được ghim')),
+                            isGridView
+                                ? GridBuilder(
+                                    tasksList: pinList,
+                                    isSelectionMode: _isSelectionMode,
+                                    onTap: onTap,
+                                    onLongPress: onLongPress,
+                                  )
+                                : TasksList(
+                                    taskList: pinList,
+                                    isSelectionMode: _isSelectionMode,
+                                    onLongPress: onLongPress,
+                                    onTap: onTap,
+                                  ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: SizesManager.p20,
+                                    left: SizesManager.p20),
+                                child: Text('Khác')),
+                            isGridView
+                                ? GridBuilder(
+                                    tasksList: tasksList,
+                                    isSelectionMode: _isSelectionMode,
+                                    onTap: onTap,
+                                    onLongPress: onLongPress,
+                                  )
+                                : TasksList(
+                                    taskList: tasksList,
+                                    isSelectionMode: _isSelectionMode,
+                                    onLongPress: onLongPress,
+                                    onTap: onTap,
+                                  ),
+                          ],
+                        ),
                       )
-                    : TasksList(
-                        taskList: tasksList,
-                        isSelectionMode: _isSelectionMode,
-                        onLongPress: onLongPress,
-                        onTap: onTap,
-                      )),
+                    : isGridView
+                        ? GridBuilder(
+                            tasksList: tasksList,
+                            isSelectionMode: _isSelectionMode,
+                            onTap: onTap,
+                            onLongPress: onLongPress,
+                          )
+                        : TasksList(
+                            taskList: tasksList,
+                            isSelectionMode: _isSelectionMode,
+                            onLongPress: onLongPress,
+                            onTap: onTap,
+                          )),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),
           notchMargin: SizesManager.m10,
@@ -160,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     StringsManger.app_name),
                 Text(
                     style: TextStyle(fontSize: SizesManager.s15),
-                    "${StringsManger.total_notes_1} ${tasksList.length} ${StringsManger.total_notes_2}")
+                    "${StringsManger.total_notes_1} ${tasksList.length + pinList.length} ${StringsManger.total_notes_2}")
               ],
             ),
           ),

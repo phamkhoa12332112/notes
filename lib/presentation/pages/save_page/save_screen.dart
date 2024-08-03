@@ -114,6 +114,10 @@ class _SaveScreenState extends State<SaveScreen> {
                                                 .add(RemoveTask(task: task));
                                           }
                                         }
+                                        setState(() {
+                                          selectedList.clear;
+                                          _isSelectionMode = !_isSelectionMode;
+                                        });
                                       }),
                                   PopupMenuItem(
                                       child: const Text(StringsManger.deny_store),
