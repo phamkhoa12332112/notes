@@ -110,7 +110,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           var task = Task(
                               title: titleController.text,
                               content: contentController.text,
-                              isChoose: false);
+                              isChoose: false, labelsList: []);
                           context.read<TasksBloc>().add(StoreTask(task: task));
                           Navigator.pop(context);
                         },
@@ -154,7 +154,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               title: titleController.text,
               content: contentController.text,
               isChoose: false,
-              isPin: pinNote);
+              isPin: pinNote, labelsList: []);
           pinNote
               ? context.read<TasksBloc>().add(PinTask(task: task))
               : context.read<TasksBloc>().add(AddTask(task: task));

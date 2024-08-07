@@ -72,4 +72,7 @@ class StringsManger {
   static const String restore = 'Khôi phục';
   static const String select_all = 'Chọn tất cả';
   static const String deny_store = 'Huỷ bỏ lưu trữ';
+
+  static const String pinned = 'Được ghim';
+  static const String others = 'Khác';
 }
