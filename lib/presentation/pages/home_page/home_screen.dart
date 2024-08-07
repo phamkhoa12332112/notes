@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: EdgeInsets.only(
                                     top: SizesManager.p20,
                                     left: SizesManager.p20),
-                                child: Text('Được ghim')),
+                                child: const Text(StringsManger.pinned)),
                             isGridView
                                 ? GridBuilder(
                                     tasksList: pinList,
@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: EdgeInsets.only(
                                     top: SizesManager.p20,
                                     left: SizesManager.p20),
-                                child: Text('Khác')),
+                                child: const Text(StringsManger.others)),
                             isGridView
                                 ? GridBuilder(
                                     tasksList: tasksList,

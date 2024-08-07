@@ -95,7 +95,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                             content: contentController.text,
                             isChoose: false,
                             isPin: !pinNote,
-                            isStore: widget.task.isStore);
+                            isStore: widget.task.isStore, labelsList: []);
                         context.read<TasksBloc>().add(PinTask(task: task));
                         widget.task.isStore!
                             ? Navigator.pushNamedAndRemoveUntil(context,
@@ -124,7 +124,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
-                              isStore: widget.task.isStore);
+                              isStore: widget.task.isStore, labelsList: const []);
                           if (!widget.task.isStore!) {
                             context
                                 .read<TasksBloc>()
@@ -172,7 +172,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               title: titleController.text,
               content: contentController.text,
               isChoose: false,
-              isStore: widget.task.isStore);
+              isStore: widget.task.isStore, labelsList: []);
           context
               .read<TasksBloc>()
               .add(EditTask(oldTask: widget.task, newTask: editedTask));
