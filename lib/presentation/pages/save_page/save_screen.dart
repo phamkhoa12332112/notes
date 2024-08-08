@@ -85,6 +85,7 @@ class _SaveScreenState extends State<SaveScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               const Icon(Icons.search),
+                              GapsManager.w10,
                               if (isGridView)
                                 IconButton(
                                     icon: const Icon(Icons.view_agenda_outlined),
@@ -129,6 +130,10 @@ class _SaveScreenState extends State<SaveScreen> {
                                                 .add(UnStoreTask(task: task));
                                           }
                                         }
+                                        setState(() {
+                                          selectedList.clear;
+                                          _isSelectionMode = !_isSelectionMode;
+                                        });
                                       }),
                                   PopupMenuItem(
                                       child:

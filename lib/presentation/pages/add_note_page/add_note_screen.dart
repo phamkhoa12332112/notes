@@ -154,7 +154,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               title: titleController.text,
               content: contentController.text,
               isChoose: false,
-              isPin: pinNote, labelsList: []);
+              isPin: pinNote, labelsList: const []);
           pinNote
               ? context.read<TasksBloc>().add(PinTask(task: task))
               : context.read<TasksBloc>().add(AddTask(task: task));

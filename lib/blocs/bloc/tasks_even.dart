@@ -80,6 +80,24 @@ class PinTask extends TasksEven {
   List<Object?> get props => [task];
 }
 
+class RemovePinTask extends TasksEven {
+  final Task task;
+
+  const RemovePinTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
+class RestorePinTask extends TasksEven {
+  final Task task;
+
+  const RestorePinTask({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
 class AddLabelTask extends TasksEven {
   final Task task;
 
