@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -17,6 +19,8 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     on<StoreTask>(_onStoreTask);
     on<UnStoreTask>(_onUnStoreTask);
     on<PinTask>(_onPinTask);
+    on<RemovePinTask>(_onRemovePinTask);
+    on<RestorePinTask>(_onRestorePinTask);
     on<AddLabelTask>(_onAddLabelTask);
     on<AddLabelList>(_onAddLabelList);
     on<RemoveLabel>(_onRemoveLabel);
@@ -36,14 +40,21 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     final state = this.state;
     final List<Task> listTasks = even.oldTask.isStore!
         ? state.allTasks
-        : (List.from(state.allTasks)
-          ..remove(even.oldTask)
-          ..insert(0, even.newTask));
+        : even.newTask.isPin!
+            ? state.allTasks
+            : (List.from(state.allTasks)
+              ..remove(even.oldTask)
+              ..insert(0, even.newTask));
     final List<Task> storeTasks = even.oldTask.isStore!
         ? (List.from(state.storeTasks)
           ..remove(even.oldTask)
           ..insert(0, even.newTask))
         : state.storeTasks;
+    final List<Task> pinTasks = even.newTask.isPin!
+        ? (List.from(state.pinTasks)
+          ..remove(even.oldTask)
+          ..insert(0, even.newTask))
+        : state.pinTasks;
     final Map<String, List<Task>> labelsList =
         Map<String, List<Task>>.from(state.labelListTasks);
     even.newTask.labelsList.forEach((label) {
@@ -57,7 +68,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         allTasks: listTasks,
         deleteTasks: state.deleteTasks,
         storeTasks: storeTasks,
-        pinTasks: state.pinTasks,
+        pinTasks: pinTasks,
         labelListTasks: labelsList));
   }
 
@@ -105,10 +116,10 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     final state = this.state;
     emit(TasksState(
         storeTasks: List.from(state.storeTasks)
-          ..add(even.task.copyWith(isStore: true, isPin: even.task.isPin)),
+          ..add(even.task.copyWith(isStore: true, isPin: false)),
         deleteTasks: List.from(state.deleteTasks),
         allTasks: List.from(state.allTasks)..remove(even.task),
-        pinTasks: state.pinTasks,
+        pinTasks: List.from(state.pinTasks)..remove(even.task),
         labelListTasks: state.labelListTasks));
   }
 
@@ -142,6 +153,26 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         labelListTasks: state.labelListTasks));
   }
 
+  void _onRemovePinTask(RemovePinTask even, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(TasksState(
+        allTasks: state.allTasks,
+        deleteTasks: state.deleteTasks,
+        storeTasks: state.storeTasks,
+        pinTasks: List.from(state.pinTasks)..remove(even.task),
+        labelListTasks: state.labelListTasks));
+  }
+
+  void _onRestorePinTask(RestorePinTask even, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(TasksState(
+        allTasks: List.from(state.allTasks)..remove(even.task),
+        deleteTasks: state.deleteTasks,
+        storeTasks: state.storeTasks,
+        pinTasks: state.pinTasks,
+        labelListTasks: state.labelListTasks));
+  }
+
   void _onAddLabelTask(AddLabelTask even, Emitter<TasksState> emit) {
     final state = this.state;
     final Map<String, List<Task>> labelsTaskList =
@@ -164,7 +195,8 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
 
   void _onAddLabelList(AddLabelList even, Emitter<TasksState> emit) {
     final state = this.state;
-    final Map<String, List<Task>> labelsTaskList = Map<String, List<Task>>.from(state.labelListTasks);
+    final Map<String, List<Task>> labelsTaskList =
+        Map<String, List<Task>>.from(state.labelListTasks);
     labelsTaskList[even.label] = [];
     emit(TasksState(
         allTasks: state.allTasks,
@@ -176,7 +208,8 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
 
   void _onRemoveLabel(RemoveLabel even, Emitter<TasksState> emit) {
     final state = this.state;
-    final Map<String, List<Task>> labelsTaskList = Map<String, List<Task>>.from(state.labelListTasks);
+    final Map<String, List<Task>> labelsTaskList =
+        Map<String, List<Task>>.from(state.labelListTasks);
     labelsTaskList.remove(even.label);
     emit(TasksState(
         allTasks: state.allTasks,
@@ -196,3 +229,5 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     return state.toMap();
   }
 }
+
+class _onRemovePinTask {}

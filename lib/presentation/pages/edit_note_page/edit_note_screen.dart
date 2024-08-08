@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notesapp/blocs/bloc.export.dart';
 import 'package:notesapp/blocs/bloc/tasks_bloc.dart';
 import 'package:notesapp/models/task.dart';
 
@@ -22,14 +23,35 @@ class EditNoteScreen extends StatefulWidget {
 }
 
 class _EditNoteScreenState extends State<EditNoteScreen> {
-  late bool pinNote = false;
+  late bool? pinNote = widget.task.isPin;
+  late String title = widget.task.title;
+  late String content = widget.task.content;
+
+  late TextEditingController titleController;
+  late TextEditingController contentController;
+
+  @override
+  void initState() {
+    super.initState();
+    titleController = TextEditingController(text: title);
+    contentController = TextEditingController(text: content);
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
+
+  void onTap() {
+    setState(() {
+      pinNote = !pinNote!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController titleController =
-        TextEditingController(text: widget.task.title);
-    final TextEditingController contentController =
-        TextEditingController(text: widget.task.content);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -90,19 +112,22 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        var task = Task(
-                            title: titleController.text,
-                            content: contentController.text,
-                            isChoose: false,
-                            isPin: !pinNote,
-                            isStore: widget.task.isStore, labelsList: []);
-                        context.read<TasksBloc>().add(PinTask(task: task));
-                        widget.task.isStore!
-                            ? Navigator.pushNamedAndRemoveUntil(context,
-                                RoutesName.saveScreen, (route) => route.isFirst)
-                            : Navigator.pop(context);
+                        if (widget.task.isStore!) {
+                          var task = Task(
+                              title: titleController.text,
+                              content: contentController.text,
+                              isChoose: false,
+                              isPin: !pinNote!,
+                              isStore: widget.task.isStore,
+                              labelsList: const []);
+                          context.read<TasksBloc>().add(PinTask(task: task));
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              RoutesName.saveScreen, (route) => route.isFirst);
+                        } else {
+                          onTap();
+                        }
                       },
-                      child: pinNote
+                      child: pinNote!
                           ? const Icon(Icons.push_pin)
                           : const Icon(Icons.push_pin_outlined),
                     ),
@@ -124,7 +149,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
-                              isStore: widget.task.isStore, labelsList: const []);
+                              isPin: pinNote,
+                              isStore: widget.task.isStore,
+                              labelsList: const []);
                           if (!widget.task.isStore!) {
                             context
                                 .read<TasksBloc>()
@@ -171,11 +198,19 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
           var editedTask = Task(
               title: titleController.text,
               content: contentController.text,
+              isPin: pinNote,
               isChoose: false,
-              isStore: widget.task.isStore, labelsList: []);
+              isStore: widget.task.isStore,
+              labelsList: const []);
           context
               .read<TasksBloc>()
               .add(EditTask(oldTask: widget.task, newTask: editedTask));
+          if (!pinNote!) {
+            context.read<TasksBloc>().add(RemovePinTask(task: widget.task));
+          }
+          else {
+            context.read<TasksBloc>().add(RestorePinTask(task: widget.task));
+          }
           widget.task.isStore!
               ? Navigator.pushNamedAndRemoveUntil(
                   context, RoutesName.saveScreen, (route) => route.isFirst)
