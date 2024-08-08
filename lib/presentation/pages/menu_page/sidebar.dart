@@ -52,7 +52,8 @@ class _SidebarState extends State<Sidebar> {
                           shrinkWrap: true,
                           itemCount: state.labelListTasks.keys.length,
                           itemBuilder: (context, index) {
-                            var key = state.labelListTasks.keys.elementAt(index);
+                            var key =
+                                state.labelListTasks.keys.elementAt(index);
                             return Padding(
                               padding: EdgeInsets.only(
                                   top: SizesManager.p12,
