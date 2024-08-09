@@ -124,3 +124,13 @@ class RemoveLabel extends TasksEven {
   @override
   List<Object?> get props => [label];
 }
+
+class EditLabel extends TasksEven {
+  final String oldLabel;
+  final String newLabel;
+
+  const EditLabel({required this.oldLabel, required this.newLabel});
+
+  @override
+  List<Object?> get props => [oldLabel, newLabel];
+}

@@ -75,4 +75,9 @@ class StringsManger {
 
   static const String pinned = 'Được ghim';
   static const String others = 'Khác';
+  static const String label_content = 'Không có ghi chú nào có nhãn này';
+  static const String change_name_label = 'Đổi tên nhãn';
+  static const String delete_label = 'Xoá nhãn';
+  static const String save_button = 'Lưu';
+  static const String cancel_button = 'Huỷ bỏ';
 }

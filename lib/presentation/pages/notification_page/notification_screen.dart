@@ -62,7 +62,7 @@ class NotificationScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.grey.shade300,
         child: const Icon(Icons.add),
         onPressed: () {
           Navigator.pushNamed(context, RoutesName.addNoteScreen);

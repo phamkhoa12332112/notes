@@ -38,7 +38,7 @@ class SizesManager {
   static double h1 = 1.h;
   static double h30 = 30.h;
   static double h60 = 60.h;
-
+  static double h120 = 120.h;
 
   static double e10 = 10.r;
 

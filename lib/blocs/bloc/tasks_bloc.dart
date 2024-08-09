@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -24,6 +22,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     on<AddLabelTask>(_onAddLabelTask);
     on<AddLabelList>(_onAddLabelList);
     on<RemoveLabel>(_onRemoveLabel);
+    on<EditLabel>(_onEditLabel);
   }
 
   void _onAddTask(AddTask even, Emitter<TasksState> emit) {
@@ -219,6 +218,23 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         labelListTasks: labelsTaskList));
   }
 
+  void _onEditLabel(EditLabel even, Emitter<TasksState> emit) {
+    final state = this.state;
+    final Map<String, List<Task>> labelsTaskList =
+        Map<String, List<Task>>.from(state.labelListTasks);
+    if (labelsTaskList.containsKey(even.oldLabel)) {
+      final List<Task> tasks = labelsTaskList[even.oldLabel]!;
+      labelsTaskList.remove(even.oldLabel);
+      labelsTaskList[even.newLabel] = tasks;
+    }
+    emit(TasksState(
+        allTasks: state.allTasks,
+        deleteTasks: state.deleteTasks,
+        storeTasks: state.storeTasks,
+        pinTasks: state.pinTasks,
+        labelListTasks: labelsTaskList));
+  }
+
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
     return TasksState.fromMap(json);
@@ -229,5 +245,3 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     return state.toMap();
   }
 }
-
-class _onRemovePinTask {}
