@@ -4,6 +4,7 @@ import '../../../blocs/bloc.export.dart';
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
+import '../label_notes_page/label_notes_screen.dart';
 import 'list_title.dart';
 
 class Sidebar extends StatefulWidget {
@@ -54,21 +55,29 @@ class _SidebarState extends State<Sidebar> {
                           itemBuilder: (context, index) {
                             var key =
                                 state.labelListTasks.keys.elementAt(index);
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: SizesManager.p12,
-                                  bottom: SizesManager.p14),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Icon(Icons.label_outlined),
-                                  GapsManager.w10,
-                                  Text(
-                                    key,
-                                    style:
-                                        TextStyle(fontSize: SizesManager.s15),
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => LabelNote(label: key),));
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: SizesManager.p12,
+                                      bottom: SizesManager.p14),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Icon(Icons.label_outlined),
+                                      GapsManager.w10,
+                                      Text(
+                                        key,
+                                        style:
+                                            TextStyle(fontSize: SizesManager.s15),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             );
                           },
