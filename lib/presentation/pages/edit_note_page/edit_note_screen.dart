@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/blocs/bloc.export.dart';
-import 'package:notesapp/blocs/bloc/tasks_bloc.dart';
 import 'package:notesapp/models/task.dart';
 
 import '../../../config/routes/routes.dart';
@@ -12,6 +10,7 @@ import '../../../utils/resources/strings_manager.dart';
 import '../../widgets/bottom_sheet_page/info_add_box_page.dart';
 import '../../widgets/bottom_sheet_page/info_more_vert_page.dart';
 import '../../widgets/bottom_sheet_page/info_notification_add_page.dart';
+import '../choose_label_page/choose_label_screen.dart';
 
 class EditNoteScreen extends StatefulWidget {
   final Task task;
@@ -26,6 +25,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   late bool? pinNote = widget.task.isPin;
   late String title = widget.task.title;
   late String content = widget.task.content;
+  late List<String> labelTask;
+  late Map<String, bool> checkList = {};
 
   late TextEditingController titleController;
   late TextEditingController contentController;
@@ -50,8 +51,25 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     });
   }
 
+  Future<void> onLabel() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => ChooseLabelScreen(checkList: checkList)),
+    );
+
+    if (result != null && result is Map<String, bool>) {
+      setState(() {
+        checkList = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    widget.task.labelsList.forEach((label) {
+      checkList[label] = true;
+    });
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -145,13 +163,17 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     GapsManager.w20,
                     InkWell(
                         onTap: () {
+                          labelTask = checkList.entries
+                              .where((entry) => entry.value)
+                              .map((entry) => entry.key.toString())
+                              .toList();
                           var task = Task(
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
                               isPin: pinNote,
                               isStore: widget.task.isStore,
-                              labelsList: const []);
+                              labelsList: labelTask);
                           if (!widget.task.isStore!) {
                             context
                                 .read<TasksBloc>()
@@ -187,6 +209,20 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                         hintStyle: TextStyle(
                             color: Colors.grey, fontSize: SizesManager.s20)),
                   ),
+                  if (checkList.isNotEmpty)
+                    Wrap(
+                        spacing: SizesManager.w5,
+                        children: List.generate(
+                            checkList.length,
+                            (index) => Chip(
+                                  padding: EdgeInsets.all(SizesManager.p8),
+                                  label: Text(
+                                    checkList.keys.elementAt(index),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: SizesManager.s15),
+                                  ),
+                                ))),
                 ],
               ),
             )
@@ -194,21 +230,25 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey.shade300,
         onPressed: () {
+          labelTask = checkList.entries
+              .where((entry) => entry.value)
+              .map((entry) => entry.key.toString())
+              .toList();
           var editedTask = Task(
               title: titleController.text,
               content: contentController.text,
               isPin: pinNote,
               isChoose: false,
               isStore: widget.task.isStore,
-              labelsList: const []);
+              labelsList: labelTask);
           context
               .read<TasksBloc>()
               .add(EditTask(oldTask: widget.task, newTask: editedTask));
           if (!pinNote!) {
             context.read<TasksBloc>().add(RemovePinTask(task: widget.task));
-          }
-          else {
+          } else {
             context.read<TasksBloc>().add(RestorePinTask(task: widget.task));
           }
           widget.task.isStore!
@@ -259,7 +299,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero),
                     context: context,
-                    builder: (ctx) => const InfoMoreVertPage());
+                    builder: (ctx) => InfoMoreVertPage(onLabel: onLabel));
               },
               icon: const Icon(Icons.more_vert),
             )

@@ -80,4 +80,6 @@ class StringsManger {
   static const String delete_label = 'Xoá nhãn';
   static const String save_button = 'Lưu';
   static const String cancel_button = 'Huỷ bỏ';
+
+  static const String find_label = 'Tìm kiếm nhãn';
 }

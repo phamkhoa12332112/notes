@@ -4,7 +4,6 @@ import 'package:notesapp/models/task.dart';
 import 'package:notesapp/presentation/pages/edit_note_page/edit_note_screen.dart';
 import 'package:notesapp/utils/resources/sizes_manager.dart';
 
-
 class GridBuilder extends StatefulWidget {
   const GridBuilder({
     super.key,
@@ -33,7 +32,8 @@ class GridBuilderState extends State<GridBuilder> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+        shrinkWrap: true,
         itemCount: widget.tasksList.length,
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
@@ -57,7 +57,8 @@ class GridBuilderState extends State<GridBuilder> {
                     child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: task.isChoose ? Colors.green : Colors.grey,
+                                color:
+                                    task.isChoose ? Colors.green : Colors.grey,
                                 width: task.isChoose
                                     ? SizesManager.w5
                                     : SizesManager.w1),

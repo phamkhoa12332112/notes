@@ -126,7 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
         body: SafeArea(
-            child: (tasksList.isEmpty && pinList.isEmpty)
+            child: SingleChildScrollView(
+          child: Column(children: [
+            (tasksList.isEmpty && pinList.isEmpty)
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -142,48 +144,46 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 : pinList.isNotEmpty
-                    ? SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: SizesManager.p20,
-                                    left: SizesManager.p20),
-                                child: const Text(StringsManger.pinned)),
-                            isGridView
-                                ? GridBuilder(
-                                    tasksList: pinList,
-                                    isSelectionMode: _isSelectionMode,
-                                    onTap: onTap,
-                                    onLongPress: onLongPress,
-                                  )
-                                : TasksList(
-                                    taskList: pinList,
-                                    isSelectionMode: _isSelectionMode,
-                                    onLongPress: onLongPress,
-                                    onTap: onTap,
-                                  ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: SizesManager.p20,
-                                    left: SizesManager.p20),
-                                child: const Text(StringsManger.others)),
-                            isGridView
-                                ? GridBuilder(
-                                    tasksList: tasksList,
-                                    isSelectionMode: _isSelectionMode,
-                                    onTap: onTap,
-                                    onLongPress: onLongPress,
-                                  )
-                                : TasksList(
-                                    taskList: tasksList,
-                                    isSelectionMode: _isSelectionMode,
-                                    onLongPress: onLongPress,
-                                    onTap: onTap,
-                                  ),
-                          ],
-                        ),
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: SizesManager.p20,
+                                  left: SizesManager.p20),
+                              child: const Text(StringsManger.pinned)),
+                          isGridView
+                              ? GridBuilder(
+                                  tasksList: pinList,
+                                  isSelectionMode: _isSelectionMode,
+                                  onTap: onTap,
+                                  onLongPress: onLongPress,
+                                )
+                              : TasksList(
+                                  taskList: pinList,
+                                  isSelectionMode: _isSelectionMode,
+                                  onLongPress: onLongPress,
+                                  onTap: onTap,
+                                ),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: SizesManager.p20,
+                                  left: SizesManager.p20),
+                              child: const Text(StringsManger.others)),
+                          isGridView
+                              ? GridBuilder(
+                                  tasksList: tasksList,
+                                  isSelectionMode: _isSelectionMode,
+                                  onTap: onTap,
+                                  onLongPress: onLongPress,
+                                )
+                              : TasksList(
+                                  taskList: tasksList,
+                                  isSelectionMode: _isSelectionMode,
+                                  onLongPress: onLongPress,
+                                  onTap: onTap,
+                                ),
+                        ],
                       )
                     : isGridView
                         ? GridBuilder(
@@ -197,7 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             isSelectionMode: _isSelectionMode,
                             onLongPress: onLongPress,
                             onTap: onTap,
-                          )),
+                          )
+          ]),
+        )),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),
           notchMargin: SizesManager.m10,

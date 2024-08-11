@@ -4,7 +4,9 @@ import 'package:notesapp/utils/resources/strings_manager.dart';
 import 'list_items.dart';
 
 class InfoMoreVertPage extends StatelessWidget {
-  const InfoMoreVertPage({super.key});
+  const InfoMoreVertPage({super.key, required this.onLabel});
+
+  final VoidCallback onLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class InfoMoreVertPage extends StatelessWidget {
         ListItem(
             textRight: StringsManger.label,
             icon: Icons.label_outline,
-            onPressed: () {}),
+            onPressed: onLabel),
         ListItem(
             textRight: StringsManger.help,
             icon: Icons.help_outline,
