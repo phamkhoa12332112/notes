@@ -13,6 +13,8 @@ class SizesManager {
   static double s90 = 90.sp;
   static double s100 = 100.sp;
 
+  static double p5 = 5.r;
+  static double p8 = 8.r;
   static double p10 = 10.r;
   static double p12 = 12.r;
   static double p14 = 14.r;
@@ -23,6 +25,7 @@ class SizesManager {
 
   static double w1 = 1.w;
   static double w5 = 5.w;
+  static double w8 = 8.w;
   static double w10 = 10.w;
   static double w30 = 30.w;
   static double w100 = 100.w;

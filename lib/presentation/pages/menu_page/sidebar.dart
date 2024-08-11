@@ -57,7 +57,12 @@ class _SidebarState extends State<Sidebar> {
                                 state.labelListTasks.keys.elementAt(index);
                             return GestureDetector(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => LabelNote(label: key),));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          LabelNote(label: key),
+                                    ));
                               },
                               child: Container(
                                 color: Colors.transparent,
@@ -70,10 +75,13 @@ class _SidebarState extends State<Sidebar> {
                                     children: [
                                       const Icon(Icons.label_outlined),
                                       GapsManager.w10,
-                                      Text(
-                                        key,
-                                        style:
-                                            TextStyle(fontSize: SizesManager.s15),
+                                      Expanded(
+                                        child: Text(
+                                          key,
+                                          style: TextStyle(
+                                              fontSize: SizesManager.s15),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ],
                                   ),

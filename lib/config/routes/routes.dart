@@ -7,4 +7,5 @@ class RoutesName {
   static const String deleteScreen = '/delete';
   static const String settingScreen = '/setting';
   static const String helpScreen = '/help';
+  static const String chooseLabelScreen = '/chooseLabel';
 }

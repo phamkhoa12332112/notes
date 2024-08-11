@@ -11,6 +11,7 @@ import '../../../utils/resources/strings_manager.dart';
 import '../../widgets/bottom_sheet_page/info_add_box_page.dart';
 import '../../widgets/bottom_sheet_page/info_more_vert_page.dart';
 import '../../widgets/bottom_sheet_page/info_notification_add_page.dart';
+import '../choose_label_page/choose_label_screen.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
@@ -25,6 +26,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late bool pinNote = false;
   late String title;
   late String content;
+  late List<String> labelTask;
+  late Map<String, bool> checkList = {};
 
   void onTap() {
     setState(() {
@@ -32,6 +35,22 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       title = titleController.text;
       content = contentController.text;
     });
+  }
+
+  Future<void> onLabel() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => ChooseLabelScreen(checkList: checkList)),
+    );
+
+    if (result != null && result is Map<String, bool>) {
+      setState(() {
+        checkList = result;
+        title = titleController.text;
+        content = contentController.text;
+      });
+    }
   }
 
   @override
@@ -110,7 +129,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           var task = Task(
                               title: titleController.text,
                               content: contentController.text,
-                              isChoose: false, labelsList: []);
+                              isChoose: false,
+                              labelsList: []);
                           context.read<TasksBloc>().add(StoreTask(task: task));
                           Navigator.pop(context);
                         },
@@ -125,6 +145,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
+                    minLines: 1,
+                    maxLines: 5,
                     style: TextStyle(fontSize: SizesManager.s30),
                     controller: titleController,
                     decoration: InputDecoration(
@@ -134,6 +156,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
                   TextField(
+                    minLines: 1,
+                    maxLines: 10,
                     style: TextStyle(fontSize: SizesManager.s20),
                     controller: contentController,
                     decoration: InputDecoration(
@@ -142,6 +166,22 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         hintStyle: TextStyle(
                             color: Colors.grey, fontSize: SizesManager.s20)),
                   ),
+                  if (checkList.isNotEmpty)
+                    Wrap(
+                      spacing: SizesManager.w5,
+                      children: checkList.entries
+                          .where((entry) => entry.value)
+                          .map((entry) => Chip(
+                                padding: EdgeInsets.all(SizesManager.p8),
+                                label: Text(
+                                  entry.key,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: SizesManager.s15),
+                                ),
+                              ))
+                          .toList(),
+                    ),
                 ],
               ),
             )
@@ -149,12 +189,18 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey.shade300,
         onPressed: () {
+          labelTask = checkList.entries
+              .where((entry) => entry.value)
+              .map((entry) => entry.key.toString())
+              .toList();
           var task = Task(
               title: titleController.text,
               content: contentController.text,
               isChoose: false,
-              isPin: pinNote, labelsList: const []);
+              isPin: pinNote,
+              labelsList: labelTask);
           pinNote
               ? context.read<TasksBloc>().add(PinTask(task: task))
               : context.read<TasksBloc>().add(AddTask(task: task));
@@ -203,7 +249,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero),
                     context: context,
-                    builder: (ctx) => const InfoMoreVertPage());
+                    builder: (ctx) => InfoMoreVertPage(onLabel: onLabel));
               },
               icon: const Icon(Icons.more_vert),
             )
