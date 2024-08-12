@@ -83,13 +83,10 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
 
   void _onRemoveTask(RemoveTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    final Map<String, List<Task>> labelsList =
+    final Map<String, List<Task>> labelListTasks =
         Map<String, List<Task>>.from(state.labelListTasks);
     even.task.labelsList.forEach((label) {
-      if (labelsList.containsKey(label)) {
-        final taskList = List.from(labelsList[label]!);
-        taskList.remove(even.task);
-      }
+      labelListTasks[label]?.remove(even.task);
     });
     emit(TasksState(
         allTasks: List.from(state.allTasks)..remove(even.task),
@@ -97,7 +94,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
           ..insert(0, even.task.copyWith(isDelete: true, isChoose: false)),
         storeTasks: List.from(state.storeTasks)..remove(even.task),
         pinTasks: List.from(state.pinTasks)..remove(even.task),
-        labelListTasks: labelsList));
+        labelListTasks: labelListTasks));
   }
 
   void _onRestoreTask(RestoreTask even, Emitter<TasksState> emit) {
@@ -177,10 +174,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     final Map<String, List<Task>> labelsTaskList =
         Map<String, List<Task>>.from(state.labelListTasks);
     even.task.labelsList.forEach((label) {
-      if (labelsTaskList.containsKey(label)) {
-        labelsTaskList[label] = List.from(labelsTaskList[label]!)
-          ..add(even.task);
-      } else {
+      if (!labelsTaskList[label]!.contains(even.task)) {
         labelsTaskList[label] = [even.task];
       }
     });
