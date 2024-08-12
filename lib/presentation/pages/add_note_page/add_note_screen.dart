@@ -126,12 +126,17 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     GapsManager.w20,
                     InkWell(
                         onTap: () {
+                          labelTask = checkList.entries
+                              .where((entry) => entry.value)
+                              .map((entry) => entry.key.toString())
+                              .toList();
                           var task = Task(
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
-                              labelsList: []);
+                              labelsList: labelTask);
                           context.read<TasksBloc>().add(StoreTask(task: task));
+                          context.read<TasksBloc>().add(AddLabelTask(task: task));
                           Navigator.pop(context);
                         },
                         child: const Icon(Icons.save_alt)),
@@ -204,6 +209,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           pinNote
               ? context.read<TasksBloc>().add(PinTask(task: task))
               : context.read<TasksBloc>().add(AddTask(task: task));
+          context.read<TasksBloc>().add(AddLabelTask(task: task));
           Navigator.popAndPushNamed(context, RoutesName.homeScreen);
         },
         elevation: SizesManager.e10,

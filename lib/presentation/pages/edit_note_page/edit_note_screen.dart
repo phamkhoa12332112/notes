@@ -98,18 +98,13 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                               onPressed: () =>
                                                   Navigator.pop(context)),
                                           CupertinoDialogAction(
-                                              child:
-                                                  const Text(StringsManger.yes),
-                                              onPressed: () => widget
-                                                      .task.isStore!
-                                                  ? Navigator
-                                                      .pushNamedAndRemoveUntil(
-                                                      context,
-                                                      RoutesName.saveScreen,
-                                                      (route) => route.isFirst,
-                                                    )
-                                                  : Navigator.pushNamed(context,
-                                                      RoutesName.homeScreen))
+                                            child:
+                                                const Text(StringsManger.yes),
+                                            onPressed: () => {
+                                              Navigator.pop(context),
+                                              Navigator.pop(context)
+                                            },
+                                          )
                                         ],
                                       ),
                                   barrierDismissible: false);
@@ -179,6 +174,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                 .read<TasksBloc>()
                                 .add(StoreTask(task: task));
                           }
+                          context.read<TasksBloc>().add(AddLabelTask(task: task));
                           Navigator.pop(context);
                         },
                         child: const Icon(Icons.save_alt)),
@@ -192,6 +188,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                 padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
+                    minLines: 1,
+                    maxLines: 5,
                     style: TextStyle(fontSize: SizesManager.s30),
                     controller: titleController,
                     decoration: InputDecoration(
@@ -201,6 +199,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
                   TextField(
+                    minLines: 1,
+                    maxLines: 10,
                     style: TextStyle(fontSize: SizesManager.s20),
                     controller: contentController,
                     decoration: InputDecoration(
@@ -251,10 +251,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
           } else {
             context.read<TasksBloc>().add(RestorePinTask(task: widget.task));
           }
-          widget.task.isStore!
-              ? Navigator.pushNamedAndRemoveUntil(
-                  context, RoutesName.saveScreen, (route) => route.isFirst)
-              : Navigator.pushNamed(context, RoutesName.homeScreen);
+          context.read<TasksBloc>().add(AddLabelTask(task: editedTask));
+          Navigator.pop(context);
         },
         elevation: SizesManager.e10,
         child: const Icon(Icons.save),
