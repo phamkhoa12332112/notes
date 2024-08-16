@@ -8,6 +8,7 @@ class Task extends Equatable {
   bool? isDelete;
   bool? isStore;
   bool? isPin;
+  String? editedTime;
   List<String> labelsList;
   Map<IconData, Map<String, DateTime>> notifications;
 
@@ -17,12 +18,14 @@ class Task extends Equatable {
       required this.isChoose,
       required this.labelsList,
       required this.notifications,
+      this.editedTime,
       this.isDelete,
       this.isStore,
       this.isPin}) {
     isDelete = isDelete ?? false;
     isStore = isStore ?? false;
     isPin = isPin ?? false;
+    editedTime = editedTime ?? "";
   }
 
   Task copyWith(
@@ -32,6 +35,7 @@ class Task extends Equatable {
       bool? isDelete,
       bool? isStore,
       bool? isPin,
+      String? editedTime,
       List<String>? labelsList,
       Map<IconData, Map<String, DateTime>>? notifications}) {
     return Task(
@@ -41,6 +45,7 @@ class Task extends Equatable {
         isDelete: isDelete ?? this.isDelete,
         isStore: isStore ?? this.isStore,
         isPin: isPin ?? this.isPin,
+        editedTime: editedTime ?? this.editedTime,
         labelsList: labelsList ?? this.labelsList,
         notifications: notifications ?? this.notifications);
   }
@@ -53,6 +58,7 @@ class Task extends Equatable {
       'isDelete': isDelete,
       'isStore': isStore,
       'isPin': isPin,
+      'editedTime': editedTime,
       'labelsList': labelsList,
       'notifications': notifications
     };
@@ -66,6 +72,7 @@ class Task extends Equatable {
         isDelete: map['isDelete'],
         isStore: map['isStore'],
         isPin: map['isPin'],
+        editedTime: map['editedTime'],
         labelsList: map['labelsList'],
         notifications: map['notifications']);
   }
@@ -78,6 +85,7 @@ class Task extends Equatable {
         isDelete,
         isStore,
         isPin,
+        editedTime,
         labelsList,
         notifications
       ];

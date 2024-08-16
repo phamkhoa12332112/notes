@@ -32,10 +32,19 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late bool timeOrLocation;
   late Map<String, bool> checkList = {};
   late Map<IconData, Map<String, DateTime>> notificationList = {};
+  late DateTime editedTime = DateTime.now();
+  String formattedEditedTime = "";
   late DateTime now = DateTime.now();
   String date = '';
   String formattedDate = '';
   String location = '';
+
+  void onEditedTime() {
+    setState(() {
+      editedTime = DateTime.now();
+      formattedEditedTime = DateFormat("HH:mm").format(editedTime);
+    });
+  }
 
   void onTapTime() {
     setState(() {
@@ -57,11 +66,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   void onDelete() {
     setState(() {
+      onEditedTime();
       notificationList.clear();
     });
   }
 
   void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
+    onEditedTime();
     setState(() {
       !timeOrLocation
           ? {
@@ -82,6 +93,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
 
     if (result != null && result is Map<String, bool>) {
+      onEditedTime();
       setState(() {
         checkList = result;
       });
@@ -97,6 +109,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             builder: (context) => const InfoNotificationAddPage());
 
     if (result != null) {
+      onEditedTime();
       setState(() {
         notificationList = result;
         now = result.values.first.values.first;
@@ -189,6 +202,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
+                              editedTime: formattedEditedTime,
                               labelsList: labelTask,
                               notifications: notificationList);
                           context.read<TasksBloc>().add(StoreTask(task: task));
@@ -208,6 +222,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
+                    onChanged: (_) {
+                      onEditedTime();
+                    },
                     minLines: 1,
                     maxLines: 5,
                     style: TextStyle(fontSize: SizesManager.s30),
@@ -219,6 +236,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
                   TextField(
+                    onChanged: (_) {
+                      onEditedTime();
+                    },
                     minLines: 1,
                     maxLines: 10,
                     style: TextStyle(fontSize: SizesManager.s20),
@@ -304,6 +324,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               content: contentController.text,
               isChoose: false,
               isPin: pinNote,
+              editedTime: formattedEditedTime,
               labelsList: labelTask,
               notifications: notificationList);
           pinNote
@@ -345,7 +366,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     icon: const Icon(Icons.text_format_outlined),
                   ),
                   Text(
-                    StringsManger.update_home,
+                    formattedEditedTime.isNotEmpty
+                        ? "${StringsManger.update_home} $formattedEditedTime"
+                        : "",
                     style: TextStyle(fontSize: SizesManager.s15),
                   ),
                 ],
