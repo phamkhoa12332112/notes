@@ -42,11 +42,14 @@ class SizesManager {
   static double h30 = 30.h;
   static double h60 = 60.h;
   static double h120 = 120.h;
+  static double h200 = 200.h;
+  static double h260 = 260.h;
 
   static double e10 = 10.r;
 
   static const int l2 = 2;
 
   static double r0 = 0.r;
+  static double r2 = 2.r;
   static double r20 = 20.r;
 }

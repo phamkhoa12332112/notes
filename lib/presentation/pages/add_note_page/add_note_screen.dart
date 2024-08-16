@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:notesapp/blocs/bloc/tasks_bloc.dart';
 import 'package:notesapp/models/task.dart';
+import 'package:notesapp/presentation/widgets/dialog_box_notification.dart';
 
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/gaps_manager.dart';
@@ -27,13 +29,48 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late String title;
   late String content;
   late List<String> labelTask;
+  late bool timeOrLocation;
   late Map<String, bool> checkList = {};
+  late Map<IconData, Map<String, DateTime>> notificationList = {};
+  late DateTime now = DateTime.now();
+  String date = '';
+  String formattedDate = '';
+  String location = '';
+
+  void onTapTime() {
+    setState(() {
+      timeOrLocation = false;
+    });
+  }
+
+  void onTapLocation() {
+    setState(() {
+      timeOrLocation = true;
+    });
+  }
 
   void onTap() {
     setState(() {
       pinNote = !pinNote;
-      title = titleController.text;
-      content = contentController.text;
+    });
+  }
+
+  void onDelete() {
+    setState(() {
+      notificationList.clear();
+    });
+  }
+
+  void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
+    setState(() {
+      !timeOrLocation
+          ? {
+              now = updateTime,
+              date =
+                  '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}',
+              formattedDate = DateFormat('HH:mm').format(now),
+            }
+          : location = locations;
     });
   }
 
@@ -47,8 +84,31 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     if (result != null && result is Map<String, bool>) {
       setState(() {
         checkList = result;
-        title = titleController.text;
-        content = contentController.text;
+      });
+    }
+  }
+
+  Future<void> onNotification() async {
+    final result =
+        await showModalBottomSheet<Map<IconData, Map<String, DateTime>>>(
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            context: context,
+            builder: (context) => const InfoNotificationAddPage());
+
+    if (result != null) {
+      setState(() {
+        notificationList = result;
+        now = result.values.first.values.first;
+        date =
+            '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}';
+        formattedDate = DateFormat('HH:mm').format(now);
+        if (notificationList.keys.first != Icons.schedule) {
+          timeOrLocation = true;
+          location = notificationList.values.first.keys.first;
+        } else {
+          timeOrLocation = false;
+        }
       });
     }
   }
@@ -116,12 +176,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     InkWell(
                         child: const Icon(Icons.notification_add_outlined),
                         onTap: () {
-                          showModalBottomSheet(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero),
-                              context: context,
-                              builder: (context) =>
-                                  const InfoNotificationAddPage());
+                          onNotification();
                         }),
                     GapsManager.w20,
                     InkWell(
@@ -136,7 +191,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               isChoose: false,
                               labelsList: labelTask);
                           context.read<TasksBloc>().add(StoreTask(task: task));
-                          context.read<TasksBloc>().add(AddLabelTask(task: task));
+                          context
+                              .read<TasksBloc>()
+                              .add(AddLabelTask(task: task));
                           Navigator.pop(context);
                         },
                         child: const Icon(Icons.save_alt)),
@@ -187,6 +244,44 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               ))
                           .toList(),
                     ),
+                  if (notificationList.isNotEmpty)
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => DialogBoxNotification(
+                                  now: now,
+                                  timeOrLocation: timeOrLocation,
+                                  resultLocation: location,
+                                  onDelete: onDelete,
+                                  onSave: onSave,
+                                  onTapTime: onTapTime,
+                                  onTapLocation: onTapLocation,
+                                ));
+                      },
+                      child: Wrap(spacing: SizesManager.w5, children: [
+                        Chip(
+                            padding: EdgeInsets.all(SizesManager.p8),
+                            avatar: timeOrLocation
+                                ? (location != StringsManger.private_home)
+                                    ? const Icon(Icons.work)
+                                    : const Icon(Icons.home)
+                                : const Icon(Icons.schedule),
+                            label: timeOrLocation
+                                ? Text(
+                                    location,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: SizesManager.s15),
+                                  )
+                                : Text(
+                                    '$date, $formattedDate',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: SizesManager.s15),
+                                  ))
+                      ]),
+                    )
                 ],
               ),
             )
