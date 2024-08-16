@@ -72,12 +72,13 @@ class UnStoreTask extends TasksEven {
 }
 
 class PinTask extends TasksEven {
-  final Task task;
+  final Task oldTask;
+  final Task newTask;
 
-  const PinTask({required this.task});
+  const PinTask({required this.oldTask, required this.newTask});
 
   @override
-  List<Object?> get props => [task];
+  List<Object?> get props => [oldTask, newTask];
 }
 
 class RemovePinTask extends TasksEven {

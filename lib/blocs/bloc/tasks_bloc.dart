@@ -132,17 +132,17 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
 
   void _onPinTask(PinTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    List<Task> storeTasks = even.task.isStore!
+    List<Task> storeTasks = even.oldTask.isStore!
         ? (List.from(state.storeTasks)
-          ..remove(even.task.copyWith(isPin: !even.task.isPin!)))
+          ..remove(even.oldTask))
         : state.storeTasks;
-    List<Task> allTasks = even.task.isStore!
+    List<Task> allTasks = even.oldTask.isStore!
         ? state.allTasks
         : (List.from(state.allTasks)
-          ..remove(even.task.copyWith(isPin: !even.task.isPin!)));
+          ..remove(even.oldTask.copyWith(isPin: !even.oldTask.isPin!)));
     emit(TasksState(
         pinTasks: List.from(state.pinTasks)
-          ..add(even.task.copyWith(isStore: false)),
+          ..add(even.newTask.copyWith(isStore: false)),
         deleteTasks: List.from(state.deleteTasks),
         storeTasks: storeTasks,
         allTasks: allTasks,
