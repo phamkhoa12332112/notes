@@ -84,6 +84,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   void initState() {
     super.initState();
     labelTask = widget.task.labelsList;
+    widget.task.labelsList.forEach((label) {
+      checkList[label] = true;
+    });
     notificationList = widget.task.notifications;
     if (widget.task.notifications.isNotEmpty) {
       timeOrLocation = (widget.task.notifications.keys.first == Icons.schedule)
@@ -153,9 +156,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    widget.task.labelsList.forEach((label) {
-      checkList[label] = true;
-    });
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -296,19 +296,22 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s20)),
                   ),
                   if (checkList.isNotEmpty)
-                    Wrap(
-                        spacing: SizesManager.w5,
-                        children: List.generate(
-                            checkList.length,
-                            (index) => Chip(
-                                  padding: EdgeInsets.all(SizesManager.p8),
-                                  label: Text(
-                                    checkList.keys.elementAt(index),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: SizesManager.s15),
-                                  ),
-                                ))),
+                    GestureDetector(
+                        onTap: () => onLabel(),
+                        child: Wrap(
+                            spacing: SizesManager.w5,
+                            children: checkList.entries
+                                .where((entry) => entry.value)
+                                .map((entry) => Chip(
+                                      padding: EdgeInsets.all(SizesManager.p8),
+                                      label: Text(
+                                        entry.key,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: SizesManager.s15),
+                                      ),
+                                    ))
+                                .toList())),
                   if (notificationList.isNotEmpty)
                     InkWell(
                       onTap: () {

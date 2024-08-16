@@ -230,20 +230,23 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s20)),
                   ),
                   if (checkList.isNotEmpty)
-                    Wrap(
-                      spacing: SizesManager.w5,
-                      children: checkList.entries
-                          .where((entry) => entry.value)
-                          .map((entry) => Chip(
-                                padding: EdgeInsets.all(SizesManager.p8),
-                                label: Text(
-                                  entry.key,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: SizesManager.s15),
-                                ),
-                              ))
-                          .toList(),
+                    GestureDetector(
+                      onTap: () => onLabel(),
+                      child: Wrap(
+                        spacing: SizesManager.w5,
+                        children: checkList.entries
+                            .where((entry) => entry.value)
+                            .map((entry) => Chip(
+                                  padding: EdgeInsets.all(SizesManager.p8),
+                                  label: Text(
+                                    entry.key,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: SizesManager.s15),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
                     ),
                   if (notificationList.isNotEmpty)
                     InkWell(
