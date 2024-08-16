@@ -55,17 +55,17 @@ class StringsManger {
   static const String record = 'Ghi';
   static const String check_box = 'Hộp kiểm';
 
-  static const String today = 'Lúc khác trong ngày hôm nay';
-  static const String tomorrow = 'Sáng mai';
+  static const String today_notification = 'Lúc khác trong ngày hôm nay';
+  static const String today = 'Hôm nay';
+  static const String tomorrow = 'Ngày mai';
+  static const String tomorrow_notification = 'Sáng mai';
   static const String friday_morning = 'Sáng Thứ Năm';
   static const String private_home = 'Nhà riêng';
   static const String workplace = 'Nơi làm việc';
   static const String date_and_time = 'Chọn ngày và giờ';
-  static const String location = 'Chọn địa điểm';
   static const String time_today = '18:00';
   static const String time_tomorrow = '08:00';
-  static const String time_friday_morning = 'Th 6 08:00';
-  static const String address_private_home = '112 Ngự Bình, An...';
+  static const String time_friday_morning = 'Th 5 08:00';
   static const String selected_item = 'đã được chọn';
 
   static const String delete_bin = 'Xoá';
@@ -82,4 +82,16 @@ class StringsManger {
   static const String cancel_button = 'Huỷ bỏ';
 
   static const String find_label = 'Tìm kiếm nhãn';
+  static const String no_duration = 'Không lặp lại';
+  static const String edit_notification = 'Chỉnh sửa lời nhắc';
+  static const String time = 'Thời gian';
+  static const String location = 'Địa điểm';
+  static const String day = 'Ngày';
+  static const String month = 'tháng';
+  static const String choosing_date = 'Chọn ngày';
+  static const String choosing_time = 'Chọn thời gian';
+  static const String duration_day = 'Hằng ngày';
+  static const String duration_week = 'Hằng tuần';
+  static const String duration_month = 'Hằng tháng';
+  static const String cancel = 'Huỷ';
 }
