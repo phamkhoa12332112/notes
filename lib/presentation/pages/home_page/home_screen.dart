@@ -29,6 +29,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onCancel() {
+    setState(() {
+      _isSelectionMode = false;
+      for (var task in selectedList) {
+        task.isChoose = false;
+      }
+      selectedList.clear();
+    });
+  }
+
   void onTap(Task task) {
     if (_isSelectionMode) {
       setState(() {
@@ -120,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GapsManager.w20,
                   InkWell(
-                    onTap: onLongPress,
+                    onTap: onCancel,
                     child: const Icon(Icons.cancel),
                   )
                 ],

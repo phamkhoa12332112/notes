@@ -121,6 +121,11 @@ class _DialogBoxNotificationState extends State<DialogBoxNotification> {
                         onTap: () {
                           setState(() {
                             widget.timeOrLocation = true;
+                            (_character == ChoosingLocation.home)
+                                ? widget.resultLocation =
+                                    StringsManger.private_home
+                                : widget.resultLocation =
+                                    StringsManger.workplace;
                           });
                           Future.delayed(Duration.zero, () async {
                             widget.onTapLocation!();

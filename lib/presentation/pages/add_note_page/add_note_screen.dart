@@ -189,7 +189,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
-                              labelsList: labelTask);
+                              labelsList: labelTask,
+                              notifications: notificationList);
                           context.read<TasksBloc>().add(StoreTask(task: task));
                           context
                               .read<TasksBloc>()
@@ -300,9 +301,12 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               content: contentController.text,
               isChoose: false,
               isPin: pinNote,
-              labelsList: labelTask);
+              labelsList: labelTask,
+              notifications: notificationList);
           pinNote
-              ? context.read<TasksBloc>().add(PinTask(task: task))
+              ? context
+                  .read<TasksBloc>()
+                  .add(PinTask(oldTask: task, newTask: task))
               : context.read<TasksBloc>().add(AddTask(task: task));
           context.read<TasksBloc>().add(AddLabelTask(task: task));
           Navigator.popAndPushNamed(context, RoutesName.homeScreen);
