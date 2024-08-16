@@ -17,7 +17,7 @@ import '../choose_label_page/choose_label_screen.dart';
 class EditNoteScreen extends StatefulWidget {
   final Task task;
 
-  const EditNoteScreen({super.key, required this.task});
+  EditNoteScreen({super.key, required this.task});
 
   @override
   State<EditNoteScreen> createState() => _EditNoteScreenState();
@@ -39,6 +39,16 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   String formattedDate = '';
   String location = '';
 
+  late DateTime editedTime = DateTime.now();
+  String formattedEditedTime = "";
+
+  void onEditedTime() {
+    setState(() {
+      editedTime = DateTime.now();
+      formattedEditedTime = DateFormat("HH:mm").format(editedTime);
+    });
+  }
+
   void onTapTime() {
     setState(() {
       timeOrLocation = false;
@@ -53,11 +63,13 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
 
   void onDelete() {
     setState(() {
+      onEditedTime();
       notificationList.clear();
     });
   }
 
   void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
+    onEditedTime();
     setState(() {
       IconData icon;
       !timeOrLocation
@@ -80,9 +92,59 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     });
   }
 
+  void onTap() {
+    setState(() {
+      pinNote = !pinNote!;
+    });
+  }
+
+  Future<void> onLabel() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => ChooseLabelScreen(checkList: checkList)),
+    );
+
+    if (result != null && result is Map<String, bool>) {
+      onEditedTime();
+      setState(() {
+        checkList = result;
+        formattedEditedTime = DateFormat("HH:mm").format(editedTime);
+      });
+    }
+  }
+
+  Future<void> onNotification() async {
+    final result =
+        await showModalBottomSheet<Map<IconData, Map<String, DateTime>>>(
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            context: context,
+            builder: (context) => const InfoNotificationAddPage());
+
+    if (result != null) {
+      onEditedTime();
+      setState(() {
+        formattedEditedTime = DateFormat("HH:mm").format(editedTime);
+        notificationList = result;
+        now = result.values.first.values.first;
+        date =
+            '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}';
+        formattedDate = DateFormat('HH:mm').format(now);
+        if (notificationList.keys.first != Icons.schedule) {
+          timeOrLocation = true;
+          location = notificationList.values.first.keys.first;
+        } else {
+          timeOrLocation = false;
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    formattedEditedTime = widget.task.editedTime ?? "";
     labelTask = widget.task.labelsList;
     widget.task.labelsList.forEach((label) {
       checkList[label] = true;
@@ -107,51 +169,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     titleController.dispose();
     contentController.dispose();
     super.dispose();
-  }
-
-  void onTap() {
-    setState(() {
-      pinNote = !pinNote!;
-    });
-  }
-
-  Future<void> onLabel() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (_) => ChooseLabelScreen(checkList: checkList)),
-    );
-
-    if (result != null && result is Map<String, bool>) {
-      setState(() {
-        checkList = result;
-      });
-    }
-  }
-
-  Future<void> onNotification() async {
-    final result =
-        await showModalBottomSheet<Map<IconData, Map<String, DateTime>>>(
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            context: context,
-            builder: (context) => const InfoNotificationAddPage());
-
-    if (result != null) {
-      setState(() {
-        notificationList = result;
-        now = result.values.first.values.first;
-        date =
-            '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}';
-        formattedDate = DateFormat('HH:mm').format(now);
-        if (notificationList.keys.first != Icons.schedule) {
-          timeOrLocation = true;
-          location = notificationList.values.first.keys.first;
-        } else {
-          timeOrLocation = false;
-        }
-      });
-    }
   }
 
   @override
@@ -218,6 +235,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               isChoose: false,
                               isPin: !pinNote!,
                               isStore: widget.task.isStore,
+                              editedTime: formattedEditedTime,
                               labelsList: labelTask,
                               notifications: notificationList);
                           context.read<TasksBloc>().add(
@@ -251,6 +269,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               isChoose: false,
                               isPin: pinNote,
                               isStore: widget.task.isStore,
+                              editedTime: formattedEditedTime,
                               labelsList: labelTask,
                               notifications: notificationList);
                           if (!widget.task.isStore!) {
@@ -274,6 +293,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                 padding: EdgeInsets.only(left: SizesManager.p10),
                 children: [
                   TextField(
+                    onChanged: (_) {
+                      onEditedTime();
+                    },
                     minLines: 1,
                     maxLines: 5,
                     style: TextStyle(fontSize: SizesManager.s30),
@@ -285,6 +307,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                             color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
                   TextField(
+                    onChanged: (_) {
+                      onEditedTime();
+                    },
                     minLines: 1,
                     maxLines: 10,
                     style: TextStyle(fontSize: SizesManager.s20),
@@ -369,6 +394,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               isPin: pinNote,
               isChoose: false,
               isStore: widget.task.isStore,
+              editedTime: formattedEditedTime,
               labelsList: labelTask,
               notifications: notificationList);
           context
@@ -413,7 +439,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     icon: const Icon(Icons.text_format_outlined),
                   ),
                   Text(
-                    StringsManger.update_home,
+                    formattedEditedTime.isNotEmpty
+                        ? "${StringsManger.update_home} $formattedEditedTime"
+                        : "",
                     style: TextStyle(fontSize: SizesManager.s15),
                   ),
                 ],
