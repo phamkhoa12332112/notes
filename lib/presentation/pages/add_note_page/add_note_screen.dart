@@ -33,6 +33,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late Map<String, bool> checkList = {};
   late Map<IconData, Map<String, DateTime>> notificationList = {};
   late DateTime editedTime = DateTime.now();
+  final DateTime checkEdit = DateTime.now();
   String formattedEditedTime = "";
   late DateTime now = DateTime.now();
   String date = '';
@@ -379,7 +380,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     formattedEditedTime.isNotEmpty
                         ? "${StringsManger.update_home} $formattedEditedTime"
                         : "",
-                    style: TextStyle(fontSize: SizesManager.s15),
+                    style: TextStyle(fontSize: SizesManager.s12),
                   ),
                 ],
               ),

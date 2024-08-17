@@ -34,6 +34,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   late TextEditingController contentController;
   late bool timeOrLocation;
   late Map<IconData, Map<String, DateTime>> notificationList;
+  late Map<IconData, Map<String, DateTime>> notification;
   late DateTime now;
   String date = '';
   String formattedDate = '';
@@ -150,6 +151,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
       checkList[label] = true;
     });
     notificationList = widget.task.notifications;
+    notification = widget.task.notifications;
     if (widget.task.notifications.isNotEmpty) {
       timeOrLocation = (widget.task.notifications.keys.first == Icons.schedule)
           ? false
@@ -440,9 +442,18 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   ),
                   Text(
                     formattedEditedTime.isNotEmpty
-                        ? "${StringsManger.update_home} $formattedEditedTime"
+                        ? (notification.isNotEmpty)
+                            ? (editedTime.day ==
+                                        notification
+                                            .values.first.values.first.day &&
+                                    editedTime.month ==
+                                        notification
+                                            .values.first.values.first.month)
+                                ? "${StringsManger.update_home} $formattedEditedTime"
+                                : "${StringsManger.update_home} ${StringsManger.day} ${notification.values.first.values.first.day} ${StringsManger.month} ${notification.values.first.values.first.month}"
+                            : "${StringsManger.update_home} $formattedEditedTime"
                         : "",
-                    style: TextStyle(fontSize: SizesManager.s15),
+                    style: TextStyle(fontSize: SizesManager.s12),
                   ),
                 ],
               ),
