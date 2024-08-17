@@ -225,12 +225,14 @@ class _LabelNote extends State<LabelNote> {
                         isSelectionMode: _isSelectionMode,
                         onTap: onTap,
                         onLongPress: onLongPress,
+                        physic: const AlwaysScrollableScrollPhysics(),
                       )
                     : TasksList(
                         taskList: labelListTasks[widget.label]!.toList(),
                         isSelectionMode: _isSelectionMode,
                         onLongPress: onLongPress,
                         onTap: onTap,
+                        physic: const AlwaysScrollableScrollPhysics(),
                       )),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),

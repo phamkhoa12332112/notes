@@ -55,7 +55,8 @@ class _SaveScreenState extends State<SaveScreen> {
                               GapsManager.w20,
                               if (isGridView)
                                 IconButton(
-                                    icon: const Icon(Icons.view_agenda_outlined),
+                                    icon:
+                                        const Icon(Icons.view_agenda_outlined),
                                     onPressed: () {
                                       setState(() {
                                         isGridView = false;
@@ -88,7 +89,8 @@ class _SaveScreenState extends State<SaveScreen> {
                               GapsManager.w10,
                               if (isGridView)
                                 IconButton(
-                                    icon: const Icon(Icons.view_agenda_outlined),
+                                    icon:
+                                        const Icon(Icons.view_agenda_outlined),
                                     onPressed: () {
                                       setState(() {
                                         isGridView = false;
@@ -121,7 +123,8 @@ class _SaveScreenState extends State<SaveScreen> {
                                         });
                                       }),
                                   PopupMenuItem(
-                                      child: const Text(StringsManger.deny_store),
+                                      child:
+                                          const Text(StringsManger.deny_store),
                                       onTap: () {
                                         for (var task in selectedList) {
                                           if (task.isChoose) {
@@ -182,9 +185,11 @@ class _SaveScreenState extends State<SaveScreen> {
                       ? GridBuilder(
                           tasksList: storeList,
                           isSelectionMode: _isSelectionMode,
+                          physic: const AlwaysScrollableScrollPhysics(),
                           onLongPress: onLongPress,
                           onTap: onTap)
                       : TasksList(
+                          physic: const AlwaysScrollableScrollPhysics(),
                           taskList: storeList,
                           isSelectionMode: _isSelectionMode,
                           onTap: onTap,
