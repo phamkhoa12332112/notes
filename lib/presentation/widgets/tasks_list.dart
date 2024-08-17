@@ -13,12 +13,13 @@ class TasksList extends StatefulWidget {
       required this.taskList,
       required this.onLongPress,
       required this.isSelectionMode,
-      required this.onTap});
+      required this.onTap, required this.physic});
 
   final List<Task> taskList;
   final bool isSelectionMode;
   final Function? onLongPress;
   final Function? onTap;
+  final ScrollPhysics? physic;
 
   @override
   State<TasksList> createState() => _TasksListState();
@@ -34,7 +35,7 @@ class _TasksListState extends State<TasksList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: widget.physic,
       shrinkWrap: true,
       itemCount: widget.taskList.length,
       itemBuilder: (context, index) {

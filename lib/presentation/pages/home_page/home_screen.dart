@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 : pinList.isNotEmpty
                     ? SingleChildScrollView(
-                      child: Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
@@ -167,12 +167,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isSelectionMode: _isSelectionMode,
                                     onTap: onTap,
                                     onLongPress: onLongPress,
+                                    physic:
+                                        const NeverScrollableScrollPhysics(),
                                   )
                                 : TasksList(
                                     taskList: pinList,
                                     isSelectionMode: _isSelectionMode,
                                     onLongPress: onLongPress,
                                     onTap: onTap,
+                                    physic:
+                                        const NeverScrollableScrollPhysics(),
                                   ),
                             Padding(
                                 padding: EdgeInsets.only(
@@ -185,28 +189,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isSelectionMode: _isSelectionMode,
                                     onTap: onTap,
                                     onLongPress: onLongPress,
+                                    physic:
+                                        const NeverScrollableScrollPhysics(),
                                   )
                                 : TasksList(
                                     taskList: tasksList,
                                     isSelectionMode: _isSelectionMode,
                                     onLongPress: onLongPress,
                                     onTap: onTap,
+                                    physic:
+                                        const NeverScrollableScrollPhysics(),
                                   ),
                           ],
                         ),
-                    )
+                      )
                     : isGridView
                         ? GridBuilder(
                             tasksList: tasksList,
                             isSelectionMode: _isSelectionMode,
                             onTap: onTap,
                             onLongPress: onLongPress,
+                            physic: const AlwaysScrollableScrollPhysics(),
                           )
                         : TasksList(
                             taskList: tasksList,
                             isSelectionMode: _isSelectionMode,
                             onLongPress: onLongPress,
                             onTap: onTap,
+                            physic: const AlwaysScrollableScrollPhysics(),
                           )),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),

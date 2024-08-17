@@ -11,12 +11,14 @@ class GridBuilder extends StatefulWidget {
     required this.isSelectionMode,
     required this.onLongPress,
     required this.onTap,
+    this.physic
   });
 
   final List<Task> tasksList;
   final bool isSelectionMode;
   final Function? onLongPress;
   final Function? onTap;
+  final ScrollPhysics? physic;
 
   @override
   GridBuilderState createState() => GridBuilderState();
@@ -32,7 +34,7 @@ class GridBuilderState extends State<GridBuilder> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+        physics: widget.physic, // Disable scrolling
         shrinkWrap: true,
         itemCount: widget.tasksList.length,
         gridDelegate:
