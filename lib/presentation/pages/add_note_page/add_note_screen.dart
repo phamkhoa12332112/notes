@@ -74,14 +74,24 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
     onEditedTime();
     setState(() {
+      IconData icon;
       !timeOrLocation
           ? {
+              icon = Icons.schedule,
               now = updateTime,
               date =
                   '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}',
               formattedDate = DateFormat('HH:mm').format(now),
             }
-          : location = locations;
+          : {
+              icon = (location == StringsManger.private_home)
+                  ? Icons.home
+                  : Icons.work,
+              location = locations
+            };
+      notificationList = {
+        icon: {location: updateTime}
+      };
     });
   }
 
