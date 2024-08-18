@@ -22,10 +22,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   bool _isSelectionMode = false;
   late List<Task> selectedList = [];
 
-  bool checkNotification(List<Task> tasksList) {
-    return tasksList.any((e) => e.notifications.isNotEmpty);
-  }
-
   void onLongPress() {
     setState(() {
       _isSelectionMode = !_isSelectionMode;
@@ -56,6 +52,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return BlocBuilder<TasksBloc, TasksState>(builder: (context, state) {
       List<Task> tasksList =
           state.allTasks.where((e) => e.notifications.isNotEmpty).toList();
+      List<Task> pinList =
+          state.pinTasks.where((e) => e.notifications.isNotEmpty).toList();
       return Scaffold(
         drawer: const Sidebar(),
         appBar: !_isSelectionMode
@@ -133,22 +131,68 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   )
                 ],
               ),
-        body: checkNotification(tasksList)
-            ? isGridView
-                ? GridBuilder(
-                    tasksList: tasksList,
-                    isSelectionMode: _isSelectionMode,
-                    onTap: onTap,
-                    onLongPress: onLongPress,
-                    physic: const AlwaysScrollableScrollPhysics(),
+        body: (tasksList.isNotEmpty || pinList.isNotEmpty)
+            ? pinList.isNotEmpty
+                ? SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(
+                                top: SizesManager.p20, left: SizesManager.p20),
+                            child: const Text(StringsManger.pinned)),
+                        isGridView
+                            ? GridBuilder(
+                                tasksList: pinList,
+                                isSelectionMode: _isSelectionMode,
+                                onTap: onTap,
+                                onLongPress: onLongPress,
+                                physic: const NeverScrollableScrollPhysics(),
+                              )
+                            : TasksList(
+                                taskList: pinList,
+                                isSelectionMode: _isSelectionMode,
+                                onLongPress: onLongPress,
+                                onTap: onTap,
+                                physic: const NeverScrollableScrollPhysics(),
+                              ),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                top: SizesManager.p20, left: SizesManager.p20),
+                            child: const Text(StringsManger.others)),
+                        isGridView
+                            ? GridBuilder(
+                                tasksList: tasksList,
+                                isSelectionMode: _isSelectionMode,
+                                onTap: onTap,
+                                onLongPress: onLongPress,
+                                physic: const NeverScrollableScrollPhysics(),
+                              )
+                            : TasksList(
+                                taskList: tasksList,
+                                isSelectionMode: _isSelectionMode,
+                                onLongPress: onLongPress,
+                                onTap: onTap,
+                                physic: const NeverScrollableScrollPhysics(),
+                              ),
+                      ],
+                    ),
                   )
-                : TasksList(
-                    taskList: tasksList,
-                    isSelectionMode: _isSelectionMode,
-                    onLongPress: onLongPress,
-                    onTap: onTap,
-                    physic: const AlwaysScrollableScrollPhysics(),
-                  )
+                : isGridView
+                    ? GridBuilder(
+                        tasksList: tasksList,
+                        isSelectionMode: _isSelectionMode,
+                        onTap: onTap,
+                        onLongPress: onLongPress,
+                        physic: const AlwaysScrollableScrollPhysics(),
+                      )
+                    : TasksList(
+                        taskList: tasksList,
+                        isSelectionMode: _isSelectionMode,
+                        onLongPress: onLongPress,
+                        onTap: onTap,
+                        physic: const AlwaysScrollableScrollPhysics(),
+                      )
             : SafeArea(
                 child: Center(
                   child: Column(
@@ -178,7 +222,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     StringsManger.app_name),
                 Text(
                     style: TextStyle(fontSize: SizesManager.s15),
-                    "${StringsManger.total_notes_1} ${tasksList.length} ${StringsManger.total_notes_2}")
+                    "${StringsManger.total_notes_1} ${tasksList.length + pinList.length} ${StringsManger.total_notes_2}")
               ],
             ),
           ),
