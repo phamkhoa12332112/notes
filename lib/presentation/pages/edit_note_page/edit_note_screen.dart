@@ -126,7 +126,19 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     if (result != null) {
       onEditedTime();
       setState(() {
-        formattedEditedTime = DateFormat("HH:mm").format(editedTime);
+        if (result.values.first.keys.first == StringsManger.date_and_time) {
+          showDialog(
+              context: context,
+              builder: (_) => DialogBoxNotification(
+                    now: now,
+                    timeOrLocation: timeOrLocation,
+                    resultLocation: location,
+                    onDelete: onDelete,
+                    onSave: onSave,
+                    onTapTime: onTapTime,
+                    onTapLocation: onTapLocation,
+                  ));
+        }
         notificationList = result;
         now = result.values.first.values.first;
         date =
