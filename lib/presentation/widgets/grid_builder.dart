@@ -3,16 +3,16 @@ import 'package:notesapp/blocs/bloc.export.dart';
 import 'package:notesapp/models/task.dart';
 import 'package:notesapp/presentation/pages/edit_note_page/edit_note_screen.dart';
 import 'package:notesapp/utils/resources/sizes_manager.dart';
+import 'package:notesapp/utils/resources/strings_manager.dart';
 
 class GridBuilder extends StatefulWidget {
-  const GridBuilder({
-    super.key,
-    required this.tasksList,
-    required this.isSelectionMode,
-    required this.onLongPress,
-    required this.onTap,
-    this.physic
-  });
+  const GridBuilder(
+      {super.key,
+      required this.tasksList,
+      required this.isSelectionMode,
+      required this.onLongPress,
+      required this.onTap,
+      this.physic});
 
   final List<Task> tasksList;
   final bool isSelectionMode;
@@ -34,7 +34,8 @@ class GridBuilderState extends State<GridBuilder> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        physics: widget.physic, // Disable scrolling
+        physics: widget.physic,
+        // Disable scrolling
         shrinkWrap: true,
         itemCount: widget.tasksList.length,
         gridDelegate:
@@ -88,6 +89,28 @@ class GridBuilderState extends State<GridBuilder> {
                                       color: Colors.black,
                                       fontSize: SizesManager.s20)),
                             ),
+                            Wrap(spacing: SizesManager.w5, children: [
+                              Chip(
+                                  padding: EdgeInsets.all(SizesManager.p8),
+                                  avatar: Icon(widget.tasksList[index]
+                                      .notifications.keys.first),
+                                  label: widget.tasksList[index].notifications
+                                              .keys.first ==
+                                          Icons.schedule
+                                      ? Text(
+                                          '${StringsManger.day} ${widget.tasksList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.tasksList[index].notifications.values.first.values.first.month}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: SizesManager.s15),
+                                        )
+                                      : Text(
+                                          widget.tasksList[index].notifications
+                                              .values.first.keys.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: SizesManager.s15),
+                                        ))
+                            ]),
                           ],
                         )))
                 : GridTile(
@@ -119,6 +142,28 @@ class GridBuilderState extends State<GridBuilder> {
                                       color: Colors.black,
                                       fontSize: SizesManager.s20)),
                             ),
+                            Wrap(spacing: SizesManager.w5, children: [
+                              Chip(
+                                  padding: EdgeInsets.all(SizesManager.p8),
+                                  avatar: Icon(widget.tasksList[index]
+                                      .notifications.keys.first),
+                                  label: widget.tasksList[index].notifications
+                                              .keys.first ==
+                                          Icons.schedule
+                                      ? Text(
+                                          '${StringsManger.day} ${widget.tasksList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.tasksList[index].notifications.values.first.values.first.month}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: SizesManager.s15),
+                                        )
+                                      : Text(
+                                          widget.tasksList[index].notifications
+                                              .values.first.keys.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: SizesManager.s15),
+                                        ))
+                            ]),
                           ],
                         ))),
           );

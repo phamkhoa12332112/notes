@@ -122,6 +122,19 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     if (result != null) {
       onEditedTime();
       setState(() {
+        if (result.values.first.keys.first == StringsManger.date_and_time) {
+          showDialog(
+              context: context,
+              builder: (_) => DialogBoxNotification(
+                    now: now,
+                    timeOrLocation: timeOrLocation,
+                    resultLocation: location,
+                    onDelete: onDelete,
+                    onSave: onSave,
+                    onTapTime: onTapTime,
+                    onTapLocation: onTapLocation,
+                  ));
+        }
         notificationList = result;
         now = result.values.first.values.first;
         date =

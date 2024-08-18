@@ -13,7 +13,8 @@ class TasksList extends StatefulWidget {
       required this.taskList,
       required this.onLongPress,
       required this.isSelectionMode,
-      required this.onTap, required this.physic});
+      required this.onTap,
+      required this.physic});
 
   final List<Task> taskList;
   final bool isSelectionMode;
@@ -86,13 +87,40 @@ class _TasksListState extends State<TasksList> {
                                 color: Colors.black,
                                 fontSize: SizesManager.s25)),
                       ),
-                      subtitle: RichText(
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(
-                            text: task.content,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: SizesManager.s20)),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                                text: task.content,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: SizesManager.s20)),
+                          ),
+                          Wrap(spacing: SizesManager.w5, children: [
+                            Chip(
+                                padding: EdgeInsets.all(SizesManager.p8),
+                                avatar: Icon(widget
+                                    .taskList[index].notifications.keys.first),
+                                label: widget.taskList[index].notifications.keys
+                                            .first ==
+                                        Icons.schedule
+                                    ? Text(
+                                        '${StringsManger.day} ${widget.taskList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.taskList[index].notifications.values.first.values.first.month}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: SizesManager.s15),
+                                      )
+                                    : Text(
+                                        widget.taskList[index].notifications
+                                            .values.first.keys.first,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: SizesManager.s15),
+                                      ))
+                          ]),
+                        ],
                       ),
                     ),
                   )
@@ -104,12 +132,40 @@ class _TasksListState extends State<TasksList> {
                           style: TextStyle(
                               color: Colors.black, fontSize: SizesManager.s25)),
                     ),
-                    subtitle: RichText(
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                          text: task.content,
-                          style: TextStyle(
-                              color: Colors.black, fontSize: SizesManager.s20)),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                              text: task.content,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: SizesManager.s20)),
+                        ),
+                        Wrap(spacing: SizesManager.w5, children: [
+                          Chip(
+                              padding: EdgeInsets.all(SizesManager.p8),
+                              avatar: Icon(widget
+                                  .taskList[index].notifications.keys.first),
+                              label: widget.taskList[index].notifications.keys
+                                          .first ==
+                                      Icons.schedule
+                                  ? Text(
+                                      '${StringsManger.day} ${widget.taskList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.taskList[index].notifications.values.first.values.first.month}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: SizesManager.s15),
+                                    )
+                                  : Text(
+                                      widget.taskList[index].notifications
+                                          .values.first.keys.first,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: SizesManager.s15),
+                                    ))
+                        ]),
+                      ],
                     ),
                   ),
           ),
