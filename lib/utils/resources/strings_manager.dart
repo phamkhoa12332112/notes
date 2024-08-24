@@ -24,7 +24,6 @@ class StringsManger {
   static const String save_text =
       'Ghi chú đã được lưu trữ của bạn sẽ xuất hiện ở đây';
 
-
   static const String show_mode = 'Chế độ hiển thị';
   static const String show_mode_1 = 'Thêm các mục mới vào cuối';
   static const String default_remind = 'Cài đặt mặc định cho lời nhắc';
@@ -39,7 +38,8 @@ class StringsManger {
   static const String help_1 = 'Khắc phục vấn đề với Notes';
   static const String help_2 = 'Xuất dữ liệu của bạn từ Notes';
   static const String help_3 = 'Gắn nhãn, tô màu hoặc ghim ghi chú';
-  static const String help_4 = 'Sử dụng tính năng ghi chú trên màn hình chính của Android ...';
+  static const String help_4 =
+      'Sử dụng tính năng ghi chú trên màn hình chính của Android ...';
   static const String help_5 = 'Lưu trữ ghi chú và danh sách';
   static const String help_6 = 'Gửi ý kiến phản hồi';
   static const String searchHelp = 'Tìm trong phần trợ giúp';
@@ -94,4 +94,10 @@ class StringsManger {
   static const String duration_week = 'Hằng tuần';
   static const String duration_month = 'Hằng tháng';
   static const String cancel = 'Huỷ';
+
+  static const String undo = 'Undo';
+  static const String redo = 'Redo';
+  static const String painting = 'Hình vẽ';
+  static const String disappearCheckBox = 'Ẩn hộp kiểm';
+  static const String delete_painting = 'Xoá hình vẽ';
 }

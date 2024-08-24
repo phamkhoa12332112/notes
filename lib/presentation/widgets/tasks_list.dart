@@ -98,28 +98,29 @@ class _TasksListState extends State<TasksList> {
                                     color: Colors.black,
                                     fontSize: SizesManager.s20)),
                           ),
-                          Wrap(spacing: SizesManager.w5, children: [
-                            Chip(
-                                padding: EdgeInsets.all(SizesManager.p8),
-                                avatar: Icon(widget
-                                    .taskList[index].notifications.keys.first),
-                                label: widget.taskList[index].notifications.keys
-                                            .first ==
-                                        Icons.schedule
-                                    ? Text(
-                                        '${StringsManger.day} ${widget.taskList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.taskList[index].notifications.values.first.values.first.month}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: SizesManager.s15),
-                                      )
-                                    : Text(
-                                        widget.taskList[index].notifications
-                                            .values.first.keys.first,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: SizesManager.s15),
-                                      ))
-                          ]),
+                          if (widget.taskList[index].notifications.isNotEmpty)
+                            Wrap(spacing: SizesManager.w5, children: [
+                              Chip(
+                                  padding: EdgeInsets.all(SizesManager.p8),
+                                  avatar: Icon(widget.taskList[index]
+                                      .notifications.keys.first),
+                                  label: widget.taskList[index].notifications
+                                              .keys.first ==
+                                          Icons.schedule
+                                      ? Text(
+                                          '${StringsManger.day} ${widget.taskList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.taskList[index].notifications.values.first.values.first.month}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: SizesManager.s15),
+                                        )
+                                      : Text(
+                                          widget.taskList[index].notifications
+                                              .values.first.keys.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: SizesManager.s15),
+                                        ))
+                            ]),
                         ],
                       ),
                     ),
@@ -143,28 +144,29 @@ class _TasksListState extends State<TasksList> {
                                   color: Colors.black,
                                   fontSize: SizesManager.s20)),
                         ),
-                        Wrap(spacing: SizesManager.w5, children: [
-                          Chip(
-                              padding: EdgeInsets.all(SizesManager.p8),
-                              avatar: Icon(widget
-                                  .taskList[index].notifications.keys.first),
-                              label: widget.taskList[index].notifications.keys
-                                          .first ==
-                                      Icons.schedule
-                                  ? Text(
-                                      '${StringsManger.day} ${widget.taskList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.taskList[index].notifications.values.first.values.first.month}',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: SizesManager.s15),
-                                    )
-                                  : Text(
-                                      widget.taskList[index].notifications
-                                          .values.first.keys.first,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: SizesManager.s15),
-                                    ))
-                        ]),
+                        if (widget.taskList[index].notifications.isNotEmpty)
+                          Wrap(spacing: SizesManager.w5, children: [
+                            Chip(
+                                padding: EdgeInsets.all(SizesManager.p8),
+                                avatar: Icon(widget
+                                    .taskList[index].notifications.keys.first),
+                                label: widget.taskList[index].notifications.keys
+                                            .first ==
+                                        Icons.schedule
+                                    ? Text(
+                                        '${StringsManger.day} ${widget.taskList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.taskList[index].notifications.values.first.values.first.month}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: SizesManager.s15),
+                                      )
+                                    : Text(
+                                        widget.taskList[index].notifications
+                                            .values.first.keys.first,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: SizesManager.s15),
+                                      ))
+                          ]),
                       ],
                     ),
                   ),

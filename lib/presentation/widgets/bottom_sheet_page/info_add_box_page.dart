@@ -4,7 +4,18 @@ import 'package:notesapp/utils/resources/strings_manager.dart';
 import 'list_items.dart';
 
 class InfoAddBoxPage extends StatelessWidget {
-  const InfoAddBoxPage({super.key});
+  const InfoAddBoxPage({super.key,
+    required this.onGallery,
+    required this.onCamera,
+    required this.onCheckBox,
+    required this.onRecord,
+    required this.onPaint});
+
+  final VoidCallback onCamera;
+  final VoidCallback onGallery;
+  final VoidCallback onCheckBox;
+  final VoidCallback onRecord;
+  final VoidCallback onPaint;
 
   @override
   Widget build(BuildContext context) {
@@ -14,21 +25,33 @@ class InfoAddBoxPage extends StatelessWidget {
         ListItem(
             textRight: StringsManger.take_a_photo,
             icon: Icons.photo_camera_outlined,
-            onPressed: () {}),
+            onPressed: () {
+              onCamera();
+            }),
         ListItem(
             textRight: StringsManger.add_pic,
             icon: Icons.image_outlined,
-            onPressed: () {}),
+            onPressed: () {
+              onGallery();
+            }),
         ListItem(
             textRight: StringsManger.blueprint,
             icon: Icons.brush_outlined,
-            onPressed: () {}),
+            onPressed: () {
+              onPaint();
+            }),
         ListItem(
-            textRight: StringsManger.record, icon: Icons.mic, onPressed: () {}),
+            textRight: StringsManger.record,
+            icon: Icons.mic,
+            onPressed: () {
+              onRecord();
+            }),
         ListItem(
             textRight: StringsManger.check_box,
             icon: Icons.check_box_outlined,
-            onPressed: () {}),
+            onPressed: () {
+              onCheckBox();
+            }),
       ],
     );
   }
