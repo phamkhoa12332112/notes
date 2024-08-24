@@ -44,6 +44,15 @@ class RemoveTask extends TasksEven {
   List<Object?> get props => [task];
 }
 
+class DuplicateNote extends TasksEven {
+  final Task task;
+
+  const DuplicateNote({required this.task});
+
+  @override
+  List<Object?> get props => [task];
+}
+
 class RestoreTask extends TasksEven {
   final Task task;
 
@@ -54,12 +63,13 @@ class RestoreTask extends TasksEven {
 }
 
 class StoreTask extends TasksEven {
-  final Task task;
+  final Task oldTask;
+  final Task newTask;
 
-  const StoreTask({required this.task});
+  const StoreTask({required this.oldTask, required this.newTask});
 
   @override
-  List<Object?> get props => [task];
+  List<Object?> get props => [oldTask, newTask];
 }
 
 class UnStoreTask extends TasksEven {

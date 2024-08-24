@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:notesapp/config/routes/routes.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
 
 import 'list_items.dart';
 
 class InfoMoreVertPage extends StatelessWidget {
-  const InfoMoreVertPage({super.key, required this.onLabel});
+  const InfoMoreVertPage(
+      {super.key,
+      required this.onLabel,
+      required this.onDelete,
+      required this.onDuplicate});
 
   final VoidCallback onLabel;
+  final VoidCallback onDelete;
+  final VoidCallback onDuplicate;
 
   @override
   Widget build(BuildContext context) {
@@ -14,21 +21,13 @@ class InfoMoreVertPage extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ListItem(
-            textRight: StringsManger.delete,
+            textRight: StringsManger.delete_bin,
             icon: Icons.delete_outline,
-            onPressed: () {}),
+            onPressed: () => onDelete()),
         ListItem(
             textRight: StringsManger.copy,
             icon: Icons.content_copy,
-            onPressed: () {}),
-        ListItem(
-            textRight: StringsManger.send,
-            icon: Icons.share_outlined,
-            onPressed: () {}),
-        ListItem(
-            textRight: StringsManger.collaborator,
-            icon: Icons.person_add_outlined,
-            onPressed: () {}),
+            onPressed: () => onDuplicate()),
         ListItem(
             textRight: StringsManger.label,
             icon: Icons.label_outline,
@@ -36,7 +35,9 @@ class InfoMoreVertPage extends StatelessWidget {
         ListItem(
             textRight: StringsManger.help,
             icon: Icons.help_outline,
-            onPressed: () {})
+            onPressed: () {
+              Navigator.pushNamed(context, RoutesName.helpScreen);
+            })
       ],
     );
   }

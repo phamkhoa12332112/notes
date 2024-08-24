@@ -38,7 +38,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late bool pinNote = false;
   late String title;
   late String content;
-  late List<String> labelTask;
+  late List<String> labelTask = [];
   late bool timeOrLocation;
   late Map<IconData, Map<String, DateTime>> notificationList = {};
 
@@ -199,11 +199,44 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     });
   }
 
-  void onDelete() {
+  void onDeleteNotification() {
     setState(() {
       onEditedTime();
       notificationList.clear();
     });
+  }
+
+  void onDeleteNote() {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesName.homeScreen,
+      (route) => route.isFirst,
+    );
+  }
+
+  void onDuplicateNote() {
+    var task = Task(
+        title: titleController.text,
+        content: contentController.text,
+        isChoose: false,
+        isPin: pinNote,
+        editedTime: formattedEditedTime,
+        labelsList: labelTask,
+        notifications: notificationList,
+        checkBoxList: checkBoxList,
+        drawingPoint: drawingPoint,
+        recordingPath: recordingPath,
+        selectedImage: selectedImage);
+    if (pinNote) {
+      context.read<TasksBloc>().add(PinTask(oldTask: task, newTask: task));
+    } else {
+      context.read<TasksBloc>().add(DuplicateNote(task: task));
+    }
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesName.homeScreen,
+      (route) => route.isFirst,
+    );
   }
 
   void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
@@ -302,7 +335,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     now: now,
                     timeOrLocation: timeOrLocation,
                     resultLocation: location,
-                    onDelete: onDelete,
+                    onDelete: onDeleteNotification,
                     onSave: onSave,
                     onTapTime: onTapTime,
                     onTapLocation: onTapLocation,
@@ -410,7 +443,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             audioRecorder.dispose();
                             audioPlayer.dispose();
                           });
-                          context.read<TasksBloc>().add(StoreTask(task: task));
+                          context
+                              .read<TasksBloc>()
+                              .add(StoreTask(oldTask: task, newTask: task));
                           context
                               .read<TasksBloc>()
                               .add(AddLabelTask(task: task));
@@ -599,7 +634,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                   now: now,
                                   timeOrLocation: timeOrLocation,
                                   resultLocation: location,
-                                  onDelete: onDelete,
+                                  onDelete: onDeleteNotification,
                                   onSave: onSave,
                                   onTapTime: onTapTime,
                                   onTapLocation: onTapLocation,
@@ -795,7 +830,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero),
                     context: context,
-                    builder: (ctx) => InfoMoreVertPage(onLabel: onLabel));
+                    builder: (ctx) => InfoMoreVertPage(
+                          onLabel: onLabel,
+                          onDelete: onDeleteNote,
+                          onDuplicate: onDuplicateNote,
+                        ));
               },
               icon: const Icon(Icons.more_vert),
             )

@@ -82,8 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 isGridView = true;
                               });
                             }),
-                      IconButton(
-                          icon: const Icon(Icons.people), onPressed: () {}),
                     ],
                   ),
                 ),
