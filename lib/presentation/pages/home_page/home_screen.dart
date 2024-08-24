@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       List<Task> pinList = state.pinTasks;
       return Scaffold(
         drawer: const Sidebar(),
-        appBar: !_isSelectionMode
+        appBar: (!_isSelectionMode || tasksList.isEmpty)
             ? AppBar(
                 title: TextFieldWidget(
                 borderRadius: SizesManager.r0,

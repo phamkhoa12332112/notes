@@ -51,6 +51,11 @@ class SizesManager {
   static const int l2 = 2;
 
   static double r0 = 0.r;
+  static double r1 = 1.r;
   static double r2 = 2.r;
   static double r20 = 20.r;
+
+  static int quarterTurns3 = 3;
+
+  static int crossAxis1 = 1;
 }

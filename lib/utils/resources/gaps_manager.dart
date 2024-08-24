@@ -7,4 +7,5 @@ class GapsManager {
 
   static Widget w10 = 10.horizontalSpace;
   static Widget w20 = 20.horizontalSpace;
+  static Widget w32 = 32.horizontalSpace;
 }

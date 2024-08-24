@@ -89,28 +89,35 @@ class GridBuilderState extends State<GridBuilder> {
                                       color: Colors.black,
                                       fontSize: SizesManager.s20)),
                             ),
-                            Wrap(spacing: SizesManager.w5, children: [
-                              Chip(
-                                  padding: EdgeInsets.all(SizesManager.p8),
-                                  avatar: Icon(widget.tasksList[index]
-                                      .notifications.keys.first),
-                                  label: widget.tasksList[index].notifications
-                                              .keys.first ==
-                                          Icons.schedule
-                                      ? Text(
-                                          '${StringsManger.day} ${widget.tasksList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.tasksList[index].notifications.values.first.values.first.month}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: SizesManager.s15),
-                                        )
-                                      : Text(
-                                          widget.tasksList[index].notifications
-                                              .values.first.keys.first,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: SizesManager.s15),
-                                        ))
-                            ]),
+                            if (widget
+                                .tasksList[index].notifications.isNotEmpty)
+                              Wrap(spacing: SizesManager.w5, children: [
+                                Chip(
+                                    padding: EdgeInsets.all(SizesManager.p8),
+                                    avatar: Icon(widget.tasksList[index]
+                                        .notifications.keys.first),
+                                    label: widget.tasksList[index].notifications
+                                                .keys.first ==
+                                            Icons.schedule
+                                        ? Text(
+                                            '${StringsManger.day} ${widget.tasksList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.tasksList[index].notifications.values.first.values.first.month}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: SizesManager.s15),
+                                          )
+                                        : Text(
+                                            widget
+                                                .tasksList[index]
+                                                .notifications
+                                                .values
+                                                .first
+                                                .keys
+                                                .first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: SizesManager.s15),
+                                          ))
+                              ]),
                           ],
                         )))
                 : GridTile(
@@ -142,28 +149,35 @@ class GridBuilderState extends State<GridBuilder> {
                                       color: Colors.black,
                                       fontSize: SizesManager.s20)),
                             ),
-                            Wrap(spacing: SizesManager.w5, children: [
-                              Chip(
-                                  padding: EdgeInsets.all(SizesManager.p8),
-                                  avatar: Icon(widget.tasksList[index]
-                                      .notifications.keys.first),
-                                  label: widget.tasksList[index].notifications
-                                              .keys.first ==
-                                          Icons.schedule
-                                      ? Text(
-                                          '${StringsManger.day} ${widget.tasksList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.tasksList[index].notifications.values.first.values.first.month}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: SizesManager.s15),
-                                        )
-                                      : Text(
-                                          widget.tasksList[index].notifications
-                                              .values.first.keys.first,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: SizesManager.s15),
-                                        ))
-                            ]),
+                            if (widget
+                                .tasksList[index].notifications.isNotEmpty)
+                              Wrap(spacing: SizesManager.w5, children: [
+                                Chip(
+                                    padding: EdgeInsets.all(SizesManager.p8),
+                                    avatar: Icon(widget.tasksList[index]
+                                        .notifications.keys.first),
+                                    label: widget.tasksList[index].notifications
+                                                .keys.first ==
+                                            Icons.schedule
+                                        ? Text(
+                                            '${StringsManger.day} ${widget.tasksList[index].notifications.values.first.values.first.day} ${StringsManger.month} ${widget.tasksList[index].notifications.values.first.values.first.month}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: SizesManager.s15),
+                                          )
+                                        : Text(
+                                            widget
+                                                .tasksList[index]
+                                                .notifications
+                                                .values
+                                                .first
+                                                .keys
+                                                .first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: SizesManager.s15),
+                                          ))
+                              ]),
                           ],
                         ))),
           );
