@@ -220,11 +220,47 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     });
   }
 
-  void onDelete() {
+  void onDeleteNotification() {
     setState(() {
       onEditedTime();
       notificationList.clear();
     });
+  }
+
+  void onDeleteNote() {
+    context.read<TasksBloc>().add(RemoveTask(task: widget.task));
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesName.homeScreen,
+      (route) => route.isFirst,
+    );
+  }
+
+  void onDuplicateNote() {
+    var task = Task(
+        title: titleController.text,
+        content: contentController.text,
+        isChoose: false,
+        isPin: pinNote,
+        editedTime: formattedEditedTime,
+        labelsList: labelTask,
+        notifications: notificationList,
+        checkBoxList: checkBoxList,
+        drawingPoint: drawingPoint,
+        recordingPath: recordingPath,
+        selectedImage: selectedImage);
+    if (pinNote == true) {
+      context
+          .read<TasksBloc>()
+          .add(PinTask(oldTask: widget.task, newTask: task));
+    } else {
+      context.read<TasksBloc>().add(DuplicateNote(task: task));
+    }
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesName.homeScreen,
+      (route) => route.isFirst,
+    );
   }
 
   void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
@@ -325,7 +361,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     now: now,
                     timeOrLocation: timeOrLocation,
                     resultLocation: location,
-                    onDelete: onDelete,
+                    onDelete: onDeleteNotification,
                     onSave: onSave,
                     onTapTime: onTapTime,
                     onTapLocation: onTapLocation,
@@ -440,40 +476,40 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                           onNotification();
                         }),
                     GapsManager.w20,
-                    InkWell(
-                        onTap: () {
-                          labelTask = checkList.entries
-                              .where((entry) => entry.value)
-                              .map((entry) => entry.key.toString())
-                              .toList();
-                          var task = Task(
-                              title: titleController.text,
-                              content: contentController.text,
-                              isChoose: false,
-                              isPin: pinNote,
-                              isStore: widget.task.isStore,
-                              editedTime: formattedEditedTime,
-                              labelsList: labelTask,
-                              notifications: notificationList,
-                              checkBoxList: checkBoxList,
-                              drawingPoint: drawingPoint,
-                              recordingPath: recordingPath,
-                              selectedImage: selectedImage);
-                          if (!widget.task.isStore!) {
+                    if (widget.task.isStore == false)
+                      InkWell(
+                          onTap: () {
+                            labelTask = checkList.entries
+                                .where((entry) => entry.value)
+                                .map((entry) => entry.key.toString())
+                                .toList();
+                            var task = Task(
+                                title: titleController.text,
+                                content: contentController.text,
+                                isChoose: false,
+                                isPin: pinNote,
+                                isStore: widget.task.isStore,
+                                editedTime: formattedEditedTime,
+                                labelsList: labelTask,
+                                notifications: notificationList,
+                                checkBoxList: checkBoxList,
+                                drawingPoint: drawingPoint,
+                                recordingPath: recordingPath,
+                                selectedImage: selectedImage);
+                            if (!widget.task.isStore!) {
+                              context.read<TasksBloc>().add(StoreTask(
+                                  oldTask: widget.task, newTask: task));
+                            }
+                            setState(() {
+                              audioRecorder.dispose();
+                              audioPlayer.dispose();
+                            });
                             context
                                 .read<TasksBloc>()
-                                .add(StoreTask(task: task));
-                          }
-                          setState(() {
-                            audioRecorder.dispose();
-                            audioPlayer.dispose();
-                          });
-                          context
-                              .read<TasksBloc>()
-                              .add(AddLabelTask(task: task));
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.save_alt)),
+                                .add(AddLabelTask(task: task));
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.save_alt)),
                   ],
                 )
               ],
@@ -646,7 +682,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                   now: now,
                                   timeOrLocation: timeOrLocation,
                                   resultLocation: location,
-                                  onDelete: onDelete,
+                                  onDelete: onDeleteNotification,
                                   onSave: onSave,
                                   onTapTime: onTapTime,
                                   onTapLocation: onTapLocation,
@@ -855,7 +891,11 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero),
                     context: context,
-                    builder: (ctx) => InfoMoreVertPage(onLabel: onLabel));
+                    builder: (ctx) => InfoMoreVertPage(
+                          onLabel: onLabel,
+                          onDelete: onDeleteNote,
+                          onDuplicate: onDuplicateNote,
+                        ));
               },
               icon: const Icon(Icons.more_vert),
             ),

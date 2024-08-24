@@ -23,6 +23,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     on<AddLabelList>(_onAddLabelList);
     on<RemoveLabel>(_onRemoveLabel);
     on<EditLabel>(_onEditLabel);
+    on<DuplicateNote>(_onDuplicateNote);
   }
 
   void _onAddTask(AddTask even, Emitter<TasksState> emit) {
@@ -108,14 +109,24 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         labelListTasks: state.labelListTasks));
   }
 
+  void _onDuplicateNote(DuplicateNote even, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(TasksState(
+        deleteTasks: state.deleteTasks,
+        allTasks: List.from(state.allTasks)..add(even.task),
+        storeTasks: state.storeTasks,
+        pinTasks: state.pinTasks,
+        labelListTasks: state.labelListTasks));
+  }
+
   void _onStoreTask(StoreTask even, Emitter<TasksState> emit) {
     final state = this.state;
     emit(TasksState(
         storeTasks: List.from(state.storeTasks)
-          ..add(even.task.copyWith(isStore: true, isPin: false)),
+          ..add(even.newTask.copyWith(isStore: true, isPin: false)),
         deleteTasks: List.from(state.deleteTasks),
-        allTasks: List.from(state.allTasks)..remove(even.task),
-        pinTasks: List.from(state.pinTasks)..remove(even.task),
+        allTasks: List.from(state.allTasks)..remove(even.oldTask),
+        pinTasks: List.from(state.pinTasks)..remove(even.oldTask),
         labelListTasks: state.labelListTasks));
   }
 
@@ -133,8 +144,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
   void _onPinTask(PinTask even, Emitter<TasksState> emit) {
     final state = this.state;
     List<Task> storeTasks = even.oldTask.isStore!
-        ? (List.from(state.storeTasks)
-          ..remove(even.oldTask))
+        ? (List.from(state.storeTasks)..remove(even.oldTask))
         : state.storeTasks;
     List<Task> allTasks = even.oldTask.isStore!
         ? state.allTasks
