@@ -52,6 +52,23 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   late Map<String, bool> checkList = {};
   late DateTime editedTime = DateTime.now();
 
+  // Color background
+  late Color? colorBackground = widget.task.color;
+  var availableColor = [
+    Colors.white,
+    Colors.red,
+    Colors.deepOrange,
+    Colors.amber,
+    Colors.yellow,
+    Colors.blue,
+    Colors.cyan,
+    Colors.green,
+    Colors.lightGreenAccent,
+    Colors.brown,
+    Colors.deepPurple,
+    Colors.pink,
+  ];
+
   // Image
   late List<File>? selectedImage = widget.task.selectedImage;
 
@@ -293,6 +310,80 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     });
   }
 
+  void setColorBackground() {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      context: context,
+      builder: (context) => SizedBox(
+        height: SizesManager.h60,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: availableColor.length,
+          itemBuilder: (context, index) => Stack(
+            alignment: Alignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    colorBackground = availableColor[index];
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: SizesManager.w70,
+                  height: SizesManager.h120,
+                  margin: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: colorBackground == availableColor[index]
+                          ? Colors.blue
+                          : Colors.black,
+                      width: SizesManager.w1,
+                    ),
+                    color: availableColor[index],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              if (colorBackground == availableColor[index])
+                Icon(
+                  Icons.done,
+                  color: Colors.blue,
+                  size: SizesManager
+                      .s30, // Adjust the size of the icon as required
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void onAddBox() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        context: context,
+        builder: (ctx) => InfoAddBoxPage(
+            onGallery: pickImageFromGallery,
+            onCamera: pickImageFromCamera,
+            onCheckBox: onCheckBox,
+            onRecord: onRecord,
+            onPaint: onPaint));
+  }
+
+  void onMoreVert() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        context: context,
+        builder: (ctx) => InfoMoreVertPage(
+              onLabel: onLabel,
+              onDelete: onDeleteNote,
+              onDuplicate: onDuplicateNote,
+            ));
+  }
+
+  //----------------------------------
   Future<void> onPaint() async {
     final result = await Navigator.push(
       context,
@@ -309,6 +400,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     }
   }
 
+  // get path from camera
   Future pickImageFromCamera() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.camera);
@@ -318,6 +410,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     });
   }
 
+  // get path from gallery
   Future pickImageFromGallery() async {
     final List<XFile> selectedXFileImages =
         await ImagePicker().pickMultiImage();
@@ -386,6 +479,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: colorBackground,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,6 +541,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               isChoose: false,
                               isPin: !pinNote!,
                               isStore: widget.task.isStore,
+                              color: colorBackground,
                               editedTime: formattedEditedTime,
                               labelsList: labelTask,
                               notifications: notificationList,
@@ -490,6 +585,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                 isChoose: false,
                                 isPin: pinNote,
                                 isStore: widget.task.isStore,
+                                color: colorBackground,
                                 editedTime: formattedEditedTime,
                                 labelsList: labelTask,
                                 notifications: notificationList,
@@ -832,6 +928,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               isPin: pinNote,
               isChoose: false,
               isStore: widget.task.isStore,
+              color: colorBackground,
               editedTime: formattedEditedTime,
               labelsList: labelTask,
               notifications: notificationList,
@@ -864,21 +961,14 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero),
-                          context: context,
-                          builder: (ctx) => InfoAddBoxPage(
-                              onGallery: pickImageFromGallery,
-                              onCamera: pickImageFromCamera,
-                              onCheckBox: onCheckBox,
-                              onRecord: onRecord,
-                              onPaint: onPaint));
+                      onAddBox();
                     },
                     icon: const Icon(Icons.add_box_outlined),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setColorBackground();
+                    },
                     icon: const Icon(Icons.palette_outlined),
                   ),
                   IconButton(
@@ -905,15 +995,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
             ),
             IconButton(
               onPressed: () {
-                showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                    context: context,
-                    builder: (ctx) => InfoMoreVertPage(
-                          onLabel: onLabel,
-                          onDelete: onDeleteNote,
-                          onDuplicate: onDuplicateNote,
-                        ));
+                onMoreVert();
               },
               icon: const Icon(Icons.more_vert),
             ),
