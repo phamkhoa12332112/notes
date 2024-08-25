@@ -319,11 +319,12 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   }
 
   Future pickImageFromGallery() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnedImage == null) return;
+    final List<XFile> selectedXFileImages =
+        await ImagePicker().pickMultiImage();
+    if (selectedXFileImages.isEmpty) return;
     setState(() {
-      selectedImage!.add(File(returnedImage.path));
+      selectedImage?.addAll(
+          selectedXFileImages.map((xFile) => File(xFile.path)).toList());
     });
   }
 
@@ -738,11 +739,28 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                           crossAxisCount: SizesManager.crossAxis1,
                         ),
                         itemCount: selectedImage!.length,
-                        itemBuilder: (context, index) => Image.file(
-                          selectedImage![index],
-                          height: SizesManager.h260,
-                          width: SizesManager.w150,
-                        ),
+                        itemBuilder: (context, index) =>
+                            Stack(fit: StackFit.passthrough, children: [
+                          Image.file(
+                            selectedImage![index],
+                            height: SizesManager.h260,
+                            width: SizesManager.w150,
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional.bottomCenter,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedImage?.remove(selectedImage?[index]);
+                                });
+                              },
+                              child: Icon(
+                                  size: SizesManager.s25,
+                                  color: Colors.black45,
+                                  Icons.cancel_outlined),
+                            ),
+                          ),
+                        ]),
                         shrinkWrap: true,
                       ),
                     ),
