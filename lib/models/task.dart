@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'drawing_point.dart';
 
@@ -12,6 +13,7 @@ class Task extends Equatable {
   bool? isDelete;
   bool? isStore;
   bool? isPin;
+  Color? color;
   String? editedTime;
   List<String> labelsList;
   Map<IconData, Map<String, DateTime>> notifications;
@@ -34,6 +36,7 @@ class Task extends Equatable {
     this.selectedImage,
     this.drawingPoint,
     this.recordingPath,
+    this.color,
   }) {
     isDelete = isDelete ?? false;
     isStore = isStore ?? false;
@@ -43,6 +46,7 @@ class Task extends Equatable {
     selectedImage = selectedImage ?? [];
     drawingPoint = drawingPoint ?? [];
     recordingPath = recordingPath ?? "";
+    color = color ?? Colors.white;
   }
 
   Task copyWith({
@@ -52,6 +56,7 @@ class Task extends Equatable {
     bool? isDelete,
     bool? isStore,
     bool? isPin,
+    Color? color,
     String? editedTime,
     List<String>? labelsList,
     Map<IconData, Map<String, DateTime>>? notifications,
@@ -67,6 +72,7 @@ class Task extends Equatable {
       isDelete: isDelete ?? this.isDelete,
       isStore: isStore ?? this.isStore,
       isPin: isPin ?? this.isPin,
+      color: color ?? this.color,
       editedTime: editedTime ?? this.editedTime,
       labelsList: labelsList ?? this.labelsList,
       notifications: notifications ?? this.notifications,
@@ -85,6 +91,7 @@ class Task extends Equatable {
       'isDelete': isDelete,
       'isStore': isStore,
       'isPin': isPin,
+      'color': color?.value,
       'editedTime': editedTime,
       'labelsList': labelsList,
       'notifications': notifications,
@@ -103,12 +110,15 @@ class Task extends Equatable {
       isDelete: map['isDelete'],
       isStore: map['isStore'],
       isPin: map['isPin'],
+      color: Color(map['color']),
       editedTime: map['editedTime'],
       labelsList: map['labelsList'],
       notifications: map['notifications'],
       checkBoxList: map['checkBoxList'],
       selectedImage: map['selectedImage'],
-      drawingPoint: (map['drawingPoint'] as List).map((pointMap) => DrawingPoint.fromMap(pointMap)).toList(),
+      drawingPoint: (map['drawingPoint'] as List)
+          .map((pointMap) => DrawingPoint.fromMap(pointMap))
+          .toList(),
       recordingPath: map['recordingPath'],
     );
   }
@@ -121,6 +131,7 @@ class Task extends Equatable {
         isDelete,
         isStore,
         isPin,
+        color,
         editedTime,
         labelsList,
         notifications,

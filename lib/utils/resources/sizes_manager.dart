@@ -29,6 +29,7 @@ class SizesManager {
   static double w8 = 8.w;
   static double w10 = 10.w;
   static double w30 = 30.w;
+  static double w70 = 70.w;
   static double w100 = 100.w;
   static double w150 = 150.w;
   static double w200 = 200.w;

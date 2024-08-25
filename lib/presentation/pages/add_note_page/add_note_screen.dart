@@ -42,6 +42,23 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late bool timeOrLocation;
   late Map<IconData, Map<String, DateTime>> notificationList = {};
 
+  // Color background
+  Color colorBackground = Colors.white;
+  var availableColor = [
+    Colors.white,
+    Colors.red,
+    Colors.deepOrange,
+    Colors.amber,
+    Colors.yellow,
+    Colors.blue,
+    Colors.cyan,
+    Colors.green,
+    Colors.lightGreenAccent,
+    Colors.brown,
+    Colors.deepPurple,
+    Colors.pink,
+  ];
+
   // update editing note
   late Map<String, bool> checkList = {};
   late DateTime editedTime = DateTime.now();
@@ -263,6 +280,79 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     });
   }
 
+  void setColorBackground() {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      context: context,
+      builder: (context) => SizedBox(
+        height: SizesManager.h60,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: availableColor.length,
+          itemBuilder: (context, index) => Stack(
+            alignment: Alignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    colorBackground = availableColor[index];
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: SizesManager.w70,
+                  height: SizesManager.h120,
+                  margin: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: colorBackground == availableColor[index]
+                          ? Colors.blue
+                          : Colors.black,
+                      width: SizesManager.w1,
+                    ),
+                    color: availableColor[index],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              if (colorBackground == availableColor[index])
+                Icon(
+                  Icons.done,
+                  color: Colors.blue,
+                  size: SizesManager
+                      .s30, // Adjust the size of the icon as required
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void onAddBox() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        context: context,
+        builder: (ctx) => InfoAddBoxPage(
+            onCamera: pickImageFromCamera,
+            onGallery: pickImageFromGallery,
+            onCheckBox: onCheckBox,
+            onRecord: onRecord,
+            onPaint: onPaint));
+  }
+
+  void onMoreVert() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        context: context,
+        builder: (ctx) => InfoMoreVertPage(
+              onLabel: onLabel,
+              onDelete: onDeleteNote,
+              onDuplicate: onDuplicateNote,
+            ));
+  }
+
 // get path from camera
   Future pickImageFromCamera() async {
     final returnedImage =
@@ -360,6 +450,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: colorBackground,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,6 +524,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               title: titleController.text,
                               content: contentController.text,
                               isChoose: false,
+                              color: colorBackground,
                               editedTime: formattedEditedTime,
                               labelsList: labelTask,
                               notifications: notificationList,
@@ -783,6 +875,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               content: contentController.text,
               isChoose: false,
               isPin: pinNote,
+              color: colorBackground,
               editedTime: formattedEditedTime,
               labelsList: labelTask,
               notifications: notificationList,
@@ -812,21 +905,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero),
-                          context: context,
-                          builder: (ctx) => InfoAddBoxPage(
-                              onCamera: pickImageFromCamera,
-                              onGallery: pickImageFromGallery,
-                              onCheckBox: onCheckBox,
-                              onRecord: onRecord,
-                              onPaint: onPaint));
+                      onAddBox();
                     },
                     icon: const Icon(Icons.add_box_outlined),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setColorBackground();
+                    },
                     icon: const Icon(Icons.palette_outlined),
                   ),
                   IconButton(
@@ -844,15 +930,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             ),
             IconButton(
               onPressed: () {
-                showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                    context: context,
-                    builder: (ctx) => InfoMoreVertPage(
-                          onLabel: onLabel,
-                          onDelete: onDeleteNote,
-                          onDuplicate: onDuplicateNote,
-                        ));
+                onMoreVert();
               },
               icon: const Icon(Icons.more_vert),
             )
