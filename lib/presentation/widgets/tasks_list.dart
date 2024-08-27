@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notesapp/blocs/bloc.export.dart';
@@ -41,6 +43,12 @@ class _TasksListState extends State<TasksList> {
       itemCount: widget.taskList.length,
       itemBuilder: (context, index) {
         var task = widget.taskList[index];
+        var deltaJson = jsonDecode(task.content);
+
+        StringBuffer normalText = StringBuffer();
+        for (var operation in deltaJson) {
+          normalText.write(operation['insert']);
+        }
         return GestureDetector(
           onTap: () => widget.isSelectionMode
               ? Future.delayed(Duration.zero, () async {
@@ -56,6 +64,7 @@ class _TasksListState extends State<TasksList> {
           child: Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
+                color: widget.taskList[index].color,
                 border: Border.all(
                     color: task.isChoose ? Colors.green : Colors.grey,
                     width: task.isChoose ? SizesManager.w5 : SizesManager.w1),
@@ -93,7 +102,7 @@ class _TasksListState extends State<TasksList> {
                           RichText(
                             overflow: TextOverflow.ellipsis,
                             text: TextSpan(
-                                text: task.content,
+                                text: normalText.toString(),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: SizesManager.s20)),
@@ -139,7 +148,7 @@ class _TasksListState extends State<TasksList> {
                         RichText(
                           overflow: TextOverflow.ellipsis,
                           text: TextSpan(
-                              text: task.content,
+                              text: normalText.toString(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: SizesManager.s20)),
