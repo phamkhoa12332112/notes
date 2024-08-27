@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:notesapp/blocs/bloc.export.dart';
 import 'package:notesapp/models/task.dart';
@@ -42,6 +44,11 @@ class GridBuilderState extends State<GridBuilder> {
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (_, index) {
           var task = widget.tasksList[index];
+          var deltaJson = jsonDecode(task.content);
+          StringBuffer normalText = StringBuffer();
+          for (var operation in deltaJson) {
+            normalText.write(operation['insert']);
+          }
           return GestureDetector(
             onTap: () => widget.isSelectionMode
                 ? Future.delayed(Duration.zero, () async {
@@ -59,6 +66,7 @@ class GridBuilderState extends State<GridBuilder> {
                 ? GridTile(
                     child: Container(
                         decoration: BoxDecoration(
+                            color: widget.tasksList[index].color,
                             border: Border.all(
                                 color:
                                     task.isChoose ? Colors.green : Colors.grey,
@@ -84,7 +92,7 @@ class GridBuilderState extends State<GridBuilder> {
                             RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-                                  text: task.content,
+                                  text: normalText.toString(),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: SizesManager.s20)),
@@ -123,6 +131,7 @@ class GridBuilderState extends State<GridBuilder> {
                 : GridTile(
                     child: Container(
                         decoration: BoxDecoration(
+                            color: widget.tasksList[index].color,
                             border: Border.all(
                                 color: Colors.grey, width: SizesManager.w1),
                             borderRadius: BorderRadiusDirectional.all(
@@ -144,7 +153,7 @@ class GridBuilderState extends State<GridBuilder> {
                             RichText(
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
-                                  text: task.content,
+                                  text: normalText.toString(),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: SizesManager.s20)),

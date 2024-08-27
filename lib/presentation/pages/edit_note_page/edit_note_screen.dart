@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:notesapp/blocs/bloc.export.dart';
@@ -35,9 +38,10 @@ class EditNoteScreen extends StatefulWidget {
 class _EditNoteScreenState extends State<EditNoteScreen> {
   late bool? pinNote = widget.task.isPin;
   late String title = widget.task.title;
-  late String content = widget.task.content;
   late TextEditingController titleController;
-  late TextEditingController contentController;
+  late QuillController quillController = QuillController.basic();
+  final FocusNode focusNode = FocusNode();
+  bool isFormating = false;
 
   // update editing note
   late bool timeOrLocation;
@@ -93,6 +97,20 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   @override
   void initState() {
     super.initState();
+
+    // change json to Document from Delta
+    var deltaJson = jsonDecode(widget.task.content);
+
+    // Create a Delta from the JSON
+    final Delta delta = Delta.fromJson(deltaJson);
+
+    // Convert the Delta into a Document
+    final Document document = Document.fromDelta(delta);
+    quillController = QuillController(
+      document: document,
+      selection: const TextSelection.collapsed(offset: 0),
+    );
+
     formattedEditedTime = widget.task.editedTime ?? "";
     labelTask = widget.task.labelsList;
     widget.task.labelsList.forEach((label) {
@@ -111,7 +129,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
       location = widget.task.notifications.values.first.keys.first;
     }
     titleController = TextEditingController(text: title);
-    contentController = TextEditingController(text: content);
 
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
@@ -130,13 +147,17 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         position = newPosition;
       });
     });
+
+    quillController.addListener(() {
+      onEditedTime();
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     titleController.dispose();
-    contentController.dispose();
+    quillController.dispose();
   }
 
   String formatTime(int second) {
@@ -256,7 +277,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   void onDuplicateNote() {
     var task = Task(
         title: titleController.text,
-        content: contentController.text,
+        content: quillController.document.toPlainText(),
         isChoose: false,
         isPin: pinNote,
         editedTime: formattedEditedTime,
@@ -307,6 +328,12 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   void onTap() {
     setState(() {
       pinNote = !pinNote!;
+    });
+  }
+
+  void onFormating() {
+    setState(() {
+      isFormating = !isFormating;
     });
   }
 
@@ -381,6 +408,64 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               onDelete: onDeleteNote,
               onDuplicate: onDuplicateNote,
             ));
+  }
+
+  Widget onFormatText() {
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: QuillToolbar.simple(
+                controller: quillController,
+                configurations: const QuillSimpleToolbarConfigurations(
+                    showAlignmentButtons: false,
+                    showBackgroundColorButton: false,
+                    showCenterAlignment: false,
+                    showClipboardCopy: false,
+                    showClipboardCut: false,
+                    showClipboardPaste: false,
+                    showCodeBlock: false,
+                    showDirection: false,
+                    showDividers: false,
+                    showIndent: false,
+                    showInlineCode: false,
+                    showJustifyAlignment: false,
+                    showLeftAlignment: false,
+                    showLineHeightButton: false,
+                    showLink: false,
+                    showListBullets: false,
+                    showListCheck: false,
+                    showListNumbers: false,
+                    showQuote: false,
+                    showRedo: false,
+                    showRightAlignment: false,
+                    showSearchButton: false,
+                    showSmallButton: false,
+                    showStrikeThrough: false,
+                    showSubscript: false,
+                    showSuperscript: false,
+                    showUndo: false)),
+          ),
+        ),
+        GapsManager.w10,
+        VerticalDivider(
+          endIndent: SizesManager.w1,
+          color: Colors.black,
+          width: SizesManager.w1,
+          thickness: SizesManager.w1,
+        ),
+        GapsManager.w10,
+        Padding(
+          padding: EdgeInsets.only(top: SizesManager.p5),
+          child: InkWell(
+              onTap: () {
+                onFormating();
+              },
+              child: const Icon(Icons.cancel_outlined)),
+        )
+      ],
+    );
   }
 
   //----------------------------------
@@ -537,7 +622,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                         if (widget.task.isStore!) {
                           var task = Task(
                               title: titleController.text,
-                              content: contentController.text,
+                              content: jsonEncode(
+                                  quillController.document.toDelta().toJson()),
                               isChoose: false,
                               isPin: !pinNote!,
                               isStore: widget.task.isStore,
@@ -581,7 +667,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                 .toList();
                             var task = Task(
                                 title: titleController.text,
-                                content: contentController.text,
+                                content: jsonEncode(quillController.document
+                                    .toDelta()
+                                    .toJson()),
                                 isChoose: false,
                                 isPin: pinNote,
                                 isStore: widget.task.isStore,
@@ -630,19 +718,39 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                         hintStyle: TextStyle(
                             color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
-                  TextField(
-                    onChanged: (_) {
-                      onEditedTime();
-                    },
-                    minLines: 1,
-                    maxLines: 10,
-                    style: TextStyle(fontSize: SizesManager.s20),
-                    controller: contentController,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: StringsManger.noted,
-                        hintStyle: TextStyle(
-                            color: Colors.grey, fontSize: SizesManager.s20)),
+                  Stack(
+                    children: [
+                      QuillEditor.basic(
+                        focusNode: focusNode,
+                        controller: quillController,
+                        configurations: QuillEditorConfigurations(
+                          customStyles: DefaultStyles(
+                            paragraph: DefaultTextBlockStyle(
+                                TextStyle(
+                                  color: Colors.black,
+                                  fontSize: SizesManager.s25,
+                                ),
+                                const HorizontalSpacing(0, 0),
+                                const VerticalSpacing(0, 0),
+                                const VerticalSpacing(0, 0),
+                                const BoxDecoration()),
+                          ),
+                        ),
+                      ),
+                      if (quillController.document.isEmpty())
+                        GestureDetector(
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              StringsManger.noted,
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: SizesManager.s20,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   if (checkBox)
                     Column(
@@ -924,7 +1032,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               .toList();
           var editedTask = Task(
               title: titleController.text,
-              content: contentController.text,
+              content: jsonEncode(quillController.document.toDelta().toJson()),
               isPin: pinNote,
               isChoose: false,
               isStore: widget.task.isStore,
@@ -951,56 +1059,60 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         child: const Icon(Icons.save),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: SizesManager.h60,
+        height: SizesManager.h70,
         color: Colors.white60,
-        child: Row(
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        child: isFormating
+            ? onFormatText()
+            : Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      onAddBox();
-                    },
-                    icon: const Icon(Icons.add_box_outlined),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            onAddBox();
+                          },
+                          icon: const Icon(Icons.add_box_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setColorBackground();
+                          },
+                          icon: const Icon(Icons.palette_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            onFormating();
+                          },
+                          icon: const Icon(Icons.text_format_outlined),
+                        ),
+                        Text(
+                          formattedEditedTime.isNotEmpty
+                              ? (notification.isNotEmpty)
+                                  ? (editedTime.day ==
+                                              notification.values.first.values
+                                                  .first.day &&
+                                          editedTime.month ==
+                                              notification.values.first.values
+                                                  .first.month)
+                                      ? "${StringsManger.update_home} $formattedEditedTime"
+                                      : "${StringsManger.update_home} ${StringsManger.day} ${notification.values.first.values.first.day} ${StringsManger.month} ${notification.values.first.values.first.month}"
+                                  : "${StringsManger.update_home} $formattedEditedTime"
+                              : "",
+                          style: TextStyle(fontSize: SizesManager.s12),
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                     onPressed: () {
-                      setColorBackground();
+                      onMoreVert();
                     },
-                    icon: const Icon(Icons.palette_outlined),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.text_format_outlined),
-                  ),
-                  Text(
-                    formattedEditedTime.isNotEmpty
-                        ? (notification.isNotEmpty)
-                            ? (editedTime.day ==
-                                        notification
-                                            .values.first.values.first.day &&
-                                    editedTime.month ==
-                                        notification
-                                            .values.first.values.first.month)
-                                ? "${StringsManger.update_home} $formattedEditedTime"
-                                : "${StringsManger.update_home} ${StringsManger.day} ${notification.values.first.values.first.day} ${StringsManger.month} ${notification.values.first.values.first.month}"
-                            : "${StringsManger.update_home} $formattedEditedTime"
-                        : "",
-                    style: TextStyle(fontSize: SizesManager.s12),
+                    icon: const Icon(Icons.more_vert),
                   ),
                 ],
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                onMoreVert();
-              },
-              icon: const Icon(Icons.more_vert),
-            ),
-          ],
-        ),
       ),
     );
   }

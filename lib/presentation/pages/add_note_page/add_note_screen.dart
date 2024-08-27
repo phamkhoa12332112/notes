@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -5,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:notesapp/blocs/bloc/tasks_bloc.dart';
@@ -34,12 +36,14 @@ class AddNoteScreen extends StatefulWidget {
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
   final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  final QuillController quillController = QuillController.basic();
+  final FocusNode focusNode = FocusNode();
   late bool pinNote = false;
   late String title;
   late String content;
   late List<String> labelTask = [];
   late bool timeOrLocation;
+  bool isFormating = false;
   late Map<IconData, Map<String, DateTime>> notificationList = {};
 
   // Color background
@@ -110,10 +114,27 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         position = newPosition;
       });
     });
+
+    quillController.addListener(() {
+      onEditedTime();
+    });
+  }
+
+  @override
+  void dispose() {
+    quillController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   String formatTime(int second) {
     return '${(Duration(seconds: second))}'.split('.')[0].padLeft(8, '0');
+  }
+
+  void onFormating() {
+    setState(() {
+      isFormating = !isFormating;
+    });
   }
 
   void onDeletePainting() {
@@ -234,7 +255,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   void onDuplicateNote() {
     var task = Task(
         title: titleController.text,
-        content: contentController.text,
+        content: quillController.document.toPlainText(),
         isChoose: false,
         isPin: pinNote,
         editedTime: formattedEditedTime,
@@ -352,6 +373,66 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               onDuplicate: onDuplicateNote,
             ));
   }
+
+  Widget onFormatText() {
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: QuillToolbar.simple(
+                controller: quillController,
+                configurations: const QuillSimpleToolbarConfigurations(
+                    showAlignmentButtons: false,
+                    showBackgroundColorButton: false,
+                    showCenterAlignment: false,
+                    showClipboardCopy: false,
+                    showClipboardCut: false,
+                    showClipboardPaste: false,
+                    showCodeBlock: false,
+                    showDirection: false,
+                    showDividers: false,
+                    showIndent: false,
+                    showInlineCode: false,
+                    showJustifyAlignment: false,
+                    showLeftAlignment: false,
+                    showLineHeightButton: false,
+                    showLink: false,
+                    showListBullets: false,
+                    showListCheck: false,
+                    showListNumbers: false,
+                    showQuote: false,
+                    showRedo: false,
+                    showRightAlignment: false,
+                    showSearchButton: false,
+                    showSmallButton: false,
+                    showStrikeThrough: false,
+                    showSubscript: false,
+                    showSuperscript: false,
+                    showUndo: false)),
+          ),
+        ),
+        GapsManager.w10,
+        VerticalDivider(
+          endIndent: SizesManager.w1,
+          color: Colors.black,
+          width: SizesManager.w1,
+          thickness: SizesManager.w1,
+        ),
+        GapsManager.w10,
+        Padding(
+          padding: EdgeInsets.only(top: SizesManager.p5),
+          child: InkWell(
+              onTap: () {
+                onFormating();
+              },
+              child: const Icon(Icons.cancel_outlined)),
+        )
+      ],
+    );
+  }
+
+  //----------------------------------------------------
 
 // get path from camera
   Future pickImageFromCamera() async {
@@ -522,7 +603,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               .toList();
                           var task = Task(
                               title: titleController.text,
-                              content: contentController.text,
+                              content: jsonEncode(
+                                  quillController.document.toDelta().toJson()),
                               isChoose: false,
                               color: colorBackground,
                               editedTime: formattedEditedTime,
@@ -560,7 +642,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     },
                     minLines: 1,
                     maxLines: 5,
-                    style: TextStyle(fontSize: SizesManager.s30),
+                    style: TextStyle(fontSize: SizesManager.s35),
                     controller: titleController,
                     decoration: InputDecoration(
                         suffixIcon: checkBox
@@ -578,19 +660,42 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         hintStyle: TextStyle(
                             color: Colors.grey, fontSize: SizesManager.s30)),
                   ),
-                  TextField(
-                    onChanged: (_) {
-                      onEditedTime();
-                    },
-                    minLines: 1,
-                    maxLines: 10,
-                    style: TextStyle(fontSize: SizesManager.s20),
-                    controller: contentController,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: StringsManger.noted,
-                        hintStyle: TextStyle(
-                            color: Colors.grey, fontSize: SizesManager.s20)),
+                  Stack(
+                    children: [
+                      QuillEditor.basic(
+                        controller: quillController,
+                        focusNode: focusNode,
+                        configurations: QuillEditorConfigurations(
+                          customStyles: DefaultStyles(
+                            paragraph: DefaultTextBlockStyle(
+                                TextStyle(
+                                  color: Colors.black,
+                                  fontSize: SizesManager.s25,
+                                ),
+                                const HorizontalSpacing(0, 0),
+                                const VerticalSpacing(0, 0),
+                                const VerticalSpacing(0, 0),
+                                const BoxDecoration()),
+                          ),
+                        ),
+                      ),
+                      if (quillController.document.isEmpty())
+                        GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(focusNode);
+                          },
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              StringsManger.noted,
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: SizesManager.s20,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   if (checkBox)
                     Column(
@@ -872,7 +977,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               .toList();
           var task = Task(
               title: titleController.text,
-              content: contentController.text,
+              content: jsonEncode(quillController.document.toDelta().toJson()),
               isChoose: false,
               isPin: pinNote,
               color: colorBackground,
@@ -883,6 +988,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               drawingPoint: drawingPoint,
               recordingPath: recordingPath,
               selectedImage: selectedImage);
+          print(task.content);
+          print(task.content.runtimeType);
           pinNote
               ? context
                   .read<TasksBloc>()
@@ -895,47 +1002,51 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         child: const Icon(Icons.save),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: SizesManager.h60,
+        height: SizesManager.h70,
         color: Colors.white60,
-        child: Row(
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        child: isFormating
+            ? onFormatText()
+            : Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      onAddBox();
-                    },
-                    icon: const Icon(Icons.add_box_outlined),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            onAddBox();
+                          },
+                          icon: const Icon(Icons.add_box_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setColorBackground();
+                          },
+                          icon: const Icon(Icons.palette_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            onFormating();
+                          },
+                          icon: const Icon(Icons.text_format_outlined),
+                        ),
+                        Text(
+                          formattedEditedTime.isNotEmpty
+                              ? "${StringsManger.update_home} $formattedEditedTime"
+                              : "",
+                          style: TextStyle(fontSize: SizesManager.s12),
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                     onPressed: () {
-                      setColorBackground();
+                      onMoreVert();
                     },
-                    icon: const Icon(Icons.palette_outlined),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.text_format_outlined),
-                  ),
-                  Text(
-                    formattedEditedTime.isNotEmpty
-                        ? "${StringsManger.update_home} $formattedEditedTime"
-                        : "",
-                    style: TextStyle(fontSize: SizesManager.s12),
-                  ),
+                    icon: const Icon(Icons.more_vert),
+                  )
                 ],
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                onMoreVert();
-              },
-              icon: const Icon(Icons.more_vert),
-            )
-          ],
-        ),
       ),
     );
   }

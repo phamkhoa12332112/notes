@@ -9,6 +9,7 @@ class SizesManager {
   static double s20 = 20.sp;
   static double s25 = 25.sp;
   static double s30 = 30.sp;
+  static double s35 = 35.sp;
   static double s50 = 50.sp;
   static double s70 = 70.sp;
   static double s90 = 90.sp;
@@ -43,6 +44,7 @@ class SizesManager {
   static double h1 = 1.h;
   static double h30 = 30.h;
   static double h60 = 60.h;
+  static double h70 = 70.h;
   static double h120 = 120.h;
   static double h200 = 200.h;
   static double h260 = 260.h;
