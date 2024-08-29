@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
 
-import 'list_items.dart';
+import '../list_item.dart';
 
 class InfoNotificationAddPage extends StatefulWidget {
   const InfoNotificationAddPage({super.key});

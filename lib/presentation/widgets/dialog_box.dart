@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/utils/resources/gaps_manager.dart';
 import 'package:notesapp/utils/resources/sizes_manager.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
 
-import '../../blocs/bloc/tasks_bloc.dart';
+import '../../blocs/bloc_task/tasks_bloc.dart';
 import '../pages/label_notes_page/label_notes_screen.dart';
 
 class DialogBox extends StatelessWidget {

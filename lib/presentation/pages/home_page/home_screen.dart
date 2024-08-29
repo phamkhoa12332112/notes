@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:notesapp/blocs/bloc.export.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/models/task.dart';
 import 'package:notesapp/presentation/widgets/grid_builder.dart';
 import 'package:notesapp/presentation/widgets/tasks_list.dart';
 import 'package:notesapp/utils/resources/gaps_manager.dart';
 
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
@@ -26,6 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void onLongPress() {
     setState(() {
       _isSelectionMode = !_isSelectionMode;
+      for (var task in selectedList) {
+        task.isChoose = false;
+      }
+      selectedList.clear();
     });
   }
 
@@ -51,41 +56,43 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(builder: (context, state) {
+      final theme = Theme.of(context);
       List<Task> tasksList = state.allTasks;
       List<Task> pinList = state.pinTasks;
       return Scaffold(
-        drawer: const Sidebar(),
+        drawer: Sidebar(onTap: onLongPress),
         appBar: (!_isSelectionMode || tasksList.isEmpty)
             ? AppBar(
+                backgroundColor: theme.appBarTheme.backgroundColor,
                 title: TextFieldWidget(
-                borderRadius: SizesManager.r0,
-                hintText: StringsManger.searchText_home,
-                contentPadding: SizesManager.p12,
-                suffixIcon: SizedBox(
-                  width: SizesManager.w100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (isGridView)
-                        IconButton(
-                            icon: const Icon(Icons.view_agenda_outlined),
-                            onPressed: () {
-                              setState(() {
-                                isGridView = false;
-                              });
-                            })
-                      else
-                        IconButton(
-                            icon: const Icon(Icons.grid_view_outlined),
-                            onPressed: () {
-                              setState(() {
-                                isGridView = true;
-                              });
-                            }),
-                    ],
+                  borderRadius: SizesManager.r0,
+                  hintText: StringsManger.searchText_home,
+                  contentPadding: SizesManager.p12,
+                  suffixIcon: SizedBox(
+                    width: SizesManager.w100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (isGridView)
+                          IconButton(
+                              icon: const Icon(Icons.view_agenda_outlined),
+                              onPressed: () {
+                                setState(() {
+                                  isGridView = false;
+                                });
+                              })
+                        else
+                          IconButton(
+                              icon: const Icon(Icons.grid_view_outlined),
+                              onPressed: () {
+                                setState(() {
+                                  isGridView = true;
+                                });
+                              }),
+                      ],
+                    ),
                   ),
-                ),
-              ))
+                ))
             : AppBar(
                 title: Text(
                     "${selectedList.length} ${StringsManger.selected_item}"),
@@ -236,9 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.grey.shade300,
           child: const Icon(Icons.add),
           onPressed: () {
+            onLongPress();
             Navigator.pushNamed(context, RoutesName.addNoteScreen);
           },
         ),

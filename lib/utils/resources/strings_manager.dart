@@ -25,7 +25,7 @@ class StringsManger {
       'Ghi chú đã được lưu trữ của bạn sẽ xuất hiện ở đây';
 
   static const String show_mode = 'Chế độ hiển thị';
-  static const String show_mode_1 = 'Thêm các mục mới vào cuối';
+  static const String show_mode_1 = 'Sáng & Tối';
   static const String default_remind = 'Cài đặt mặc định cho lời nhắc';
   static const String morning = 'Sáng';
   static const String afternoon = 'Chiều';
