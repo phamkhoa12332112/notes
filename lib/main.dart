@@ -8,6 +8,7 @@ import 'package:notesapp/utils/resources/routes_manager.dart';
 import 'package:notesapp/utils/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'blocs/bloc_notification/timing_bloc.dart';
 import 'blocs/bloc_task/tasks_bloc.dart';
 
 void main() async {
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
         builder: (context, child) => MultiBlocProvider(
                 providers: [
                   BlocProvider(create: (context) => TasksBloc()),
-                  BlocProvider(create: (context) => ThemeBloc())
+                  BlocProvider(create: (context) => ThemeBloc()),
+                  BlocProvider(create: (context) => TimingBloc())
                 ],
                 child: BlocBuilder<ThemeBloc, ThemeMode>(
                   builder: (context, themeState) {

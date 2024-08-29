@@ -63,9 +63,7 @@ class StringsManger {
   static const String private_home = 'Nhà riêng';
   static const String workplace = 'Nơi làm việc';
   static const String date_and_time = 'Chọn ngày và giờ';
-  static const String time_today = '18:00';
-  static const String time_tomorrow = '08:00';
-  static const String time_friday_morning = 'Th 5 08:00';
+  static const String friday = 'Th 5';
   static const String selected_item = 'đã được chọn';
 
   static const String delete_bin = 'Xoá';
