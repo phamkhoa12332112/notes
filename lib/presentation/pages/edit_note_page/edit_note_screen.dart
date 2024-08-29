@@ -4,16 +4,17 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:notesapp/blocs/bloc.export.dart';
 import 'package:notesapp/models/task.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:path/path.dart' as p;
 
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../config/routes/routes.dart';
 import '../../../models/drawing_point.dart';
 import '../../../utils/resources/gaps_manager.dart';
@@ -49,6 +50,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   String date = '';
   String formattedDate = '';
   String location = '';
+  String? durationNotification = '';
   String formattedEditedTime = "";
   late Map<IconData, Map<String, DateTime>> notificationList;
   late Map<IconData, Map<String, DateTime>> notification;
@@ -111,6 +113,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
       selection: const TextSelection.collapsed(offset: 0),
     );
 
+    durationNotification = widget.task.duration;
     formattedEditedTime = widget.task.editedTime ?? "";
     labelTask = widget.task.labelsList;
     widget.task.labelsList.forEach((label) {
@@ -235,7 +238,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   void onCheckBox() {
     setState(() {
       checkBox = !checkBox;
-      Navigator.pop(context);
     });
   }
 
@@ -277,11 +279,12 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   void onDuplicateNote() {
     var task = Task(
         title: titleController.text,
-        content: quillController.document.toPlainText(),
+        content: jsonEncode(quillController.document.toDelta().toJson()),
         isChoose: false,
         isPin: pinNote,
         editedTime: formattedEditedTime,
         labelsList: labelTask,
+        duration: durationNotification,
         notifications: notificationList,
         checkBoxList: checkBoxList,
         drawingPoint: drawingPoint,
@@ -301,7 +304,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     );
   }
 
-  void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
+  void onSave(DateTime updateTime, String locations, bool timeOrLocation,
+      String? duration) {
     onEditedTime();
     setState(() {
       IconData icon;
@@ -312,6 +316,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               date =
                   '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}',
               formattedDate = DateFormat('HH:mm').format(now),
+              durationNotification = duration
             }
           : {
               icon = (location == StringsManger.private_home)
@@ -564,7 +569,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colorBackground,
+      backgroundColor:
+          colorBackground ?? Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -606,7 +612,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                             padding: EdgeInsets.all(SizesManager.p10),
                             icon: const Icon(
                               Icons.arrow_back,
-                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -629,6 +634,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               isStore: widget.task.isStore,
                               color: colorBackground,
                               editedTime: formattedEditedTime,
+                              duration: durationNotification,
                               labelsList: labelTask,
                               notifications: notificationList,
                               selectedImage: selectedImage,
@@ -674,6 +680,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                 isPin: pinNote,
                                 isStore: widget.task.isStore,
                                 color: colorBackground,
+                                duration: durationNotification,
                                 editedTime: formattedEditedTime,
                                 labelsList: labelTask,
                                 notifications: notificationList,
@@ -713,6 +720,17 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     style: TextStyle(fontSize: SizesManager.s30),
                     controller: titleController,
                     decoration: InputDecoration(
+                        suffixIcon: checkBox
+                            ? PopupMenuButton(
+                                itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                          onTap: () {
+                                            onCheckBox();
+                                          },
+                                          child: const Text(
+                                              StringsManger.disappearCheckBox))
+                                    ])
+                            : null,
                         border: InputBorder.none,
                         hintText: StringsManger.title,
                         hintStyle: TextStyle(
@@ -727,7 +745,11 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                           customStyles: DefaultStyles(
                             paragraph: DefaultTextBlockStyle(
                                 TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color ??
+                                      Colors.black,
                                   fontSize: SizesManager.s25,
                                 ),
                                 const HorizontalSpacing(0, 0),
@@ -739,6 +761,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                       ),
                       if (quillController.document.isEmpty())
                         GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(focusNode);
+                          },
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
@@ -785,6 +810,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                         onPressed: () {
                                           setState(() {
                                             checkBoxList!.remove(entry.key);
+                                            onCheckBox();
                                           });
                                         },
                                       ),
@@ -879,22 +905,23 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                     ),
                   GapsManager.h10,
                   if (notificationList.isNotEmpty)
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => DialogBoxNotification(
-                                  now: now,
-                                  timeOrLocation: timeOrLocation,
-                                  resultLocation: location,
-                                  onDelete: onDeleteNotification,
-                                  onSave: onSave,
-                                  onTapTime: onTapTime,
-                                  onTapLocation: onTapLocation,
-                                ));
-                      },
-                      child: Wrap(spacing: SizesManager.w5, children: [
-                        Chip(
+                    Wrap(spacing: SizesManager.w5, children: [
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => DialogBoxNotification(
+                                    now: now,
+                                    timeOrLocation: timeOrLocation,
+                                    resultLocation: location,
+                                    onDelete: onDeleteNotification,
+                                    duration: durationNotification,
+                                    onSave: onSave,
+                                    onTapTime: onTapTime,
+                                    onTapLocation: onTapLocation,
+                                  ));
+                        },
+                        child: Chip(
                             padding: EdgeInsets.all(SizesManager.p8),
                             avatar: timeOrLocation
                                 ? (location != StringsManger.private_home)
@@ -913,9 +940,9 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: SizesManager.s15),
-                                  ))
-                      ]),
-                    ),
+                                  )),
+                      )
+                    ]),
                   GapsManager.h10,
                   if (drawingPoint!.isNotEmpty)
                     GestureDetector(
@@ -1024,7 +1051,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.grey.shade300,
         onPressed: () {
           labelTask = checkList.entries
               .where((entry) => entry.value)
@@ -1038,6 +1064,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               isStore: widget.task.isStore,
               color: colorBackground,
               editedTime: formattedEditedTime,
+              duration: durationNotification,
               labelsList: labelTask,
               notifications: notificationList,
               checkBoxList: checkBoxList,

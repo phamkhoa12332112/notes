@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:notesapp/blocs/bloc.export.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
 
+import '../../blocs/bloc_task/tasks_bloc.dart';
 import '../../models/task.dart';
 import '../../utils/resources/sizes_manager.dart';
 import '../pages/edit_note_page/edit_note_screen.dart';
@@ -93,7 +94,10 @@ class _TasksListState extends State<TasksList> {
                         text: TextSpan(
                             text: task.title,
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
                                 fontSize: SizesManager.s25)),
                       ),
                       subtitle: Column(
@@ -104,7 +108,10 @@ class _TasksListState extends State<TasksList> {
                             text: TextSpan(
                                 text: normalText.toString(),
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
                                     fontSize: SizesManager.s20)),
                           ),
                           if (widget.taskList[index].notifications.isNotEmpty)
@@ -140,7 +147,9 @@ class _TasksListState extends State<TasksList> {
                       text: TextSpan(
                           text: task.title,
                           style: TextStyle(
-                              color: Colors.black, fontSize: SizesManager.s25)),
+                              color:
+                                  Theme.of(context).textTheme.titleLarge?.color,
+                              fontSize: SizesManager.s25)),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +159,10 @@ class _TasksListState extends State<TasksList> {
                           text: TextSpan(
                               text: normalText.toString(),
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
                                   fontSize: SizesManager.s20)),
                         ),
                         if (widget.taskList[index].notifications.isNotEmpty)

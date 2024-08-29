@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/presentation/widgets/grid_builder.dart';
 
-import '../../../blocs/bloc.export.dart';
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../models/task.dart';
 import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';

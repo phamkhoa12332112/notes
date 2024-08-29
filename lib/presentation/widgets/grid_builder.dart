@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:notesapp/blocs/bloc.export.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/models/task.dart';
 import 'package:notesapp/presentation/pages/edit_note_page/edit_note_screen.dart';
 import 'package:notesapp/utils/resources/sizes_manager.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
+
+import '../../blocs/bloc_task/tasks_bloc.dart';
 
 class GridBuilder extends StatefulWidget {
   const GridBuilder(
@@ -86,7 +88,10 @@ class GridBuilderState extends State<GridBuilder> {
                               text: TextSpan(
                                   text: task.title,
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.color,
                                       fontSize: SizesManager.s30)),
                             ),
                             RichText(
@@ -94,7 +99,10 @@ class GridBuilderState extends State<GridBuilder> {
                               text: TextSpan(
                                   text: normalText.toString(),
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.color,
                                       fontSize: SizesManager.s20)),
                             ),
                             if (widget
@@ -147,7 +155,10 @@ class GridBuilderState extends State<GridBuilder> {
                               text: TextSpan(
                                   text: task.title,
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.color,
                                       fontSize: SizesManager.s30)),
                             ),
                             RichText(
@@ -155,7 +166,10 @@ class GridBuilderState extends State<GridBuilder> {
                               text: TextSpan(
                                   text: normalText.toString(),
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.color,
                                       fontSize: SizesManager.s20)),
                             ),
                             if (widget

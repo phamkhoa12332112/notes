@@ -1,9 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:notesapp/blocs/bloc.export.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:notesapp/blocs/bloc_theme/theme_bloc.dart';
 import 'package:notesapp/utils/resources/routes_manager.dart';
+import 'package:notesapp/utils/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'blocs/bloc_task/tasks_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,15 +32,21 @@ class MyApp extends StatelessWidget {
         designSize: const Size(375, 812),
         minTextAdapt: true,
         splitScreenMode: true,
-        builder: (context, child) => BlocProvider(
-            create: (context) => TasksBloc(),
-            child: MaterialApp(
-                theme: ThemeData(
-                  colorScheme:
-                      ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                  useMaterial3: true,
-                ),
-                debugShowCheckedModeBanner: false,
-                onGenerateRoute: _appRouter.onGenerateRoute)));
+        builder: (context, child) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => TasksBloc()),
+                  BlocProvider(create: (context) => ThemeBloc())
+                ],
+                child: BlocBuilder<ThemeBloc, ThemeMode>(
+                  builder: (context, themeState) {
+                    return MaterialApp(
+                      themeMode: themeState,
+                      theme: TAppTheme.lightTheme,
+                      darkTheme: TAppTheme.darkTheme,
+                      debugShowCheckedModeBanner: false,
+                      onGenerateRoute: _appRouter.onGenerateRoute,
+                    );
+                  },
+                )));
   }
 }

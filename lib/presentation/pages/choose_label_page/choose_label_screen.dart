@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/utils/resources/sizes_manager.dart';
 import 'package:notesapp/utils/resources/strings_manager.dart';
 
-import '../../../blocs/bloc.export.dart';
+import '../../../blocs/bloc_task/tasks_bloc.dart';
+
 
 class ChooseLabelScreen extends StatefulWidget {
   ChooseLabelScreen({super.key, required this.checkList});

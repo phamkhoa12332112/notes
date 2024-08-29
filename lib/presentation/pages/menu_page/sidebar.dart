@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notesapp/utils/resources/gaps_manager.dart';
-import '../../../blocs/bloc.export.dart';
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../config/routes/routes.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
@@ -8,7 +9,9 @@ import '../label_notes_page/label_notes_screen.dart';
 import 'list_title.dart';
 
 class Sidebar extends StatefulWidget {
-  const Sidebar({super.key});
+  const Sidebar({super.key, required this.onTap});
+
+  final Function onTap;
 
   @override
   State<Sidebar> createState() => _SidebarState();
@@ -23,17 +26,20 @@ class _SidebarState extends State<Sidebar> {
           children: [
             Text(
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: SizesManager.s10),
+                style: TextStyle(fontSize: SizesManager.s20),
                 StringsManger.app_name),
-            const ContentSidebar(
+            GapsManager.h10,
+            ContentSidebar(
               text: StringsManger.noted,
-              icon: Icon(Icons.light),
+              icon: const Icon(Icons.light),
               routes: RoutesName.homeScreen,
+              onTap: widget.onTap,
             ),
-            const ContentSidebar(
+            ContentSidebar(
               text: StringsManger.remind,
-              icon: Icon(Icons.conveyor_belt),
+              icon: const Icon(Icons.conveyor_belt),
               routes: RoutesName.notificationScreen,
+              onTap: widget.onTap,
             ),
             state.labelListTasks.isNotEmpty
                 ? Column(
@@ -57,6 +63,7 @@ class _SidebarState extends State<Sidebar> {
                                 state.labelListTasks.keys.elementAt(index);
                             return GestureDetector(
                               onTap: () {
+                                widget.onTap();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -78,8 +85,6 @@ class _SidebarState extends State<Sidebar> {
                                       Expanded(
                                         child: Text(
                                           key,
-                                          style: TextStyle(
-                                              fontSize: SizesManager.s15),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -91,37 +96,43 @@ class _SidebarState extends State<Sidebar> {
                           },
                         ),
                       ),
-                      const ContentSidebar(
+                      ContentSidebar(
                         text: StringsManger.add_lable,
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         routes: RoutesName.labelScreen,
+                        onTap: widget.onTap,
                       ),
                       Divider(height: SizesManager.w1)
                     ],
                   )
-                : const ContentSidebar(
+                : ContentSidebar(
                     text: StringsManger.add_lable,
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     routes: RoutesName.labelScreen,
+                    onTap: widget.onTap,
                   ),
-            const ContentSidebar(
+            ContentSidebar(
               text: StringsManger.save,
-              icon: Icon(Icons.save),
+              icon: const Icon(Icons.save),
               routes: RoutesName.saveScreen,
+              onTap: widget.onTap,
             ),
-            const ContentSidebar(
+            ContentSidebar(
               text: StringsManger.delete,
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               routes: RoutesName.deleteScreen,
+              onTap: widget.onTap,
             ),
-            const ContentSidebar(
+            ContentSidebar(
               text: StringsManger.setting,
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
               routes: RoutesName.settingScreen,
+              onTap: widget.onTap,
             ),
-            const ContentSidebar(
+            ContentSidebar(
               text: StringsManger.help,
-              icon: Icon(Icons.help),
+              icon: const Icon(Icons.help),
+              onTap: widget.onTap,
               routes: RoutesName.helpScreen,
             )
           ],

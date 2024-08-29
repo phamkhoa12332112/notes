@@ -1,13 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notesapp/blocs/bloc_theme/theme_bloc.dart';
 
 import '../../../utils/resources/gaps_manager.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
+import '../../widgets/switch_theme_mode.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +32,9 @@ class SettingScreen extends StatelessWidget {
                   StringsManger.show_mode,
                   style: TextStyle(
                       fontSize: SizesManager.s25,
-                      color: Colors.black,
                       fontWeight: FontWeight.w400),
                 ),
+                GapsManager.h10,
                 Stack(
                   alignment: Alignment.centerLeft,
                   children: [
@@ -35,14 +42,24 @@ class SettingScreen extends StatelessWidget {
                         style: TextStyle(fontSize: SizesManager.s15)),
                     Align(
                         alignment: Alignment.centerRight,
-                        child: Switch(value: true, onChanged: (value) {}))
+                        child: IconSwitch(
+                          value:
+                              context.read<ThemeBloc>().state == ThemeMode.dark,
+                          onChanged: (value) {
+                            setState(() {
+                              context
+                                  .read<ThemeBloc>()
+                                  .add(ThemeChanged(value));
+                            });
+                          },
+                        ))
                   ],
                 ),
+                GapsManager.h10,
                 Text(
                   StringsManger.default_remind,
                   style: TextStyle(
                       fontSize: SizesManager.s25,
-                      color: Colors.black,
                       fontWeight: FontWeight.w400),
                 ),
                 GapsManager.h10,
@@ -70,24 +87,6 @@ class SettingScreen extends StatelessWidget {
                         style: TextStyle(fontSize: SizesManager.s15)),
                     const Align(
                         alignment: Alignment.centerRight, child: Text('18:00'))
-                  ],
-                ),
-                GapsManager.h10,
-                Text(
-                  StringsManger.share,
-                  style: TextStyle(
-                      fontSize: SizesManager.s25,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400),
-                ),
-                Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    Text(StringsManger.on_share,
-                        style: TextStyle(fontSize: SizesManager.s15)),
-                    Align(
-                        alignment: Alignment.centerRight,
-                        child: Switch(value: true, onChanged: (value) {}))
                   ],
                 ),
               ],

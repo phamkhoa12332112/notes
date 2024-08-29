@@ -9,13 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:notesapp/blocs/bloc/tasks_bloc.dart';
 import 'package:notesapp/models/task.dart';
 import 'package:notesapp/presentation/widgets/dialog_box_notification.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:path/path.dart' as p;
 
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../config/routes/routes.dart';
 import '../../../models/drawing_point.dart';
 import '../../../utils/resources/gaps_manager.dart';
@@ -47,7 +47,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late Map<IconData, Map<String, DateTime>> notificationList = {};
 
   // Color background
-  Color colorBackground = Colors.white;
+  Color? colorBackground;
   var availableColor = [
     Colors.white,
     Colors.red,
@@ -72,6 +72,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   String date = '';
   String formattedDate = '';
   String location = '';
+  String durationNotification = StringsManger.no_duration;
 
   // Image
   List<File> selectedImage = [];
@@ -208,7 +209,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   void onCheckBox() {
     setState(() {
       checkBox = !checkBox;
-      Navigator.pop(context);
     });
   }
 
@@ -255,12 +255,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   void onDuplicateNote() {
     var task = Task(
         title: titleController.text,
-        content: quillController.document.toPlainText(),
+        content: jsonEncode(quillController.document.toDelta().toJson()),
         isChoose: false,
         isPin: pinNote,
         editedTime: formattedEditedTime,
         labelsList: labelTask,
         notifications: notificationList,
+        duration: durationNotification,
         checkBoxList: checkBoxList,
         drawingPoint: drawingPoint,
         recordingPath: recordingPath,
@@ -277,7 +278,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     );
   }
 
-  void onSave(DateTime updateTime, String locations, bool timeOrLocation) {
+  void onSave(DateTime updateTime, String locations, bool timeOrLocation,
+      String? duration) {
     onEditedTime();
     setState(() {
       IconData icon;
@@ -288,6 +290,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               date =
                   '${StringsManger.day} ${now.day} ${StringsManger.month} ${now.month}',
               formattedDate = DateFormat('HH:mm').format(now),
+              durationNotification = duration!
             }
           : {
               icon = (location == StringsManger.private_home)
@@ -341,8 +344,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 Icon(
                   Icons.done,
                   color: Colors.blue,
-                  size: SizesManager
-                      .s30, // Adjust the size of the icon as required
+                  size: SizesManager.s30,
                 ),
             ],
           ),
@@ -415,7 +417,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         GapsManager.w10,
         VerticalDivider(
           endIndent: SizesManager.w1,
-          color: Colors.black,
           width: SizesManager.w1,
           thickness: SizesManager.w1,
         ),
@@ -531,7 +532,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colorBackground,
+      backgroundColor:
+          colorBackground ?? Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -571,7 +573,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             padding: EdgeInsets.all(SizesManager.p10),
                             icon: const Icon(
                               Icons.arrow_back,
-                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -606,6 +607,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               content: jsonEncode(
                                   quillController.document.toDelta().toJson()),
                               isChoose: false,
+                              duration: durationNotification,
                               color: colorBackground,
                               editedTime: formattedEditedTime,
                               labelsList: labelTask,
@@ -649,10 +651,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             ? PopupMenuButton(
                                 itemBuilder: (context) => [
                                       PopupMenuItem(
-                                          child: InkWell(
-                                              onTap: onCheckBox,
-                                              child: const Text(StringsManger
-                                                  .disappearCheckBox)))
+                                          onTap: () {
+                                            onCheckBox();
+                                          },
+                                          child: const Text(
+                                              StringsManger.disappearCheckBox))
                                     ])
                             : null,
                         border: InputBorder.none,
@@ -669,7 +672,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           customStyles: DefaultStyles(
                             paragraph: DefaultTextBlockStyle(
                                 TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color ??
+                                      Colors.black,
                                   fontSize: SizesManager.s25,
                                 ),
                                 const HorizontalSpacing(0, 0),
@@ -697,7 +704,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         ),
                     ],
                   ),
-                  if (checkBox)
+                  if (checkBox == true)
                     Column(
                       children: [
                         Column(
@@ -824,23 +831,23 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     ),
                   GapsManager.h10,
                   if (notificationList.isNotEmpty)
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => DialogBoxNotification(
-                                  now: now,
-                                  timeOrLocation: timeOrLocation,
-                                  resultLocation: location,
-                                  onDelete: onDeleteNotification,
-                                  onSave: onSave,
-                                  onTapTime: onTapTime,
-                                  onTapLocation: onTapLocation,
-                                ));
-                      },
-                      child: Wrap(spacing: SizesManager.w5, children: [
-                        Chip(
-                            padding: EdgeInsets.all(SizesManager.p8),
+                    Wrap(spacing: SizesManager.w5, children: [
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => DialogBoxNotification(
+                                    now: now,
+                                    timeOrLocation: timeOrLocation,
+                                    resultLocation: location,
+                                    onDelete: onDeleteNotification,
+                                    duration: durationNotification,
+                                    onSave: onSave,
+                                    onTapTime: onTapTime,
+                                    onTapLocation: onTapLocation,
+                                  ));
+                        },
+                        child: Chip(
                             avatar: timeOrLocation
                                 ? (location != StringsManger.private_home)
                                     ? const Icon(Icons.work)
@@ -858,9 +865,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: SizesManager.s15),
-                                  ))
-                      ]),
-                    ),
+                                  )),
+                      )
+                    ]),
                   GapsManager.h10,
                   if (drawingPoint.isNotEmpty)
                     GestureDetector(
@@ -969,7 +976,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.grey.shade300,
         onPressed: () {
           labelTask = checkList.entries
               .where((entry) => entry.value)
@@ -982,14 +988,13 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               isPin: pinNote,
               color: colorBackground,
               editedTime: formattedEditedTime,
+              duration: durationNotification,
               labelsList: labelTask,
               notifications: notificationList,
               checkBoxList: checkBoxList,
               drawingPoint: drawingPoint,
               recordingPath: recordingPath,
               selectedImage: selectedImage);
-          print(task.content);
-          print(task.content.runtimeType);
           pinNote
               ? context
                   .read<TasksBloc>()
@@ -1003,7 +1008,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         height: SizesManager.h70,
-        color: Colors.white60,
         child: isFormating
             ? onFormatText()
             : Row(

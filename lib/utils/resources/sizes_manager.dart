@@ -46,6 +46,7 @@ class SizesManager {
   static double h60 = 60.h;
   static double h70 = 70.h;
   static double h120 = 120.h;
+  static double h150 = 150.h;
   static double h200 = 200.h;
   static double h260 = 260.h;
 

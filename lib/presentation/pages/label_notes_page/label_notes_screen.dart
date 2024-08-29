@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../blocs/bloc.export.dart';
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../config/routes/routes.dart';
 import '../../../models/task.dart';
 import '../../../utils/resources/gaps_manager.dart';
@@ -29,6 +29,10 @@ class _LabelNote extends State<LabelNote> {
   void onLongPress() {
     setState(() {
       _isSelectionMode = !_isSelectionMode;
+      for (var task in selectedList) {
+        task.isChoose = false;
+      }
+      selectedList.clear();
     });
   }
 
@@ -54,7 +58,7 @@ class _LabelNote extends State<LabelNote> {
       }
 
       return Scaffold(
-        drawer: const Sidebar(),
+        drawer: Sidebar(onTap: onLongPress),
         appBar: AppBar(
             title: !_isSelectionMode
                 ? Row(
@@ -254,9 +258,9 @@ class _LabelNote extends State<LabelNote> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.grey.shade300,
           child: const Icon(Icons.add),
           onPressed: () {
+            onLongPress();
             Navigator.pushNamed(context, RoutesName.addNoteScreen);
           },
         ),

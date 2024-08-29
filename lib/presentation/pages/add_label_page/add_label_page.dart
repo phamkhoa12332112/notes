@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../blocs/bloc.export.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 

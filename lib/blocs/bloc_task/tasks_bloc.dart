@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:notesapp/models/task.dart';
 
-import '../../models/task.dart';
 
 part 'tasks_even.dart';
 
