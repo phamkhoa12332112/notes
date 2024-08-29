@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:notesapp/utils/resources/sizes_manager.dart';
 
 class TIconTheme {
   TIconTheme._();
 
   static IconThemeData lightIconTheme = IconThemeData(
-    color: Colors.black, // Color of the icons in light theme
-    size: 24.0, // Size of the icons
-    opacity: 0.9, // Opacity of the icons
+    color: Colors.black,
+    size: SizesManager.s25,
+    opacity: 0.9,
   );
 
   static IconThemeData darkIconTheme = IconThemeData(
-    color: Colors.white, // Color of the icons in dark theme
-    size: 24.0, // Size of the icons
-    opacity: 0.9, // Opacity of the icons
+    color: Colors.white,
+    size: SizesManager.s25,
+    opacity: 0.9,
   );
 }

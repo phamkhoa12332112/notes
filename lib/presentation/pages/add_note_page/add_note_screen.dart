@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,20 +47,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   // Color background
   Color? colorBackground;
-  var availableColor = [
-    Colors.white,
-    Colors.red,
-    Colors.deepOrange,
-    Colors.amber,
-    Colors.yellow,
-    Colors.blue,
-    Colors.cyan,
-    Colors.green,
-    Colors.lightGreenAccent,
-    Colors.brown,
-    Colors.deepPurple,
-    Colors.pink,
-  ];
+  List<Color?> availableColor = [];
 
   // update editing note
   late Map<String, bool> checkList = {};
@@ -93,6 +79,49 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   // Paint
   List<DrawingPoint> drawingPoint = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    colorBackground = Theme.of(context).scaffoldBackgroundColor;
+    availableColor = [
+      Theme.of(context).scaffoldBackgroundColor,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.red[300]
+          : Colors.red,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepOrange[300]
+          : Colors.deepOrange,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.amber[300]
+          : Colors.amber,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.yellow[300]
+          : Colors.yellow,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.blue[300]
+          : Colors.blue,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.cyan[300]
+          : Colors.cyan,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.green[300]
+          : Colors.green,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.lightGreenAccent[400]
+          : Colors.lightGreenAccent,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.brown[300]
+          : Colors.brown,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepPurple[300]
+          : Colors.deepPurple,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.pink[300]
+          : Colors.pink,
+    ];
+  }
 
   @override
   void initState() {
