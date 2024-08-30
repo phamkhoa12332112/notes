@@ -52,8 +52,6 @@ class _SaveScreenState extends State<SaveScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              const Icon(Icons.search),
-                              GapsManager.w20,
                               if (isGridView)
                                 IconButton(
                                     icon:

@@ -4,12 +4,11 @@ import 'package:notesapp/utils/resources/sizes_manager.dart';
 
 class ListItem extends StatelessWidget {
   const ListItem(
-      {Key? key,
+      {super.key,
       required this.textRight,
       required this.icon,
       required this.onPressed,
-      this.textLeft})
-      : super(key: key);
+      this.textLeft});
 
   final String textRight;
   final IconData icon;

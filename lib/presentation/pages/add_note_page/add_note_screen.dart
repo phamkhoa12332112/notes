@@ -294,7 +294,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         checkBoxList: checkBoxList,
         drawingPoint: drawingPoint,
         recordingPath: recordingPath,
-        selectedImage: selectedImage);
+        selectedImage: selectedImage,
+        isStore: false);
     if (pinNote) {
       context.read<TasksBloc>().add(PinTask(oldTask: task, newTask: task));
     } else {
@@ -644,7 +645,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               selectedImage: selectedImage,
                               recordingPath: recordingPath,
                               drawingPoint: drawingPoint,
-                              checkBoxList: checkBoxList);
+                              checkBoxList: checkBoxList,
+                              isPin: false,
+                              isStore: false);
                           setState(() {
                             audioRecorder.dispose();
                             audioPlayer.dispose();
@@ -1023,7 +1026,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               checkBoxList: checkBoxList,
               drawingPoint: drawingPoint,
               recordingPath: recordingPath,
-              selectedImage: selectedImage);
+              selectedImage: selectedImage,
+              isStore: false);
           pinNote
               ? context
                   .read<TasksBloc>()

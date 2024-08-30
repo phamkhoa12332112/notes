@@ -20,13 +20,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
   bool isGridView = false;
   bool _isSelectionMode = false;
   late List<Task> selectedList = [];
 
-  void onLongPress() {
+  void onDrawer() {
     setState(() {
-      _isSelectionMode = !_isSelectionMode;
+      for (var task in selectedList) {
+        task.isChoose = false;
+      }
+      selectedList.clear();
+    });
+  }
+
+  void onLongPress() {
+    _isSelectionMode = !_isSelectionMode;
+    setState(() {
       for (var task in selectedList) {
         task.isChoose = false;
       }
@@ -59,12 +69,17 @@ class _HomeScreenState extends State<HomeScreen> {
       final theme = Theme.of(context);
       List<Task> tasksList = state.allTasks;
       List<Task> pinList = state.pinTasks;
+      List<Task> searchList = state.searchTasks;
       return Scaffold(
-        drawer: Sidebar(onTap: onLongPress),
+        drawer: Sidebar(onTap: onDrawer),
         appBar: (!_isSelectionMode || tasksList.isEmpty)
             ? AppBar(
                 backgroundColor: theme.appBarTheme.backgroundColor,
                 title: TextFieldWidget(
+                  controller: _searchController,
+                  onChanged: (query) {
+                    context.read<TasksBloc>().add(SearchTasks(query: query));
+                  },
                   borderRadius: SizesManager.r0,
                   hintText: StringsManger.searchText_home,
                   contentPadding: SizesManager.p12,
@@ -168,7 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: const Text(StringsManger.pinned)),
                             isGridView
                                 ? GridBuilder(
-                                    tasksList: pinList,
+                                    tasksList: searchList
+                                        .where((task) => task.isPin)
+                                        .toList(),
                                     isSelectionMode: _isSelectionMode,
                                     onTap: onTap,
                                     onLongPress: onLongPress,
@@ -176,7 +193,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const NeverScrollableScrollPhysics(),
                                   )
                                 : TasksList(
-                                    taskList: pinList,
+                                    taskList: searchList
+                                        .where((task) => task.isPin)
+                                        .toList(),
                                     isSelectionMode: _isSelectionMode,
                                     onLongPress: onLongPress,
                                     onTap: onTap,
@@ -190,7 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: const Text(StringsManger.others)),
                             isGridView
                                 ? GridBuilder(
-                                    tasksList: tasksList,
+                                    tasksList: searchList
+                                        .where((task) => !task.isPin)
+                                        .toList(),
                                     isSelectionMode: _isSelectionMode,
                                     onTap: onTap,
                                     onLongPress: onLongPress,
@@ -198,7 +219,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const NeverScrollableScrollPhysics(),
                                   )
                                 : TasksList(
-                                    taskList: tasksList,
+                                    taskList: searchList
+                                        .where((task) => !task.isPin)
+                                        .toList(),
                                     isSelectionMode: _isSelectionMode,
                                     onLongPress: onLongPress,
                                     onTap: onTap,
@@ -210,14 +233,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     : isGridView
                         ? GridBuilder(
-                            tasksList: tasksList,
+                            tasksList: searchList
+                                .where((task) => !task.isPin)
+                                .toList(),
                             isSelectionMode: _isSelectionMode,
                             onTap: onTap,
                             onLongPress: onLongPress,
                             physic: const AlwaysScrollableScrollPhysics(),
                           )
                         : TasksList(
-                            taskList: tasksList,
+                            taskList: searchList
+                                .where((task) => !task.isPin)
+                                .toList(),
                             isSelectionMode: _isSelectionMode,
                             onLongPress: onLongPress,
                             onTap: onTap,
@@ -237,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     StringsManger.app_name),
                 Text(
                     style: TextStyle(fontSize: SizesManager.s15),
-                    "${StringsManger.total_notes_1} ${tasksList.length + pinList.length} ${StringsManger.total_notes_2}")
+                    "${StringsManger.total_notes_1} ${searchList.length} ${StringsManger.total_notes_2}")
               ],
             ),
           ),
@@ -245,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            onLongPress();
+            onDrawer();
             Navigator.pushNamed(context, RoutesName.addNoteScreen);
           },
         ),

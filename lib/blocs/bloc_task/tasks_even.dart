@@ -145,3 +145,12 @@ class EditLabel extends TasksEven {
   @override
   List<Object?> get props => [oldLabel, newLabel];
 }
+
+class SearchTasks extends TasksEven {
+  final String query;
+
+  const SearchTasks({required this.query});
+
+  @override
+  List<Object?> get props => [query];
+}

@@ -10,8 +10,8 @@ class Task extends Equatable {
   final String content;
   bool isChoose = false;
   bool? isDelete;
-  bool? isStore;
-  bool? isPin;
+  bool isStore;
+  bool isPin;
   Color? color;
   String? editedTime;
   List<String> labelsList;
@@ -31,8 +31,8 @@ class Task extends Equatable {
     this.duration,
     this.editedTime,
     this.isDelete,
-    this.isStore,
-    this.isPin,
+    required this.isStore,
+    required this.isPin,
     this.checkBoxList,
     this.selectedImage,
     this.drawingPoint,
@@ -40,8 +40,6 @@ class Task extends Equatable {
     this.color,
   }) {
     isDelete = isDelete ?? false;
-    isStore = isStore ?? false;
-    isPin = isPin ?? false;
     editedTime = editedTime ?? "";
     duration = duration ?? "";
     checkBoxList = checkBoxList ?? {};

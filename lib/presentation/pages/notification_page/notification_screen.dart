@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notesapp/presentation/widgets/text_field_widget.dart';
 
 import '../../../blocs/bloc_task/tasks_bloc.dart';
 import '../../../config/routes/routes.dart';
@@ -19,11 +20,23 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  bool isSearch = false;
   bool isGridView = false;
   bool _isSelectionMode = false;
   late List<Task> selectedList = [];
 
+  void onDrawer() {
+    setState(() {
+      for (var task in selectedList) {
+        task.isChoose = false;
+      }
+      selectedList.clear();
+    });
+  }
+
   void onLongPress() {
+    _isSelectionMode = !_isSelectionMode;
     setState(() {
       _isSelectionMode = !_isSelectionMode;
       for (var task in selectedList) {
@@ -59,21 +72,49 @@ class _NotificationScreenState extends State<NotificationScreen> {
           state.allTasks.where((e) => e.notifications.isNotEmpty).toList();
       List<Task> pinList =
           state.pinTasks.where((e) => e.notifications.isNotEmpty).toList();
+      List<Task> searchList =
+          state.searchTasks.where((e) => e.notifications.isNotEmpty).toList();
       return Scaffold(
-        drawer: Sidebar(onTap: onLongPress,),
+        drawer: Sidebar(
+          onTap: onDrawer,
+        ),
         appBar: !_isSelectionMode
             ? AppBar(
                 title: Row(
                   children: [
-                    Title(
-                        color: Colors.black,
-                        child: const Text(StringsManger.remind)),
+                    isSearch
+                        ? Expanded(
+                            flex: SizesManager.l2,
+                            child: TextFieldWidget(
+                              controller: _searchController,
+                              onChanged: (query) {
+                                context
+                                    .read<TasksBloc>()
+                                    .add(SearchTasks(query: query));
+                              },
+                              borderRadius: SizesManager.r0,
+                              hintText: StringsManger.searchText_home,
+                              contentPadding: SizesManager.p12,
+                            ),
+                          )
+                        : Title(
+                            color: Colors.black,
+                            child: const Text(StringsManger.remind)),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const Icon(Icons.search),
-                          GapsManager.w20,
+                          InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isSearch = !isSearch;
+                                  _searchController.clear();
+                                });
+                              },
+                              child: isSearch
+                                  ? const Icon(Icons.cancel_outlined)
+                                  : const Icon(Icons.search)),
+                          GapsManager.w10,
                           if (isGridView)
                             IconButton(
                                 icon: const Icon(Icons.view_agenda_outlined),
@@ -148,14 +189,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             child: const Text(StringsManger.pinned)),
                         isGridView
                             ? GridBuilder(
-                                tasksList: pinList,
+                                tasksList: searchList
+                                    .where((task) => task.isPin)
+                                    .toList(),
                                 isSelectionMode: _isSelectionMode,
                                 onTap: onTap,
                                 onLongPress: onLongPress,
                                 physic: const NeverScrollableScrollPhysics(),
                               )
                             : TasksList(
-                                taskList: pinList,
+                                taskList: searchList
+                                    .where((task) => task.isPin)
+                                    .toList(),
                                 isSelectionMode: _isSelectionMode,
                                 onLongPress: onLongPress,
                                 onTap: onTap,
@@ -167,14 +212,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             child: const Text(StringsManger.others)),
                         isGridView
                             ? GridBuilder(
-                                tasksList: tasksList,
+                                tasksList: searchList
+                                    .where((task) => !task.isPin)
+                                    .toList(),
                                 isSelectionMode: _isSelectionMode,
                                 onTap: onTap,
                                 onLongPress: onLongPress,
                                 physic: const NeverScrollableScrollPhysics(),
                               )
                             : TasksList(
-                                taskList: tasksList,
+                                taskList: searchList
+                                    .where((task) => !task.isPin)
+                                    .toList(),
                                 isSelectionMode: _isSelectionMode,
                                 onLongPress: onLongPress,
                                 onTap: onTap,
@@ -185,14 +234,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   )
                 : isGridView
                     ? GridBuilder(
-                        tasksList: tasksList,
+                        tasksList:
+                            searchList.where((task) => !task.isPin).toList(),
                         isSelectionMode: _isSelectionMode,
                         onTap: onTap,
                         onLongPress: onLongPress,
                         physic: const AlwaysScrollableScrollPhysics(),
                       )
                     : TasksList(
-                        taskList: tasksList,
+                        taskList:
+                            searchList.where((task) => !task.isPin).toList(),
                         isSelectionMode: _isSelectionMode,
                         onLongPress: onLongPress,
                         onTap: onTap,
@@ -227,7 +278,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     StringsManger.app_name),
                 Text(
                     style: TextStyle(fontSize: SizesManager.s15),
-                    "${StringsManger.total_notes_1} ${tasksList.length + pinList.length} ${StringsManger.total_notes_2}")
+                    "${StringsManger.total_notes_1} ${searchList.length} ${StringsManger.total_notes_2}")
               ],
             ),
           ),
@@ -235,7 +286,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            onLongPress();
+            onDrawer();
             Navigator.pushNamed(context, RoutesName.addNoteScreen);
           },
         ),
