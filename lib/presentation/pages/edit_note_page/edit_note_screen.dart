@@ -37,7 +37,7 @@ class EditNoteScreen extends StatefulWidget {
 }
 
 class _EditNoteScreenState extends State<EditNoteScreen> {
-  late bool? pinNote = widget.task.isPin;
+  late bool pinNote = widget.task.isPin;
   late String title = widget.task.title;
   late TextEditingController titleController;
   late QuillController quillController = QuillController.basic();
@@ -289,7 +289,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         checkBoxList: checkBoxList,
         drawingPoint: drawingPoint,
         recordingPath: recordingPath,
-        selectedImage: selectedImage);
+        selectedImage: selectedImage,
+        isStore: false);
     if (pinNote == true) {
       context
           .read<TasksBloc>()
@@ -332,7 +333,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
 
   void onTap() {
     setState(() {
-      pinNote = !pinNote!;
+      pinNote = !pinNote;
     });
   }
 
@@ -624,13 +625,13 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        if (widget.task.isStore!) {
+                        if (widget.task.isStore) {
                           var task = Task(
                               title: titleController.text,
                               content: jsonEncode(
                                   quillController.document.toDelta().toJson()),
                               isChoose: false,
-                              isPin: !pinNote!,
+                              isPin: !pinNote,
                               isStore: widget.task.isStore,
                               color: colorBackground,
                               editedTime: formattedEditedTime,
@@ -653,7 +654,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                           onTap();
                         }
                       },
-                      child: pinNote!
+                      child: pinNote
                           ? const Icon(Icons.push_pin)
                           : const Icon(Icons.push_pin_outlined),
                     ),
@@ -688,7 +689,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                                 drawingPoint: drawingPoint,
                                 recordingPath: recordingPath,
                                 selectedImage: selectedImage);
-                            if (!widget.task.isStore!) {
+                            if (!widget.task.isStore) {
                               context.read<TasksBloc>().add(StoreTask(
                                   oldTask: widget.task, newTask: task));
                             }
@@ -1074,7 +1075,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
           context
               .read<TasksBloc>()
               .add(EditTask(oldTask: widget.task, newTask: editedTask));
-          if (!pinNote!) {
+          if (!pinNote) {
             context.read<TasksBloc>().add(RemovePinTask(task: widget.task));
           } else {
             context.read<TasksBloc>().add(RestorePinTask(task: widget.task));

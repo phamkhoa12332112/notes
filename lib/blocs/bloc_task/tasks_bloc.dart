@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notesapp/models/task.dart';
-
 
 part 'tasks_even.dart';
 
@@ -24,37 +25,47 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
     on<RemoveLabel>(_onRemoveLabel);
     on<EditLabel>(_onEditLabel);
     on<DuplicateNote>(_onDuplicateNote);
+    on<SearchTasks>(_onSearchTasks);
   }
 
-  void _onAddTask(AddTask even, Emitter<TasksState> emit) {
+  void _onAddTask(AddTask event, Emitter<TasksState> emit) {
     final state = this.state;
+
+    final updatedAllTasks = List<Task>.from(state.allTasks)..add(event.task);
+    final updatedSearchTasks = List<Task>.from(state.searchTasks)
+      ..add(event.task);
+
     emit(TasksState(
-        allTasks: List.from(state.allTasks)..add(even.task),
+        allTasks: updatedAllTasks,
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: updatedSearchTasks,
         labelListTasks: state.labelListTasks));
   }
 
   void _onEditTask(EditTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    final List<Task> listTasks = even.oldTask.isStore!
+    final List<Task> listTasks = even.oldTask.isStore
         ? state.allTasks
-        : even.newTask.isPin!
+        : even.newTask.isPin
             ? state.allTasks
             : (List.from(state.allTasks)
               ..remove(even.oldTask)
               ..insert(0, even.newTask));
-    final List<Task> storeTasks = even.oldTask.isStore!
+    final List<Task> storeTasks = even.oldTask.isStore
         ? (List.from(state.storeTasks)
           ..remove(even.oldTask)
           ..insert(0, even.newTask))
         : state.storeTasks;
-    final List<Task> pinTasks = even.newTask.isPin!
+    final List<Task> pinTasks = even.newTask.isPin
         ? (List.from(state.pinTasks)
           ..remove(even.oldTask)
           ..insert(0, even.newTask))
         : state.pinTasks;
+    final List<Task> searchTasks = List.from(state.searchTasks)
+      ..remove(even.oldTask)
+      ..insert(0, even.newTask);
     final Map<String, List<Task>> labelsList =
         Map<String, List<Task>>.from(state.labelListTasks);
     even.newTask.labelsList.forEach((label) {
@@ -69,6 +80,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: storeTasks,
         pinTasks: pinTasks,
+        searchTasks: searchTasks,
         labelListTasks: labelsList));
   }
 
@@ -79,6 +91,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: List.from(state.deleteTasks)..remove(even.task),
         storeTasks: state.storeTasks,
         pinTasks: List.from(state.pinTasks)..remove(even.task),
+        searchTasks: List.from(state.searchTasks)..remove(even.task),
         labelListTasks: state.labelListTasks));
   }
 
@@ -95,6 +108,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
           ..insert(0, even.task.copyWith(isDelete: true, isChoose: false)),
         storeTasks: List.from(state.storeTasks)..remove(even.task),
         pinTasks: List.from(state.pinTasks)..remove(even.task),
+        searchTasks: List.from(state.searchTasks)..remove(even.task),
         labelListTasks: labelListTasks));
   }
 
@@ -106,6 +120,8 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
           ..insert(0, even.task.copyWith(isDelete: false, isChoose: false)),
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: List.from(state.searchTasks)
+          ..insert(0, even.task.copyWith(isDelete: false, isChoose: false)),
         labelListTasks: state.labelListTasks));
   }
 
@@ -116,6 +132,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         allTasks: List.from(state.allTasks)..add(even.task),
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: List.from(state.searchTasks)..add(even.task),
         labelListTasks: state.labelListTasks));
   }
 
@@ -127,6 +144,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: List.from(state.deleteTasks),
         allTasks: List.from(state.allTasks)..remove(even.oldTask),
         pinTasks: List.from(state.pinTasks)..remove(even.oldTask),
+        searchTasks: List.from(state.searchTasks)..remove(even.oldTask),
         labelListTasks: state.labelListTasks));
   }
 
@@ -138,24 +156,29 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         allTasks: List.from(state.allTasks)
           ..add(even.task.copyWith(isStore: false, isChoose: false)),
         pinTasks: state.pinTasks,
+        searchTasks: List.from(state.searchTasks)
+          ..add(even.task.copyWith(isStore: false, isChoose: false)),
         labelListTasks: state.labelListTasks));
   }
 
   void _onPinTask(PinTask even, Emitter<TasksState> emit) {
     final state = this.state;
-    List<Task> storeTasks = even.oldTask.isStore!
+    List<Task> storeTasks = even.oldTask.isStore
         ? (List.from(state.storeTasks)..remove(even.oldTask))
         : state.storeTasks;
-    List<Task> allTasks = even.oldTask.isStore!
+    List<Task> allTasks = even.oldTask.isStore
         ? state.allTasks
         : (List.from(state.allTasks)
-          ..remove(even.oldTask.copyWith(isPin: !even.oldTask.isPin!)));
+          ..remove(even.oldTask.copyWith(isPin: !even.oldTask.isPin)));
     emit(TasksState(
         pinTasks: List.from(state.pinTasks)
           ..add(even.newTask.copyWith(isStore: false)),
         deleteTasks: List.from(state.deleteTasks),
         storeTasks: storeTasks,
         allTasks: allTasks,
+        searchTasks: List.from(state.searchTasks)
+          ..remove(even.oldTask.copyWith(isPin: !even.oldTask.isPin))
+          ..add(even.newTask.copyWith(isStore: false)),
         labelListTasks: state.labelListTasks));
   }
 
@@ -166,6 +189,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: List.from(state.pinTasks)..remove(even.task),
+        searchTasks: state.searchTasks,
         labelListTasks: state.labelListTasks));
   }
 
@@ -176,6 +200,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: state.searchTasks,
         labelListTasks: state.labelListTasks));
   }
 
@@ -193,6 +218,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: state.searchTasks,
         labelListTasks: labelsTaskList));
   }
 
@@ -206,6 +232,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: state.searchTasks,
         labelListTasks: labelsTaskList));
   }
 
@@ -219,6 +246,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: state.searchTasks,
         labelListTasks: labelsTaskList));
   }
 
@@ -236,7 +264,49 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
         deleteTasks: state.deleteTasks,
         storeTasks: state.storeTasks,
         pinTasks: state.pinTasks,
+        searchTasks: state.searchTasks,
         labelListTasks: labelsTaskList));
+  }
+
+  void _onSearchTasks(SearchTasks event, Emitter<TasksState> emit) {
+    final query = event.query.toLowerCase();
+
+    List<Task> filteredTasks = [];
+
+    StringBuffer normalText = StringBuffer();
+
+    if (query.isNotEmpty) {
+      filteredTasks.addAll(state.allTasks.where((task) {
+        var deltaJson = jsonDecode(task.content);
+        for (var operation in deltaJson) {
+          normalText.write(operation['insert']);
+        }
+
+        return task.title.toLowerCase().contains(query) ||
+            normalText.toString().toLowerCase().contains(query);
+      }).toList());
+      filteredTasks.addAll(state.pinTasks.where((task) {
+        var deltaJson = jsonDecode(task.content);
+        for (var operation in deltaJson) {
+          normalText.write(operation['insert']);
+        }
+
+        return task.title.toLowerCase().contains(query) ||
+            normalText.toString().toLowerCase().contains(query);
+      }).toList());
+    } else {
+      filteredTasks.addAll(state.allTasks);
+      filteredTasks.addAll(state.pinTasks);
+    }
+
+    emit(TasksState(
+      allTasks: state.allTasks,
+      deleteTasks: state.deleteTasks,
+      storeTasks: state.storeTasks,
+      pinTasks: state.pinTasks,
+      searchTasks: filteredTasks,
+      labelListTasks: state.labelListTasks,
+    ));
   }
 
   @override

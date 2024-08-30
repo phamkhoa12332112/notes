@@ -29,7 +29,7 @@ class AppRoutes {
       case RoutesName.settingScreen:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
       case RoutesName.helpScreen:
-        return MaterialPageRoute(builder: (_) => const HelpScreen());
+        return MaterialPageRoute(builder: (_) => HelpScreen());
       case RoutesName.chooseLabelScreen:
         return MaterialPageRoute(
             builder: (_) => ChooseLabelScreen(

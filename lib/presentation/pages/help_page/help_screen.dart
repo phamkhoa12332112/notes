@@ -6,7 +6,8 @@ import '../../../utils/resources/sizes_manager.dart';
 import '../../../utils/resources/strings_manager.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+  HelpScreen({super.key});
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +152,7 @@ class HelpScreen extends StatelessWidget {
                     contentPadding: SizesManager.p12,
                     prefixIcon: const Icon(Icons.search),
                     prefixIconColor: Colors.black,
-                    borderRadius: SizesManager.r20),
+                    borderRadius: SizesManager.r20, controller: _controller,),
                 GapsManager.h10,
                 Divider(height: SizesManager.h1),
                 GapsManager.h10,
