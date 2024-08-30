@@ -152,9 +152,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   @override
   void dispose() {
+    super.dispose();
     quillController.dispose();
     focusNode.dispose();
-    super.dispose();
   }
 
   String formatTime(int second) {

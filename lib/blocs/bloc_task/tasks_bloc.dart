@@ -273,11 +273,10 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
 
     List<Task> filteredTasks = [];
 
-    StringBuffer normalText = StringBuffer();
-
     if (query.isNotEmpty) {
       filteredTasks.addAll(state.allTasks.where((task) {
         var deltaJson = jsonDecode(task.content);
+        StringBuffer normalText = StringBuffer();
         for (var operation in deltaJson) {
           normalText.write(operation['insert']);
         }
@@ -287,6 +286,7 @@ class TasksBloc extends HydratedBloc<TasksEven, TasksState> {
       }).toList());
       filteredTasks.addAll(state.pinTasks.where((task) {
         var deltaJson = jsonDecode(task.content);
+        StringBuffer normalText = StringBuffer();
         for (var operation in deltaJson) {
           normalText.write(operation['insert']);
         }
