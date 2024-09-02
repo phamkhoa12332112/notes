@@ -29,10 +29,54 @@ class GridBuilder extends StatefulWidget {
 }
 
 class GridBuilderState extends State<GridBuilder> {
+  List<Color?> availableColor = [];
+
   void _removeOrDeleteTask(BuildContext ctx, Task task) {
     task.isDelete!
         ? ctx.read<TasksBloc>().add(DeleteTask(task: task))
         : ctx.read<TasksBloc>().add(RemoveTask(task: task));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    availableColor = [
+      Theme.of(context).scaffoldBackgroundColor,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.red[300]
+          : Colors.red,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepOrange[300]
+          : Colors.deepOrange,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.amber[300]
+          : Colors.amber,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.yellow[300]
+          : Colors.yellow,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.blue[300]
+          : Colors.blue,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.cyan[300]
+          : Colors.cyan,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.green[300]
+          : Colors.green,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.lightGreenAccent[400]
+          : Colors.lightGreenAccent,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.brown[300]
+          : Colors.brown,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepPurple[300]
+          : Colors.deepPurple,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.pink[300]
+          : Colors.pink,
+    ];
   }
 
   @override
@@ -60,7 +104,29 @@ class GridBuilderState extends State<GridBuilder> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditNoteScreen(task: task))),
-            onDoubleTap: () => _removeOrDeleteTask(context, task),
+            onDoubleTap: () {
+              _removeOrDeleteTask(context, task);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Container(
+                  height: task.isPin ? SizesManager.h35 : SizesManager.h30,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(SizesManager.r2)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: task.isPin
+                            ? const Text(
+                                StringsManger.delete_pin_snack_bar,
+                              )
+                            : const Text(
+                                StringsManger.delete_no_pin_snack_bar,
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+            },
             onLongPress: () => Future.delayed(Duration.zero, () async {
               widget.onLongPress!();
             }),
@@ -68,7 +134,8 @@ class GridBuilderState extends State<GridBuilder> {
                 ? GridTile(
                     child: Container(
                         decoration: BoxDecoration(
-                            color: widget.tasksList[index].color,
+                            color:
+                                availableColor[widget.tasksList[index].color],
                             border: Border.all(
                                 color:
                                     task.isChoose ? Colors.green : Colors.grey,
@@ -139,7 +206,8 @@ class GridBuilderState extends State<GridBuilder> {
                 : GridTile(
                     child: Container(
                         decoration: BoxDecoration(
-                            color: widget.tasksList[index].color,
+                            color:
+                                availableColor[widget.tasksList[index].color],
                             border: Border.all(
                                 color: Colors.grey, width: SizesManager.w1),
                             borderRadius: BorderRadiusDirectional.all(

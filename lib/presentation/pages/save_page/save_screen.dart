@@ -120,6 +120,26 @@ class _SaveScreenState extends State<SaveScreen> {
                                           selectedList.clear;
                                           _isSelectionMode = !_isSelectionMode;
                                         });
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Container(
+                                            height: SizesManager.h30,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        SizesManager.r2)),
+                                            child: const Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    StringsManger
+                                                        .save_snack_bar,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ));
                                       }),
                                   PopupMenuItem(
                                       child:
@@ -136,6 +156,23 @@ class _SaveScreenState extends State<SaveScreen> {
                                           selectedList.clear;
                                           _isSelectionMode = !_isSelectionMode;
                                         });
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                          content: Container(
+                                            height: SizesManager.h30,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(SizesManager.r2)),
+                                            child: const Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    StringsManger.unsave_snack_bar,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ));
                                       }),
                                   PopupMenuItem(
                                       child:

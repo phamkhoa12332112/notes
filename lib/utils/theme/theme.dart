@@ -5,6 +5,7 @@ import 'package:notesapp/utils/theme/custom_themes/checkbox_theme.dart';
 import 'package:notesapp/utils/theme/custom_themes/chip_theme.dart';
 import 'package:notesapp/utils/theme/custom_themes/floating_button_theme.dart';
 import 'package:notesapp/utils/theme/custom_themes/icon_theme.dart';
+import 'package:notesapp/utils/theme/custom_themes/snack_bar_theme.dart';
 import 'package:notesapp/utils/theme/custom_themes/text_theme.dart';
 
 class TAppTheme {
@@ -22,6 +23,7 @@ class TAppTheme {
       bottomSheetTheme: TBottomSheetTheme.lightBottomSheetTheme,
       chipTheme: TChipTheme.lightChipTheme,
       checkboxTheme: TCheckboxTheme.lightCheckboxTheme,
+      snackBarTheme: TSnackBar.lightSnackBarTheme,
       floatingActionButtonTheme: TFloatingButtonTheme.lightFloatingButtonTheme);
   static ThemeData darkTheme = ThemeData(
       useMaterial3: true,
@@ -35,5 +37,6 @@ class TAppTheme {
       chipTheme: TChipTheme.darkChipTheme,
       bottomSheetTheme: TBottomSheetTheme.darkBottomSheetTheme,
       checkboxTheme: TCheckboxTheme.darkCheckboxTheme,
+      snackBarTheme: TSnackBar.darkSnackBarTheme,
       floatingActionButtonTheme: TFloatingButtonTheme.darkFloatingButtonTheme);
 }

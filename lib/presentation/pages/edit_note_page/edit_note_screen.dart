@@ -59,21 +59,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   late DateTime editedTime = DateTime.now();
 
   // Color background
-  late Color? colorBackground = widget.task.color;
-  var availableColor = [
-    Colors.white,
-    Colors.red,
-    Colors.deepOrange,
-    Colors.amber,
-    Colors.yellow,
-    Colors.blue,
-    Colors.cyan,
-    Colors.green,
-    Colors.lightGreenAccent,
-    Colors.brown,
-    Colors.deepPurple,
-    Colors.pink,
-  ];
+  late int colorBackground = widget.task.color;
+  List<Color?> availableColor = [];
 
   // Image
   late List<File>? selectedImage = widget.task.selectedImage;
@@ -95,6 +82,48 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   final TextEditingController checkBoxController = TextEditingController();
   late bool checkBox = widget.task.checkBoxList!.isNotEmpty ? true : false;
   late Map<String, bool>? checkBoxList = widget.task.checkBoxList;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    availableColor = [
+      Theme.of(context).scaffoldBackgroundColor,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.red[300]
+          : Colors.red,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepOrange[300]
+          : Colors.deepOrange,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.amber[300]
+          : Colors.amber,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.yellow[300]
+          : Colors.yellow,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.blue[300]
+          : Colors.blue,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.cyan[300]
+          : Colors.cyan,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.green[300]
+          : Colors.green,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.lightGreenAccent[400]
+          : Colors.lightGreenAccent,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.brown[300]
+          : Colors.brown,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepPurple[300]
+          : Colors.deepPurple,
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.pink[300]
+          : Colors.pink,
+    ];
+  }
 
   @override
   void initState() {
@@ -282,6 +311,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
         content: jsonEncode(quillController.document.toDelta().toJson()),
         isChoose: false,
         isPin: pinNote,
+        color: colorBackground,
         editedTime: formattedEditedTime,
         labelsList: labelTask,
         duration: durationNotification,
@@ -359,7 +389,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    colorBackground = availableColor[index];
+                    colorBackground = index;
                   });
                   Navigator.pop(context);
                 },
@@ -369,9 +399,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   margin: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: colorBackground == availableColor[index]
-                          ? Colors.blue
-                          : Colors.black,
+                      color:
+                          colorBackground == index ? Colors.blue : Colors.black,
                       width: SizesManager.w1,
                     ),
                     color: availableColor[index],
@@ -379,7 +408,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   ),
                 ),
               ),
-              if (colorBackground == availableColor[index])
+              if (colorBackground == index)
                 Icon(
                   Icons.done,
                   color: Colors.blue,
@@ -570,8 +599,8 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          colorBackground ?? Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: availableColor[colorBackground] ??
+          Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -700,6 +729,23 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                             context
                                 .read<TasksBloc>()
                                 .add(AddLabelTask(task: task));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Container(
+                                height: SizesManager.h30,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(SizesManager.r2)),
+                                child: const Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        StringsManger.save_snack_bar,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
                             Navigator.pop(context);
                           },
                           child: const Icon(Icons.save_alt)),
