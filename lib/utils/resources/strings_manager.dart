@@ -98,4 +98,13 @@ class StringsManger {
   static const String painting = 'Hình vẽ';
   static const String disappearCheckBox = 'Ẩn hộp kiểm';
   static const String delete_painting = 'Xoá hình vẽ';
+
+  static const String delete_no_pin_snack_bar =
+      'Đã chuyển ghi chú vào thùng rác';
+  static const String delete_pin_snack_bar =
+      'Đã bỏ ghim và chuyển ghi chú vào thùng rác';
+  static const String save_snack_bar = 'Đã lưu trữ ghi chú';
+  static const String unsave_snack_bar = 'Đã huỷ bỏ lưu trữ ghi chú';
+  static const String remove_snack_bar = 'Đã xoá vĩnh viễn ghi chú';
+  static const String restore_snack_bar = 'Đã khôi phục ghi chú';
 }

@@ -46,6 +46,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   late Map<IconData, Map<String, DateTime>> notificationList = {};
 
   // Color background
+  int vt = 0;
   Color? colorBackground;
   List<Color?> availableColor = [];
 
@@ -295,7 +296,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
         drawingPoint: drawingPoint,
         recordingPath: recordingPath,
         selectedImage: selectedImage,
-        isStore: false);
+        isStore: false,
+        color: vt);
     if (pinNote) {
       context.read<TasksBloc>().add(PinTask(oldTask: task, newTask: task));
     } else {
@@ -351,6 +353,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 onTap: () {
                   setState(() {
                     colorBackground = availableColor[index];
+                    vt = index;
                   });
                   Navigator.pop(context);
                 },
@@ -638,7 +641,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                   quillController.document.toDelta().toJson()),
                               isChoose: false,
                               duration: durationNotification,
-                              color: colorBackground,
+                              color: vt,
                               editedTime: formattedEditedTime,
                               labelsList: labelTask,
                               notifications: notificationList,
@@ -658,6 +661,23 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           context
                               .read<TasksBloc>()
                               .add(AddLabelTask(task: task));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Container(
+                              height: SizesManager.h30,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(SizesManager.r2)),
+                              child: const Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      StringsManger.save_snack_bar,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
                           Navigator.pop(context);
                         },
                         child: const Icon(Icons.save_alt)),
@@ -1018,7 +1038,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               content: jsonEncode(quillController.document.toDelta().toJson()),
               isChoose: false,
               isPin: pinNote,
-              color: colorBackground,
+              color: vt,
               editedTime: formattedEditedTime,
               duration: durationNotification,
               labelsList: labelTask,

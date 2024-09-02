@@ -12,7 +12,7 @@ class Task extends Equatable {
   bool? isDelete;
   bool isStore;
   bool isPin;
-  Color? color;
+  int color;
   String? editedTime;
   List<String> labelsList;
   Map<IconData, Map<String, DateTime>> notifications;
@@ -37,7 +37,7 @@ class Task extends Equatable {
     this.selectedImage,
     this.drawingPoint,
     this.recordingPath,
-    this.color,
+    required this.color,
   }) {
     isDelete = isDelete ?? false;
     editedTime = editedTime ?? "";
@@ -46,7 +46,6 @@ class Task extends Equatable {
     selectedImage = selectedImage ?? [];
     drawingPoint = drawingPoint ?? [];
     recordingPath = recordingPath ?? "";
-    color = color;
   }
 
   Task copyWith({
@@ -56,7 +55,7 @@ class Task extends Equatable {
     bool? isDelete,
     bool? isStore,
     bool? isPin,
-    Color? color,
+    int? color,
     String? editedTime,
     List<String>? labelsList,
     Map<IconData, Map<String, DateTime>>? notifications,
@@ -93,7 +92,7 @@ class Task extends Equatable {
       'isDelete': isDelete,
       'isStore': isStore,
       'isPin': isPin,
-      'color': color?.value,
+      'color': color,
       'editedTime': editedTime,
       'labelsList': labelsList,
       'notifications': notifications,
@@ -113,7 +112,7 @@ class Task extends Equatable {
       isDelete: map['isDelete'],
       isStore: map['isStore'],
       isPin: map['isPin'],
-      color: Color(map['color']),
+      color: map['color'],
       editedTime: map['editedTime'],
       labelsList: map['labelsList'],
       notifications: map['notifications'],

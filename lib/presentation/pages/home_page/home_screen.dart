@@ -123,6 +123,23 @@ class _HomeScreenState extends State<HomeScreen> {
                         selectedList.clear;
                         _isSelectionMode = !_isSelectionMode;
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Container(
+                          height: SizesManager.h30,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(SizesManager.r2)),
+                          child: const Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  StringsManger.delete_no_pin_snack_bar,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ));
                     },
                     child: const Icon(Icons.delete),
                   ),

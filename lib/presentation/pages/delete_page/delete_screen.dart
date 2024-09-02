@@ -49,6 +49,23 @@ class _DeleteScreenState extends State<DeleteScreen> {
                                   .add(DeleteTask(task: task));
                             }
                           }
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Container(
+                              height: SizesManager.h30,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(SizesManager.r2)),
+                              child: const Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      StringsManger.remove_snack_bar,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
                         }),
                     PopupMenuItem(
                         child: const Text(StringsManger.restore),
@@ -60,6 +77,23 @@ class _DeleteScreenState extends State<DeleteScreen> {
                                   .add(RestoreTask(task: task));
                             }
                           }
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Container(
+                              height: SizesManager.h30,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(SizesManager.r2)),
+                              child: const Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      StringsManger.restore_snack_bar,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
                         }),
                     PopupMenuItem(
                         child: const Text(StringsManger.select_all),
@@ -76,7 +110,6 @@ class _DeleteScreenState extends State<DeleteScreen> {
                             }
                           });
                         }),
-
                   ],
                 )
               ],
